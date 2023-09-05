@@ -30,9 +30,8 @@ class Program
     {
         using (var writer = new StreamWriter("chirp_cli_db.csv",true))
         {
-            string author = "anon";
-            var timestamp = "100048";
-            writer.WriteLine($"{author},{timestamp},{message}");
+            var timestamp = DateTime.Now;
+            writer.WriteLine($"{Environment.UserName},{timestamp},{message}");
         }
 
     }
