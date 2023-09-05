@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
 class Program
 {
@@ -27,7 +28,13 @@ class Program
 
             // reads next line throws NullReferenceException if it returns 'null'
             string? nextln = reader.ReadLine() ?? throw new NullReferenceException();
-            string[] arr = nextln.Split(",");
+
+            // The following regex splits our CSV elements by ',' but ignores a ',' if it is within a set of quotes
+            // The regex is generated using ChatGPT
+            Regex reg = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+            string[] arr = reg.Split(nextln);
+
 
             if(!(arr.Length == 3 && arr[0] == "Author" && arr[1] == "Timestamp" && arr[2] == "Message"))
             {
@@ -38,9 +45,9 @@ class Program
             while((nextln = reader.ReadLine()) != null)
             {
                 lineno++;
-                arr = nextln.Split(",");
+                arr = reg.Split(nextln);
                 if(arr.Length != 3) throw new ArgumentException($"CSV element does not have the correct length at line {lineno}, every line should contain 3 elements");
-                Console.WriteLine($"{arr[1]} - {arr[0]}: {arr[2]}");
+                Console.WriteLine($"{arr[0]} @ {arr[1]}: {arr[2].Trim('"')}");
                 
             }
         }
@@ -50,9 +57,8 @@ class Program
     {
         using (var writer = new StreamWriter("chirp_cli_db.csv",true))
         {
-            string author = "anon";
             var timestamp = DateTime.Now;
-            writer.WriteLine($"{author},{timestamp},{message}");
+            writer.WriteLine($"{Environment.UserName},{timestamp},\"{message}\"");
         }
 
     }
