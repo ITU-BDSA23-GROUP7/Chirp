@@ -47,7 +47,8 @@ class Program
                 lineno++;
                 arr = reg.Split(nextln);
                 if(arr.Length != 3) throw new ArgumentException($"CSV element does not have the correct length at line {lineno}, every line should contain 3 elements");
-                Console.WriteLine($"{arr[0]} @ {arr[1]}: {arr[2].Trim('"')}");
+                DateTimeOffset utcTime = DateTimeOffset.FromFileTime(long.Parse(arr[1]));
+                Console.WriteLine($"{arr[0]} @ {utcTime.ToString("HH:mm:ss dd/MM/yyyy")}: {arr[2].Trim('"')}");
                 
             }
         }
@@ -57,8 +58,9 @@ class Program
     {
         using (var writer = new StreamWriter("chirp_cli_db.csv",true))
         {
-            var timestamp = DateTime.Now;
-            writer.WriteLine($"{Environment.UserName},{timestamp},\"{message}\"");
+            DateTimeOffset utcTime = DateTimeOffset.UtcNow; //https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.utcnow?view=net-7.0
+            long LongTime = utcTime.ToFileTime();
+            writer.WriteLine($"{Environment.UserName},{LongTime},\"{message}\"");
         }
 
     }
