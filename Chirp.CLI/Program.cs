@@ -1,11 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using SimpleDB;
 
 class Program
 {
     public static void Main(string[] args)
     {
+       IDatabaseRepository<string> idr = new CSVDatabase<>();
+
         if (args.Length == 0)
         {
             Console.WriteLine("Please choose 'read' or 'cheep'");
