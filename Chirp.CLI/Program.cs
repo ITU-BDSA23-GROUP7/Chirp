@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using CsvHelper; //Package from https://joshclose.github.io/CsvHelper/
 
 class Program
 {
@@ -22,45 +25,39 @@ class Program
         }
     }
 
+    //This was partly inspired by https://joshclose.github.io/CsvHelper/getting-started/
     private static void read()
     {
-        using (var reader = new StreamReader("chirp_cli_db.csv")){
+        using (var reader = new StreamReader("chirp_cli_db.csv"))
+        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))   //Package from https://joshclose.github.io/CsvHelper/
+        {
+            var records = csv.GetRecords<Cheep>();
 
-            // reads next line throws NullReferenceException if it returns 'null'
-            string? nextln = reader.ReadLine() ?? throw new NullReferenceException();
-
-            // The following regex splits our CSV elements by ',' but ignores a ',' if it is within a set of quotes
-            // The regex is generated using ChatGPT
-            Regex reg = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-
-            string[] arr = reg.Split(nextln);
-
-
-            if(!(arr.Length == 3 && arr[0] == "Author" && arr[1] == "Timestamp" && arr[2] == "Message"))
+            foreach (var record in records)
             {
-                throw new ArgumentException("CSV order does not correspond to the programs expectations. The format should be: 'Author,Timestamp,Message'");
-            }
-
-            int lineno = 1;
-            while((nextln = reader.ReadLine()) != null)
-            {
-                lineno++;
-                arr = reg.Split(nextln);
-                if(arr.Length != 3) throw new ArgumentException($"CSV element does not have the correct length at line {lineno}, every line should contain 3 elements");
-                DateTimeOffset utcTime = DateTimeOffset.FromFileTime(long.Parse(arr[1]));
-                Console.WriteLine($"{arr[0]} @ {utcTime.ToString("HH:mm:ss dd/MM/yyyy")}: {arr[2].Trim('"')}");
-                
+                var Author = record.Author;
+                DateTimeOffset UTCTimestamp = DateTimeOffset.FromFileTime(record.Timestamp);
+                var Message = record.Message;
+                Console.WriteLine($"{Author} @ {UTCTimestamp.ToString("HH:mm:ss dd/MM/yyyy")}: {Message.Trim('"')}");
             }
         }
     }
 
+    //This was partly inspired by https://joshclose.github.io/CsvHelper/getting-started/
     private static void cheep(string message)
     {
-        using (var writer = new StreamWriter("chirp_cli_db.csv",true))
+        using (var writer = new StreamWriter("chirp_cli_db.csv", true))
+        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) //https://joshclose.github.io/CsvHelper/
         {
             DateTimeOffset utcTime = DateTimeOffset.UtcNow; //https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.utcnow?view=net-7.0
-            long LongTime = utcTime.ToFileTime();
-            writer.WriteLine($"{Environment.UserName},{LongTime},\"{message}\"");
+            Cheep record = new Cheep
+            {
+                Author = Environment.UserName,
+                Timestamp = utcTime.ToFileTime(),
+                Message = $"\"{message}\""
+            };
+            csv.WriteRecord(record);
+            csv.NextRecord();
         }
 
     }
