@@ -7,7 +7,7 @@ class Program
 {
     public static void Main(string[] args)
     {
-       IDatabaseRepository<string> idr = new CSVDatabase<>();
+       IDatabaseRepository<string> idr = new CSVDatabase<string>();
 
         if (args.Length == 0)
         {
