@@ -5,9 +5,14 @@ using SimpleDB;
 
 class Program
 {
+    public record Cheep(string Author, string Message, long Timestamp);
+
+    static IDatabaseRepository<string> idr;
+
     public static void Main(string[] args)
     {
-       IDatabaseRepository<string> idr = new CSVDatabase<>();
+       
+        idr = new CSVDatabase<string>();
 
         if (args.Length == 0)
         {
@@ -64,6 +69,7 @@ class Program
             DateTimeOffset utcTime = DateTimeOffset.UtcNow; //https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.utcnow?view=net-7.0
             long LongTime = utcTime.ToFileTime();
             writer.WriteLine($"{Environment.UserName},{LongTime},\"{message}\"");
+            //idr.Store(new Cheep(Environment.UserName,message,LongTime));
         }
 
     }
