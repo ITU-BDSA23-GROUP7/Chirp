@@ -22,4 +22,5 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         Console.WriteLine(record);
         return;
     }
+}
 
