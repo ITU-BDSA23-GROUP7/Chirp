@@ -25,7 +25,9 @@ class Program
 
         if (args[0] == "read")
         {
-            read();
+            if(args.Length > 1) read(int.Parse(args[1]));
+
+            else read();
         }
         else if (args[0] == "cheep")
         {
@@ -34,10 +36,10 @@ class Program
     }
 
     //This was partly inspired by https://joshclose.github.io/CsvHelper/getting-started/
-    private static void read() 
+    private static void read(int? limit = null) 
     {
         
-        var records = dbRepository.Read();
+        var records = dbRepository.Read(limit);
         foreach (var record in records)
         {
             var Author = record.Author;

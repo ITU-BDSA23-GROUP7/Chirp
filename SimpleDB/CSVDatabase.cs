@@ -23,11 +23,11 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         {
             records = csv.GetRecords<T>().ToList();
         }
-        /*var recSize = records.Count();
+        var recSize = records.Count();
         if(limit != null && limit < recSize){
-            int n = limit;
-            return records.GetRange(recSize-limit,limit);
-        }*/
+            int n = limit.GetValueOrDefault();
+            return records.GetRange(recSize-(n),n);
+        }
         return records;
         
     }
