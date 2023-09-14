@@ -18,7 +18,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
     {
 
         List<T>? records = null;
-        using (var reader = new StreamReader("chirp_cli_db.csv"))
+        using (var reader = new StreamReader("../../data/chirp_cli_db.csv"))
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))   //Package from https://joshclose.github.io/CsvHelper/
         {
             records = csv.GetRecords<T>().ToList();
@@ -34,7 +34,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
 
     public void Store(T record)
     {
-        using (var writer = new StreamWriter("chirp_cli_db.csv", true))
+        using (var writer = new StreamWriter("../../data/chirp_cli_db.csv", true))
         using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) //https://joshclose.github.io/CsvHelper/
         {
             
