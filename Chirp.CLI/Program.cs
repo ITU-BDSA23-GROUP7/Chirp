@@ -19,7 +19,7 @@ class Program
        
         if (args.Length == 0)
         {
-            Console.WriteLine("Please choose 'read' or 'cheep'");
+            UserInterface.noCommand();
             return;
         }
 
@@ -42,12 +42,8 @@ class Program
         var records = dbRepository.Read(limit);
         foreach (var record in records)
         {
-            var Author = record.Author;
-            DateTimeOffset UTCTimestamp = DateTimeOffset.FromFileTime(record.Timestamp);
-            var Message = record.Message;
-            Console.WriteLine($"{Author} @ {UTCTimestamp.ToString("HH:mm:ss dd/MM/yyyy")}: {Message.Trim('"')}");
+            UserInterface.read(record);
         }
-        
     }
 
     //This was partly inspired by https://joshclose.github.io/CsvHelper/getting-started/
@@ -57,8 +53,5 @@ class Program
         long LongTime = utcTime.ToFileTime();
 
         dbRepository.Store(new Cheep(Environment.UserName,message,LongTime));
-        
-        
-
     }
 }
