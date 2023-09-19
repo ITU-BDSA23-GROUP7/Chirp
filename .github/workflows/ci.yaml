@@ -30,8 +30,11 @@ jobs:
           # Build everything
           dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os osx -c Release -o "App-$tag-macos"
 
-          # Pack files
-         
+          # Add CSV-file
+          cp "data/chirp_cli_db.csv" "App-$tag-windows"
+          cp "data/chirp_cli_db.csv" "App-$tag-linux"
+          cp "data/chirp_cli_db.csv" "App-$tag-macos"
+
           # Pack to zip for Windows
           7z a -tzip "App-$tag-windows.zip" "./App-$tag-windows/*"
           7z a -tzip "App-$tag-linux.zip" "./App-$tag-linux/*"
@@ -49,6 +52,3 @@ jobs:
           files: "App*"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-          
