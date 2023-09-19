@@ -33,9 +33,9 @@ jobs:
           # Pack files
          
           # Pack to zip for Windows
-          7z a -tzip "App-$tag-windows.zip" "./App-$tag-windows/*"
-          7z a -tzip "App-$tag-linux.zip" "./App-$tag-linux/*"
-          7z a -tzip "App-$tag-macos.zip" "./App-$tag-macos/*"
+          7z a -tzip "App-$tag-windows.zip" "App-$tag-windows/*"
+          7z a -tzip "App-$tag-linux.zip" "App-$tag-linux/*"
+          7z a -tzip "App-$tag-macos.zip" "App-$tag-macos/*"
 
 
           # Delete output directory
