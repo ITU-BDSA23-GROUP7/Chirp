@@ -21,7 +21,5 @@ public class UnitTest1
         Assert.Equal("JensHansen",newCheep.Author);
         Assert.Equal("Jeg har en bondegaard",newCheep.Message);
         Assert.Equal(231235543,newCheep.Timestamp);
-
-
     }
 }

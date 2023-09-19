@@ -8,18 +8,20 @@ namespace SimpleDB;
 public class CSVDatabase<T> : IDatabaseRepository<T>
 {
     private string filePath;
+
     public CSVDatabase(string filePath = "../../data/chirp_cli_db.csv")
     {
         this.filePath = filePath;
 
         //Console.WriteLine("It has been done");
-        foreach(PropertyInfo prop in typeof(T).GetProperties()){
-        //    Console.WriteLine(prop);
+        foreach(PropertyInfo prop in typeof(T).GetProperties())
+        {
+        //Console.WriteLine(prop);
         }
-    }    
+    }
+
     public IEnumerable<T> Read(int? limit=null)
     {
-
         List<T>? records = null;
         using (var reader = new StreamReader(filePath))
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))   //Package from https://joshclose.github.io/CsvHelper/
@@ -32,7 +34,6 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
             return records.GetRange(recSize-(n),n);
         }
         return records;
-        
     }
 
     public void Store(T record)
@@ -40,15 +41,10 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         using (var writer = new StreamWriter(filePath, true))
         using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) //https://joshclose.github.io/CsvHelper/
         {
-            
             //writer.WriteLine($"{Environment.UserName},{LongTime},\"{message}\"");
-            
-
-            
             csv.WriteRecord(record);
             csv.NextRecord();
-            
+
         }
     }
 }
-

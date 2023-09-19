@@ -1,0 +1,13 @@
+root = true
+
+[.cs]
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Space after comma in parameter lists and method calls
+csharp_space_after_comma = always
+
+# Enforce a blank line before the opening brace of a control block (e.g., if, for, while)
+csharp_new_line_before_open_brace = control_blocks
