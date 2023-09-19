@@ -26,16 +26,16 @@ jobs:
           # Build everything
           dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os win -c Release -o "App-$tag-windows"
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os linux -c Release -o "$App-$tag-linux"
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os linux -c Release -o "App-$tag-linux"
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os osx -c Release -o "$App-$tag-macos"
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os osx -c Release -o "App-$tag-macos"
 
           # Pack files
          
           # Pack to zip for Windows
-          7z a -tzip "App-$tag-windows.zip" "App-$tag-windows/*"
-          7z a -tzip "App-$tag-linux.zip" "App-$tag-linux/*"
-          7z a -tzip "App-$tag-macos.zip" "App-$tag-macos/*"
+          7z a -tzip "App-$tag-windows.zip" ./"App-$tag-windows/*"
+          7z a -tzip "App-$tag-linux.zip" "./App-$tag-linux/*"
+          7z a -tzip "App-$tag-macos.zip" "./App-$tag-macos/*"
 
 
           # Delete output directory
