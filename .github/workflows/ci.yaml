@@ -24,11 +24,11 @@ jobs:
           tag=$(git describe --tags --abbrev=0)
 
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os win-x64 -c Release -o "App-$tag-windows"
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os win -c Release -o "App-$tag-windows"
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os linux-x64 -c Release -o "$App-$tag-linux"
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os linux -c Release -o "$App-$tag-linux"
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os osx-x64 -c Release -o "$App-$tag-macos"
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os osx -c Release -o "$App-$tag-macos"
 
           # Pack files
          
