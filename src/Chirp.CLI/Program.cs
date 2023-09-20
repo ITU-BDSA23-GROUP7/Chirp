@@ -20,6 +20,7 @@ class Program
     {
         dbRepository = new CSVDatabase<Cheep>();
        
+       //The next code is inspired by https://learn.microsoft.com/en-us/dotnet/standard/commandline/define-commands#define-a-root-command
        var rootCommand = new RootCommand();
         rootCommand.SetHandler(() => {
             Console.WriteLine("Default");
