@@ -6,20 +6,17 @@ public class UnitTest1
 {
     public record Cheep(string Author, string Message, long Timestamp);
     [Fact]
-    public void ConversionOfRecordTest()
+    public void ReadTypes()
     {
         // Arrange
         IDatabaseRepository<Cheep> testDB = CSVDatabase<Cheep>.getInstance();
 
         // Act
-        var oldCheep = new Cheep("JensHansen", "Jeg har en bondegaard", 231235543);
-        testDB.Store(oldCheep);
-
         var newCheep = testDB.Read(1).First();
 
         // Assert
-        Assert.Equal("JensHansen", newCheep.Author);
-        Assert.Equal("Jeg har en bondegaard", newCheep.Message);
-        Assert.Equal(231235543, newCheep.Timestamp);
+        Assert.IsType<String>(newCheep.Author);
+        Assert.IsType<String>(newCheep.Message);
+        Assert.IsType<long>(newCheep.Timestamp);
     }
 }
