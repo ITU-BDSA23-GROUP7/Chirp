@@ -18,11 +18,12 @@ class Program
 
     public static void Main(string[] args)
     {
-        dbRepository = new CSVDatabase<Cheep>();
-       
-       //The next code is inspired by https://learn.microsoft.com/en-us/dotnet/standard/commandline/define-commands#define-a-root-command
-       var rootCommand = new RootCommand();
-        rootCommand.SetHandler(() => {
+        dbRepository = CSVDatabase<Cheep>.getInstance();
+
+        //The next code is inspired by https://learn.microsoft.com/en-us/dotnet/standard/commandline/define-commands#define-a-root-command
+        var rootCommand = new RootCommand();
+        rootCommand.SetHandler(() =>
+        {
             Console.WriteLine("Default");
         });
 
@@ -35,7 +36,8 @@ class Program
         {
             readLinesArgument
         };
-        readCommand.SetHandler((cheeps) => {
+        readCommand.SetHandler((cheeps) =>
+        {
             read(cheeps);
         }, readLinesArgument);
         rootCommand.Add(readCommand);
@@ -44,22 +46,23 @@ class Program
             name: "message",
             description: "The message that will be added."
         );
-        var cheepCommand = new Command("cheep", "Makes a new cheep with the current logged in user and the current time.") 
+        var cheepCommand = new Command("cheep", "Makes a new cheep with the current logged in user and the current time.")
         {
             cheepMessageArgument
         };
-        cheepCommand.SetHandler((message) => {
+        cheepCommand.SetHandler((message) =>
+        {
             cheep(message);
         }, cheepMessageArgument);
         rootCommand.Add(cheepCommand);
 
-        rootCommand.Invoke(args);        
+        rootCommand.Invoke(args);
     }
 
     //This was partly inspired by https://joshclose.github.io/CsvHelper/getting-started/
-    private static void read(int? limit = null) 
+    private static void read(int? limit = null)
     {
-        
+
         var records = dbRepository.Read(limit);
         foreach (var record in records)
         {
@@ -73,6 +76,6 @@ class Program
         DateTimeOffset utcTime = DateTimeOffset.UtcNow; //https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.utcnow?view=net-7.0
         long LongTime = utcTime.ToFileTime();
 
-        dbRepository.Store(new Cheep(Environment.UserName,message,LongTime));
+        dbRepository.Store(new Cheep(Environment.UserName, message, LongTime));
     }
 }
