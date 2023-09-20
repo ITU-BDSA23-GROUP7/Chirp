@@ -31,9 +31,9 @@ jobs:
           dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os osx -c Release -o "App-$tag-macos/src/Chirp.CLI"
 
           # Add CSV-file
-          cp "data/chirp_cli_db.csv" "App-$tag-windows/data"
-          cp "data/chirp_cli_db.csv" "App-$tag-linux/data"
-          cp "data/chirp_cli_db.csv" "App-$tag-macos/data"
+          cp "data/chirp_cli_db.csv" "App-$tag-windows/data/"
+          cp "data/chirp_cli_db.csv" "App-$tag-linux/data/"
+          cp "data/chirp_cli_db.csv" "App-$tag-macos/data/"
 
           # Pack to zip for Windows
           7z a -tzip "App-$tag-windows.zip" "./App-$tag-windows/*"
