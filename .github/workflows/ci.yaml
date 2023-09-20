@@ -35,9 +35,9 @@ jobs:
           mkdir "App-$tag-linux/data/"
           mkdir "App-$tag-macos/data/"
 
-          cp "data/chirp_cli_db.csv" "App-$tag-windows/data/chirp_cli_db.csv"
-          cp "data/chirp_cli_db.csv" "App-$tag-linux/data/chirp_cli_db.csv"
-          cp "data/chirp_cli_db.csv" "App-$tag-macos/data/chirp_cli_db.csv"
+          cp "data/chirp_cli_db.csv" "App-$tag-windows/data/"
+          cp "data/chirp_cli_db.csv" "App-$tag-linux/data/"
+          cp "data/chirp_cli_db.csv" "App-$tag-macos/data/"
 
           # Pack to zip for Windows
           7z a -tzip "App-$tag-windows.zip" "./App-$tag-windows/*"
