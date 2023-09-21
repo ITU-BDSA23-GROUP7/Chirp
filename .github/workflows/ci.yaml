@@ -32,15 +32,15 @@ jobs:
 
 
           # Pack to zip for Windows
-          7z a -tzip "App-$tag-windows.zip" "./App-$tag-windows/*"
-          7z a -tzip "App-$tag-linux.zip" "./App-$tag-linux/*"
-          7z a -tzip "App-$tag-macos.zip" "./App-$tag-macos/*"
+          7z a -tzip "Chirp-$tag-windows.zip" "./Chirp-$tag-windows/*"
+          7z a -tzip "Chirp-$tag-linux.zip" "./Chirp-$tag-linux/*"
+          7z a -tzip "Chirp-$tag-macos.zip" "./Chirp-$tag-macos/*"
 
 
           # Delete output directory
-          rm -r "App-$tag-windows"
-          rm -r "App-$tag-linux"
-          rm -r "App-$tag-macos"
+          rm -r "Chirp-$tag-windows"
+          rm -r "Chirp-$tag-linux"
+          rm -r "Chirp-$tag-macos"
 
       - name: Publish
         uses: softprops/action-gh-release@v1
