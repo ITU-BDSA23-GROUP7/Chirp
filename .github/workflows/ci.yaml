@@ -24,20 +24,12 @@ jobs:
           tag=$(git describe --tags --abbrev=0)
 
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os win -c Release -o "App-$tag-windows/src/Chirp.CLI"
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os win -c Release -p:PublishSingleFile=true -o "Chirp-$tag-windows" --self-contained false
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os linux -c Release -o "App-$tag-linux/src/Chirp.CLI"
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os linux -c Release -p:PublishSingleFile=true -o "Chirp-$tag-linux" --self-contained false
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os osx -c Release -o "App-$tag-macos/src/Chirp.CLI"
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --os osx -c Release -p:PublishSingleFile=true -o "Chirp-$tag-macos" --self-contained false
 
-          # Add CSV-file
-          mkdir "App-$tag-windows/data/"
-          mkdir "App-$tag-linux/data/"
-          mkdir "App-$tag-macos/data/"
-
-          cp "data/chirp_cli_db.csv" "App-$tag-windows/data/"
-          cp "data/chirp_cli_db.csv" "App-$tag-linux/data/"
-          cp "data/chirp_cli_db.csv" "App-$tag-macos/data/"
 
           # Pack to zip for Windows
           7z a -tzip "App-$tag-windows.zip" "./App-$tag-windows/*"
