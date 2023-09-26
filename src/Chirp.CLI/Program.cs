@@ -14,7 +14,6 @@ using System.Text.Json;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 
-
 class Program
 {
     public record Cheep(string Author, string Message, long Timestamp);
@@ -30,7 +29,7 @@ class Program
             Console.WriteLine("Default");
         });
 
-        string url = "http://localhost:5027";
+        string url = "https://bdsagroup7chirpremotedb.azurewebsites.net/";
         client = new HttpClient();
         client.BaseAddress = new Uri(url);
 
