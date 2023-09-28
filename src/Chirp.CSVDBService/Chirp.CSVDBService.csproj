@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chirp.CSVDB\Chirp.CSVDB.csproj" />
-    <EmbeddedResource Include=".\chirp_cli_db.csv"/>
   </ItemGroup>
 
   <PropertyGroup>
@@ -10,5 +9,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Update=".\chirp_cli_db.csv" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>
