@@ -21,7 +21,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         return instance;
     }
 
-    private CSVDatabase(string filePath = "../../data/chirp_cli_db.csv")
+    private CSVDatabase(string filePath = "./chirp_cli_db.csv")
     {
         this.filePath = filePath;
 
