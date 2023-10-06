@@ -4,6 +4,8 @@ public interface ICheepService
 {
     public List<CheepViewModel> GetCheeps(int pageNum = 1);
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum = 1);
+    public int GetAmountOfPages();
+    public int GetAmountOfPagesFromAuthor(string author);
 }
 
 public class CheepService : ICheepService
@@ -38,6 +40,13 @@ public class CheepService : ICheepService
         // filter by the provided author name
         var authorCheeps = _cheeps.Where(x => x.Author == author).ToList();
         return GetPageFromCheepList(authorCheeps, pageNum);
+    }
+
+    public int GetAmountOfPages() {
+        return 20;
+    }
+    public int GetAmountOfPagesFromAuthor(string author) {
+        return 30;
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)

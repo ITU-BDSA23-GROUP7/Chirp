@@ -7,6 +7,7 @@ public class PublicModel : PageModel
 {
     private readonly ICheepService _service;
     public List<CheepViewModel> Cheeps { get; set; }
+    public int AmountOfPages { get; private set; }
 
     public PublicModel(ICheepService service)
     {
@@ -15,6 +16,8 @@ public class PublicModel : PageModel
     
     public ActionResult OnGet()
     {
+        AmountOfPages = _service.GetAmountOfPages();
+
         string pageNumStr = Request.Query["page"];
 
         if (pageNumStr == null) {
