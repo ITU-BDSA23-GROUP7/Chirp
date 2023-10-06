@@ -2,8 +2,8 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps(int page = 0);
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page = 0);
+    public List<CheepViewModel> GetCheeps(int pageNum = 1);
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum = 1);
 }
 
 public class CheepService : ICheepService
@@ -28,16 +28,16 @@ public class CheepService : ICheepService
         return cheeps;
     }
 
-    public List<CheepViewModel> GetCheeps(int page = 0)
+    public List<CheepViewModel> GetCheeps(int pageNum = 1)
     {
-        return GetPageFromCheepList(_cheeps, page);
+        return GetPageFromCheepList(_cheeps, pageNum);
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page = 0)
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum = 1)
     {
         // filter by the provided author name
         var authorCheeps = _cheeps.Where(x => x.Author == author).ToList();
-        return GetPageFromCheepList(authorCheeps, page);
+        return GetPageFromCheepList(authorCheeps, pageNum);
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
@@ -48,8 +48,14 @@ public class CheepService : ICheepService
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
 
-    private List<CheepViewModel> GetPageFromCheepList(List<CheepViewModel> cheeps, int page) {
-        int fromIndex = page * pageLength;
+    private List<CheepViewModel> GetPageFromCheepList(List<CheepViewModel> cheeps, int pageNum) {
+
+        int pageIndex = pageNum - 1;
+
+        if (pageIndex < 0)
+            return GetEmptyCheepList();
+
+        int fromIndex = pageIndex * pageLength;
 
         if (cheeps.Count < fromIndex)
             return GetEmptyCheepList();

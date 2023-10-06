@@ -12,23 +12,30 @@ public class PublicModel : PageModel
     {
         _service = service;
     }
-
+    
     public ActionResult OnGet()
     {
         string pageNumStr = Request.Query["page"];
 
-        if (pageNumStr == null) 
+        if (pageNumStr == null) {
             Console.WriteLine("Page number is a null value.");
+            Cheeps = _service.GetCheeps();
+            return Page();
+        }
 
         int pageNum;
 
-        if (!int.TryParse(pageNumStr, out pageNum))
+        if (!int.TryParse(pageNumStr, out pageNum)) {
             Console.WriteLine("Page number isn't an integer.");
+            Cheeps = _service.GetCheeps(-1);
+            return Page();
+        }
 
-        if (pageNum < 0)
+        if (pageNum < 0) {
             Console.WriteLine("Page number is less than 0.");
-
-        Console.WriteLine(pageNum);
+            Cheeps = _service.GetCheeps(-1);
+            return Page();
+        }
 
         Cheeps = _service.GetCheeps(pageNum);
         return Page();
