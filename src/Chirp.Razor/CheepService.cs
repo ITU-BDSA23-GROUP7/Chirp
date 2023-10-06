@@ -58,6 +58,12 @@ public class CheepService : ICheepService
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
 
+    /// <summary>
+    /// Returns a list of CheepViewModel, with a length of <c>pageLength</c>.
+    /// </summary>
+    /// <param name="cheeps"></param>
+    /// <param name="pageNum"></param>
+    /// <returns>The </returns>
     private List<CheepViewModel> GetPageFromCheepList(List<CheepViewModel> cheeps, int pageNum) {
 
         int pageIndex = pageNum - 1;

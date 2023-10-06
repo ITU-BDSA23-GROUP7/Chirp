@@ -14,6 +14,14 @@ public class UserTimelineModel : PageModel
         _service = service;
     }
 
+    /// <summary>
+    ///     Sets PageCount to the amount of total pages from the given author. <br/>
+    ///     Sets Cheeps depending on the "page" query parameter. <br/>
+    ///     * Will set Cheeps to the first page if no parameter is specified. <br/>
+    ///     * Will set Cheeps to an empty list if parameter is not a positive integer. <br/>
+    /// </summary>
+    /// <param name="author">The name of the author.</param>
+    /// <returns></returns>
     public ActionResult OnGet(string author)
     {
         PageCount = _service.GetPageCountFromAuthor(author);

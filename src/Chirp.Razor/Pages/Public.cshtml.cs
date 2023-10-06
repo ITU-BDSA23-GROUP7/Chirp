@@ -14,6 +14,13 @@ public class PublicModel : PageModel
         _service = service;
     }
     
+    /// <summary>
+    ///     Sets PageCount to the amount of total pages. <br/>
+    ///     Sets Cheeps depending on the "page" query parameter. <br/>
+    ///     * Will set Cheeps to the first page if no parameter is specified. <br/>
+    ///     * Will set Cheeps to an empty list if parameter is not a positive integer. <br/>
+    /// </summary>
+    /// <returns></returns>
     public ActionResult OnGet()
     {
         PageCount = _service.GetPageCount();
@@ -30,13 +37,13 @@ public class PublicModel : PageModel
 
         if (!int.TryParse(pageNumStr, out pageNum)) {
             Console.WriteLine("Page number isn't an integer.");
-            Cheeps = _service.GetCheeps(-1);
+            Cheeps = new List<CheepViewModel>();
             return Page();
         }
 
-        if (pageNum < 0) {
-            Console.WriteLine("Page number is less than 0.");
-            Cheeps = _service.GetCheeps(-1);
+        if (pageNum <= 0) {
+            Console.WriteLine("Page number is less than or equal to 0.");
+            Cheeps = new List<CheepViewModel>();
             return Page();
         }
 
