@@ -32,7 +32,7 @@
     }
     <p>
         <strong>
-            @for (int n = 1; n <= Model.AmountOfPages; n++) {
+            @for (int n = 1; n <= Model.PageCount; n++) {
                 <a href="/@routeName?page=@n">@n</a>
             }
         </strong>

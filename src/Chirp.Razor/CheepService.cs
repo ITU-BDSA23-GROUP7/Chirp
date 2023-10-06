@@ -4,8 +4,8 @@ public interface ICheepService
 {
     public List<CheepViewModel> GetCheeps(int pageNum = 1);
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum = 1);
-    public int GetAmountOfPages();
-    public int GetAmountOfPagesFromAuthor(string author);
+    public int GetPageCount();
+    public int GetPageCountFromAuthor(string author);
 }
 
 public class CheepService : ICheepService
@@ -21,7 +21,7 @@ public class CheepService : ICheepService
     private static List<CheepViewModel> GetDefaultCheeps() {
         List<CheepViewModel> cheeps = new();
         List<string> userNames = new(){"Daniel", "Casper", "Max", "Line", "Sebastian"};
-        for (int i = 0; i < 994; i++) {
+        for (int i = 0; i < 1000; i++) {
             var userName = userNames[i % userNames.Count];
             var holyCow = i % (userNames.Count - 1) == (userNames.Count - 2) ? "Holy cow! " : "";
             var cheep = new CheepViewModel(userName, $"{holyCow}This is cheep number {i+1}!", UnixTimeStampToDateTimeString(1690892208+i));
@@ -42,10 +42,10 @@ public class CheepService : ICheepService
         return GetPageFromCheepList(authorCheeps, pageNum);
     }
 
-    public int GetAmountOfPages() {
+    public int GetPageCount() {
         return GetPagesCountFromCheepCount(_cheeps.Count);
     }
-    public int GetAmountOfPagesFromAuthor(string author) {
+    public int GetPageCountFromAuthor(string author) {
         var authorCheeps = _cheeps.Where(x => x.Author == author).ToList();
         return GetPagesCountFromCheepCount(authorCheeps.Count);
     }

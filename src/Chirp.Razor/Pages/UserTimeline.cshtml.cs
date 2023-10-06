@@ -7,7 +7,7 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _service;
     public List<CheepViewModel> Cheeps { get; set; }
-    public int AmountOfPages { get; private set; }
+    public int PageCount { get; private set; }
 
     public UserTimelineModel(ICheepService service)
     {
@@ -16,7 +16,7 @@ public class UserTimelineModel : PageModel
 
     public ActionResult OnGet(string author)
     {
-        AmountOfPages = _service.GetAmountOfPagesFromAuthor(author);
+        PageCount = _service.GetPageCountFromAuthor(author);
 
         string pageNumStr = Request.Query["page"];
 
