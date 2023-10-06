@@ -20,7 +20,7 @@ public class CheepService : ICheepService
     // Returns some default cheeps for testing. It is not important for the final product.
     private static List<CheepViewModel> GetDefaultCheeps() {
         List<CheepViewModel> cheeps = new();
-        List<string> userNames = new(){"Daniel", "Casper", "Max", "Line", "Sebastian"};
+        List<string> userNames = new(){"Daniel", "Casper", "Max", "Line", "Sebastian", "Helge"};
         for (int i = 0; i < 1000; i++) {
             var userName = userNames[i % userNames.Count];
             var holyCow = i % (userNames.Count - 1) == (userNames.Count - 2) ? "Holy cow! " : "";
