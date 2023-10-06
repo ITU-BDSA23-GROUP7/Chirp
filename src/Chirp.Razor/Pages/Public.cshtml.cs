@@ -15,7 +15,22 @@ public class PublicModel : PageModel
 
     public ActionResult OnGet()
     {
-        Cheeps = _service.GetCheeps();
+        string pageNumStr = Request.Query["page"];
+
+        if (pageNumStr == null) 
+            Console.WriteLine("Page number is a null value.");
+
+        int pageNum;
+
+        if (!int.TryParse(pageNumStr, out pageNum))
+            Console.WriteLine("Page number isn't an integer.");
+
+        if (pageNum < 0)
+            Console.WriteLine("Page number is less than 0.");
+
+        Console.WriteLine(pageNum);
+
+        Cheeps = _service.GetCheeps(pageNum);
         return Page();
     }
 }
