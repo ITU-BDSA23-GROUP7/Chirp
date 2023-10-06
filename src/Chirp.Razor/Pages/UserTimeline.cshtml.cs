@@ -15,7 +15,29 @@ public class UserTimelineModel : PageModel
 
     public ActionResult OnGet(string author)
     {
-        Cheeps = _service.GetCheepsFromAuthor(author);
+        string pageNumStr = Request.Query["page"];
+
+        if (pageNumStr == null) {
+            Console.WriteLine("Page number is a null value.");
+            Cheeps = _service.GetCheepsFromAuthor(author);
+            return Page();
+        }
+
+        int pageNum;
+
+        if (!int.TryParse(pageNumStr, out pageNum)) {
+            Console.WriteLine("Page number isn't an integer.");
+            Cheeps = _service.GetCheepsFromAuthor(author, -1);
+            return Page();
+        }
+
+        if (pageNum < 0) {
+            Console.WriteLine("Page number is less than 0.");
+            Cheeps = _service.GetCheepsFromAuthor(author, -1);
+            return Page();
+        }
+
+        Cheeps = _service.GetCheepsFromAuthor(author, pageNum);
         return Page();
     }
 }
