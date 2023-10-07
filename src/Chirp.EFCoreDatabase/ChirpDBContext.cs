@@ -1,11 +1,12 @@
 
-public class CheepContext : DbContext
+public class ChirpDBContext : DbContext
 {
 
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
+    public string DbPath { get; }
 
-    public CheepContext()
+    public ChirpDBContext()
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);

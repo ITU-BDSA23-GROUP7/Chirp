@@ -1,6 +1,3 @@
-using System;
-using Microsoft.Data.Sqlite;
-
 public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
@@ -11,28 +8,12 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    private static readonly List<CheepViewModel> _cheeps;
-
-
-
-    public CheepService()
-    {
-        var sqlDBFilePath = "./chirp.db";
-        var sqlQuery = @"SELECT * FROM message ORDER by message.pub_date desc";
-        using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
+    // These would normally be loaded from a database for example
+    private static readonly List<CheepViewModel> _cheeps = new()
         {
-
-            connection.Open();
-
-            var command = connection.CreateCommand();
-            command.CommandText = sqlQuery;
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                Console.WriteLine(reader);
-            }
-        }
-    }
+            new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
+            new CheepViewModel("Rasmus", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
+        };
 
     public List<CheepViewModel> GetCheeps()
     {
@@ -52,4 +33,5 @@ public class CheepService : ICheepService
         dateTime = dateTime.AddSeconds(unixTimeStamp);
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
+
 }
