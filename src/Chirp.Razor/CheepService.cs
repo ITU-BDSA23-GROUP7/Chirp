@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Data.Sqlite;
 
 public record CheepViewModel(string Author, string Message, string Timestamp);
@@ -25,7 +26,6 @@ public class CheepService : ICheepService
 
             var command = connection.CreateCommand();
             command.CommandText = sqlQuery;
-
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
