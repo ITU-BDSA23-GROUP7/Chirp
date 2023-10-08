@@ -2,8 +2,12 @@
 ChirpDBContext chirpContext = new ChirpDBContext();
 DbInitializer.SeedDatabase(chirpContext);
 
-var cheeps = chirpContext.Cheeps
-                                .OrderBy(c => c.CheepId).ToList();
+var cheeps = await chirpContext.Cheeps
+                                .Where(c => c.Author.Name == "Helge")
+                                .OrderBy(c => c.TimeStamp)
+                                .Include(c => c.Author)
+                                .ToListAsync();
+
 foreach (Cheep c in cheeps)
 {
     Console.WriteLine($"{c.TimeStamp} - {c.Author.Name}: {c.Text}");
