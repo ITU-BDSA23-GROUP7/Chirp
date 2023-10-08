@@ -8,6 +8,14 @@
 <div>
     <h2> Public Timeline </h2>
 
+    <p>
+        <strong>
+            @for (int n = 1; n <= Model.PageCount; n++) {
+                <a href="/?page=@n">@n</a>
+            }
+        </strong>
+    </p>
+
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
@@ -29,4 +37,11 @@
     {
         <em>There are no cheeps so far.</em>
     }
+    <p>
+        <strong>
+            @for (int n = 1; n <= Model.PageCount; n++) {
+                <a href="/?page=@n">@n</a>
+            }
+        </strong>
+    </p>
 </div>
