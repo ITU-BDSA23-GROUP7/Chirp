@@ -6,10 +6,12 @@ public class CheepServiceUnitTest
     public void GetCheepsListLength32()
     {
         // Arrange
-        ICheepService cheepService = new CheepService
+        ICheepService cheepService = new CheepService;
+        cheepService
 
         // Act
         List<CheepViewModel> cheepList = cheepService.GetCheeps();
+
 
 
 
