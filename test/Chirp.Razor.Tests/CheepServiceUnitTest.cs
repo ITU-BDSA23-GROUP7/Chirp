@@ -31,29 +31,42 @@ public class CheepServiceUnitTest
     }
 
     [Fact]
-    public void GetCheepsFromAuthorJonradHasNoCheeps()
+    public void GetCheepsFromAuthor6A6F6E726164HasNoCheeps()
     {
         // Arrange
         ICheepService cheepService = new CheepService();
-        List<CheepViewModel> jonradCheepList = cheepService.GetCheepsFromAuthor("Jonrad");
+        List<CheepViewModel> cheepList = cheepService.GetCheepsFromAuthor("6A6F6E726164");
 
         // Act
-        int length = jonradCheepList.Count;
+        int length = cheepList.Count;
 
         // Assert
         Assert.Equal(0, length);
     }
 
-
-
-    /*public void GetPagesCountFromCheepCountPageCountIs29()
+    [Fact]
+    public void GetPageCountPageCountIsMoreThanOne()
     {
         // Arrange
-
+        ICheepService cheepService = new CheepService();
 
         // Act
+        int pageCount = cheepService.GetPageCount();
 
         // Assert
+        Assert.True(pageCount >= 1, "Page count is less than 1");
+    }
 
-    }*/
+    [Fact]
+    public void GetPageCountPageCountIsOneWhenNoCheeps()
+    {
+        // Arrange
+        ICheepService cheepService = new CheepService();
+
+        // Act
+        int pageCount = cheepService.GetPageCountFromAuthor("6A6F6E726164");
+
+        // Assert
+        Assert.True(pageCount == 1, "Page count is not 1.");
+    }
 }
