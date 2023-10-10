@@ -7,6 +7,7 @@ public interface IChirpRepository : IDisposable {
 }
 
 public class ChirpRepository : IChirpRepository {
+    private int pageLength = 32;
     private ChirpDBContext context;
     public ChirpRepository(ChirpDBContext context) {
         this.context = context;
@@ -14,10 +15,14 @@ public class ChirpRepository : IChirpRepository {
         // Adds example data to the database if nothing has been added yet
         DbInitializer.SeedDatabase(context);
     }
-    public async Task<IEnumerable<CheepDTO>> GetCheeps(int page = 1)
+    public async Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1)
     {
+        int pageIndex = pageNum - 1;
+
         List<Cheep> cheeps = await context.Cheeps
             .OrderBy(c => c.TimeStamp)
+            .Skip(pageIndex * pageLength)
+            .Take(pageLength)
             .Include(c => c.Author)
             .ToListAsync();
 
