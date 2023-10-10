@@ -1,3 +1,5 @@
+
+
 public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
@@ -18,13 +20,15 @@ public class CheepService : ICheepService
     private static readonly List<CheepViewModel> _cheeps = GetDefaultCheeps();
 
     // Returns some default cheeps for testing. It is not important for the final product.
-    private static List<CheepViewModel> GetDefaultCheeps() {
+    private static List<CheepViewModel> GetDefaultCheeps()
+    {
         List<CheepViewModel> cheeps = new();
-        List<string> userNames = new(){"Daniel", "Casper", "Max", "Line", "Sebastian", "Helge"};
-        for (int i = 0; i < 1000; i++) {
+        List<string> userNames = new() { "Daniel", "Casper", "Max", "Line", "Sebastian", "Helge" };
+        for (int i = 0; i < 1000; i++)
+        {
             var userName = userNames[i % userNames.Count];
             var holyCow = i % (userNames.Count - 1) == (userNames.Count - 2) ? "Holy cow! " : "";
-            var cheep = new CheepViewModel(userName, $"{holyCow}This is cheep number {i+1}!", UnixTimeStampToDateTimeString(1690892208+i));
+            var cheep = new CheepViewModel(userName, $"{holyCow}This is cheep number {i + 1}!", UnixTimeStampToDateTimeString(1690892208 + i));
             cheeps.Add(cheep);
         }
         return cheeps;
@@ -42,10 +46,12 @@ public class CheepService : ICheepService
         return GetPageFromCheepList(authorCheeps, pageNum);
     }
 
-    public int GetPageCount() {
+    public int GetPageCount()
+    {
         return GetPagesCountFromCheepCount(_cheeps.Count);
     }
-    public int GetPageCountFromAuthor(string author) {
+    public int GetPageCountFromAuthor(string author)
+    {
         var authorCheeps = _cheeps.Where(x => x.Author == author).ToList();
         return GetPagesCountFromCheepCount(authorCheeps.Count);
     }
@@ -64,7 +70,8 @@ public class CheepService : ICheepService
     /// <param name="cheeps"></param>
     /// <param name="pageNum"></param>
     /// <returns>The </returns>
-    private List<CheepViewModel> GetPageFromCheepList(List<CheepViewModel> cheeps, int pageNum) {
+    private List<CheepViewModel> GetPageFromCheepList(List<CheepViewModel> cheeps, int pageNum)
+    {
 
         int pageIndex = pageNum - 1;
 
@@ -83,14 +90,21 @@ public class CheepService : ICheepService
         return cheeps.GetRange(fromIndex, currentPageLength);
     }
 
-    private List<CheepViewModel> GetEmptyCheepList() {
+    private List<CheepViewModel> GetEmptyCheepList()
+    {
         return new List<CheepViewModel>();
     }
 
-    private int GetPagesCountFromCheepCount(int cheepCount) {
+    private int GetPagesCountFromCheepCount(int cheepCount)
+    {
+        if (cheepCount == 0)
+        {
+            return 1;
+        }
         int fullPagesCount = cheepCount / pageLength;
         int remainderCheeps = cheepCount % pageLength;
-        if (remainderCheeps == 0) {
+        if (remainderCheeps == 0)
+        {
             return fullPagesCount;
         }
         return fullPagesCount + 1;
