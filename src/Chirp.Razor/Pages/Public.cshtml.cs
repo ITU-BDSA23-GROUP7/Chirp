@@ -6,14 +6,14 @@ namespace Chirp.Razor.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepService _service;
-    public List<CheepViewModel> Cheeps { get; set; }
+    public IEnumerable<CheepDTO> Cheeps { get; set; }
     public int PageCount { get; private set; }
 
     public PublicModel(ICheepService service)
     {
         _service = service;
     }
-    
+
     /// <summary>
     ///     Sets PageCount to the amount of total pages. <br/>
     ///     Sets Cheeps depending on the "page" query parameter. <br/>
@@ -21,7 +21,7 @@ public class PublicModel : PageModel
     ///     * Will set Cheeps to an empty list if parameter is not a positive integer. <br/>
     /// </summary>
     /// <returns></returns>
-    public ActionResult OnGet()
+    public async Task<ActionResult> OnGet()
     {
         PageCount = _service.GetPageCount();
 
@@ -29,7 +29,7 @@ public class PublicModel : PageModel
 
         if (pageNumStr == null) {
             Console.WriteLine("Page number is a null value.");
-            Cheeps = _service.GetCheeps();
+            Cheeps = await _service.GetCheeps();
             return Page();
         }
 
@@ -37,17 +37,17 @@ public class PublicModel : PageModel
 
         if (!int.TryParse(pageNumStr, out pageNum)) {
             Console.WriteLine("Page number isn't an integer.");
-            Cheeps = new List<CheepViewModel>();
+            Cheeps = new List<CheepDTO>();
             return Page();
         }
 
         if (pageNum <= 0) {
             Console.WriteLine("Page number is less than or equal to 0.");
-            Cheeps = new List<CheepViewModel>();
+            Cheeps = new List<CheepDTO>();
             return Page();
         }
 
-        Cheeps = _service.GetCheeps(pageNum);
+        Cheeps = await _service.GetCheeps(pageNum);
         return Page();
     }
 }
