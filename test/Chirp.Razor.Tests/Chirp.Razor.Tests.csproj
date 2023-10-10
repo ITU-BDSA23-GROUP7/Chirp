@@ -21,4 +21,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Chirp.Razor\Chirp.Razor.csproj" />
+    <ProjectReference Include="..\..\src\Chirp.EFCoreDatabase\Chirp.EFCoreDatabase.csproj" />
+  </ItemGroup>
+
 </Project>
