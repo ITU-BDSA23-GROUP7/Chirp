@@ -3,7 +3,7 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 public interface ICheepService
 {
     public Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1);
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum = 1);
+    public Task<IEnumerable<CheepDTO>> GetCheepsFromAuthor(string author, int pageNum = 1);
     public int GetPageCount();
     public int GetPageCountFromAuthor(string author);
 }
@@ -19,16 +19,18 @@ public class CheepService : ICheepService
         return await repository.GetCheeps(pageNum);
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum = 1)
+    public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthor(string author, int pageNum = 1)
     {
-        throw new NotImplementedException();
+        return await repository.GetCheeps(pageNum, author);
     }
 
-    public int GetPageCount() {
-       return repository.GetPageCount();
+    public int GetPageCount()
+    {
+        return repository.GetPageCount();
     }
-    public int GetPageCountFromAuthor(string author) {
-        return 42;
+    public int GetPageCountFromAuthor(string author)
+    {
+        return repository.GetPageCount(author);
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)

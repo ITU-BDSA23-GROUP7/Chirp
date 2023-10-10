@@ -1,25 +1,35 @@
 public record CheepDTO(string Author, string Message, string Timestamp);
 
-public interface IChirpRepository : IDisposable {
-    Task<IEnumerable<CheepDTO>> GetCheeps(int page = 1);
-    Task<IEnumerable<CheepDTO>> GetCheepsByAuthor(string author, int page = 1);
-    int GetPageCount();
+public interface IChirpRepository : IDisposable
+{
+    Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1, string? author = null);
+
+    int GetPageCount(string? auhtor = null);
 }
 
-public class ChirpRepository : IChirpRepository {
+public class ChirpRepository : IChirpRepository
+{
     private int pageLength = 32;
     private ChirpDBContext context;
-    public ChirpRepository(ChirpDBContext context) {
+    public ChirpRepository(ChirpDBContext context)
+    {
         this.context = context;
 
         // Adds example data to the database if nothing has been added yet
         DbInitializer.SeedDatabase(context);
     }
-    public async Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1)
+
+    public async Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1, string? author = null)
     {
         int pageIndex = pageNum - 1;
 
-        List<Cheep> cheeps = await context.Cheeps
+        // Checks wether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
+        List<Cheep> cheeps = await
+            (
+                author == null ?
+                context.Cheeps :
+                context.Cheeps.Where(c => c.Author.Name == author)
+            )
             .OrderBy(c => c.TimeStamp)
             .Skip(pageIndex * pageLength)
             .Take(pageLength)
@@ -40,21 +50,25 @@ public class ChirpRepository : IChirpRepository {
 
         return cheepDTOs;
     }
-    public Task<IEnumerable<CheepDTO>> GetCheepsByAuthor(string author, int page = 1)
+
+    public int GetPageCount(string? author = null)
     {
-        throw new NotImplementedException();
+        // Checks wether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
+        int cheepCount = (
+                author == null ?
+                context.Cheeps :
+                context.Cheeps.Where(c => c.Author.Name == author)
+            )
+            .Count();
+        return (int)MathF.Ceiling(1f * cheepCount / pageLength);
     }
 
-    public int GetPageCount()
+    protected virtual void Dispose(bool disposing)
     {
-        int cheepCount = context.Cheeps.Count();
-        return (int) MathF.Ceiling(1f * cheepCount / pageLength);
-    }
-
-    protected virtual void Dispose(bool disposing) {
 
     }
-    public void Dispose() {
+    public void Dispose()
+    {
         Dispose(true);
     }
 }
