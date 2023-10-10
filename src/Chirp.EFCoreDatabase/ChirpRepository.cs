@@ -65,7 +65,7 @@ public class ChirpRepository : IChirpRepository
 
     protected virtual void Dispose(bool disposing)
     {
-
+        throw new NotImplementedException("The dispose method is not implemented for ChirpRepository");
     }
     public void Dispose()
     {
