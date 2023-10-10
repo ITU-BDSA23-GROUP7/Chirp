@@ -3,7 +3,7 @@ public record CheepDTO(string Author, string Message, string Timestamp);
 public interface IChirpRepository : IDisposable {
     Task<IEnumerable<CheepDTO>> GetCheeps(int page = 1);
     Task<IEnumerable<CheepDTO>> GetCheepsByAuthor(string author, int page = 1);
-
+    int GetPageCount();
 }
 
 public class ChirpRepository : IChirpRepository {
@@ -44,6 +44,13 @@ public class ChirpRepository : IChirpRepository {
     {
         throw new NotImplementedException();
     }
+
+    public int GetPageCount()
+    {
+        int cheepCount = context.Cheeps.Count();
+        return (int) MathF.Ceiling(1f * cheepCount / pageLength);
+    }
+
     protected virtual void Dispose(bool disposing) {
 
     }

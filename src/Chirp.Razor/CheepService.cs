@@ -25,7 +25,7 @@ public class CheepService : ICheepService
     }
 
     public int GetPageCount() {
-       return 42;
+       return repository.GetPageCount();
     }
     public int GetPageCountFromAuthor(string author) {
         return 42;
