@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
+
 public record CheepDTO(string Author, string Message, string Timestamp);
 
 public interface IChirpRepository : IDisposable
@@ -14,7 +17,7 @@ public class ChirpRepository : IChirpRepository
     public ChirpRepository(ChirpDBContext context)
     {
         this.context = context;
-
+        context.Database.Migrate();
         // Adds example data to the database if nothing has been added yet
         DbInitializer.SeedDatabase(context);
     }
