@@ -8,9 +8,9 @@ public class ChirpDBContext : DbContext
 
     public ChirpDBContext()
     {
-        var folder = Environment.SpecialFolder.LocalApplicationData;
-        var path = Environment.GetFolderPath(folder);
+        var path = Path.GetTempPath();
         DbPath = System.IO.Path.Join(path, "chirp.db");
+        Console.WriteLine(DbPath);
     }
 
     // The following configures EF to create a Sqlite database file in the
