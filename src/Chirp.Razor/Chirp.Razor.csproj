@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chirp.EFCoreDatabase\Chirp.EFCoreDatabase.csproj" />
+    <ProjectReference Include="..\Chirp.Core\Chirp.Core.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
