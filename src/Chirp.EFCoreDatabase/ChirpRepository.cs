@@ -6,7 +6,7 @@ public class ChirpRepository : IChirpRepository
     public ChirpRepository(ChirpDBContext context)
     {
         this.context = context;
-        //context.Database.Migrate();
+        context.Database.Migrate();
         // Adds example data to the database if nothing has been added yet
         DbInitializer.SeedDatabase(context);
     }
