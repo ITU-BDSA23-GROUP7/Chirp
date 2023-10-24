@@ -1,8 +1,13 @@
+using System.Diagnostics;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSingleton<ICheepService, CheepService>();
+//builder.Services.AddSingleton<ICheepService, CheepService>();
+builder.Services.AddScoped<ICheepService, CheepService>();
+
+Trace.WriteLine("Programmet kører");
 
 var app = builder.Build();
 
@@ -21,6 +26,10 @@ app.UseRouting();
 
 app.MapRazorPages();
 
+Trace.WriteLine("Programmet skal til at runne");
+
 app.Run();
+
+Trace.WriteLine("programmet er kørt");
 
 public partial class Program { }
