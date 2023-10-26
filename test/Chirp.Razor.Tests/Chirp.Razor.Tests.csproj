@@ -24,8 +24,9 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Chirp.Razor.Tests" />
+    <ProjectReference Include="..\..\src\Chirp.Core\Chirp.Core.csproj" />
+    <ProjectReference Include="..\..\src\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\Chirp.Razor\Chirp.Razor.csproj" />
-    <ProjectReference Include="..\..\src\Chirp.EFCoreDatabase\Chirp.EFCoreDatabase.csproj" />
   </ItemGroup>
 
 </Project>
