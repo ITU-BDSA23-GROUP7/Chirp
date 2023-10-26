@@ -11,6 +11,25 @@
         <a href="/"><img src="/images/icon1.png" alt="Icon1"/></a>Chirp!
     </h1>
 
+    <div class=navigation>
+        @if (true)
+        {
+            <div>
+                <a href="/@("bro what")">my timeline</a> |
+                <a href="/">public timeline</a> |
+                <a href="/">logout [@("bro jo")]</a>
+            </div>
+        }
+        else
+        {
+            <div>
+                <a href="/">public timeline</a> |
+                <a href="/">register</a> |
+                <a href="/">login</a>
+            </div>
+        }
+    </div>
+
     <div class=body>
         @RenderBody()
     </div>
