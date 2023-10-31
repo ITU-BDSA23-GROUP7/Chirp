@@ -69,4 +69,18 @@ public class CheepServiceUnitTest
         // Assert
         Assert.True(pageCount == 0, "Page count is not 1.");
     }
+
+    [Fact]
+    public async void WowNewTestPlsDeleteSoon()
+    {
+        // Arrange
+        IAuthorRepository authorRepository = new AuthorRepository();
+
+        // Act
+        var authorInfo = await authorRepository.GetAuthorInfo("");
+        var email = authorInfo.Email;
+
+        // Assert
+        Assert.Equal("ben@dover.cum", email);
+    }
 }
