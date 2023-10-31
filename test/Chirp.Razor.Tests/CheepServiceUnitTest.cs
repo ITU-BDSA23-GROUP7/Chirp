@@ -77,7 +77,7 @@ public class CheepServiceUnitTest
         IAuthorRepository authorRepository = new AuthorRepository();
 
         // Act
-        var authorInfo = await authorRepository.GetAuthorInfo("");
+        var authorInfo = await authorRepository.GetAuthorInfo("Helge");
         var email = authorInfo.Email;
 
         // Assert
