@@ -8,7 +8,7 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    private static readonly IChirpRepository Repository = new ChirpRepository(new ChirpDBContext());
+    private static readonly IChirpRepository Repository = new ChirpRepository();
 
     public async Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1)
     {
