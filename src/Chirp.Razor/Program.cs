@@ -1,15 +1,33 @@
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var tempDirectoryPath = Path.GetTempPath();
+var dbPath = Path.Join(tempDirectoryPath, "chirp.db");
+
 // Add services to the container.
+builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite($"Data Source={dbPath}"));
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+
 builder.Services.AddRazorPages();
-//builder.Services.AddSingleton<ICheepService, CheepService>();
-builder.Services.AddScoped<ICheepService, CheepService>();
 
 Trace.WriteLine("Programmet kører");
 
 var app = builder.Build();
+
+// Seed database
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ChirpDBContext>();
+
+    context.Database.Migrate();
+
+    //Then you can use the context to seed the database for example
+    DbInitializer.SeedDatabase(context);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

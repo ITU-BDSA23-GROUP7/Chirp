@@ -5,13 +5,13 @@ namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly ICheepService _service;
+    private readonly ICheepRepository _repository;
     public IEnumerable<CheepDTO> Cheeps { get; set; }
     public int PageCount { get; private set; }
 
-    public UserTimelineModel(ICheepService service)
+    public UserTimelineModel(ICheepRepository repository)
     {
-        _service = service;
+        _repository = repository;
     }
 
     /// <summary>
@@ -24,14 +24,14 @@ public class UserTimelineModel : PageModel
     /// <returns></returns>
     public async Task<ActionResult> OnGet(string author)
     {
-        PageCount = _service.GetPageCountFromAuthor(author);
+        PageCount = _repository.GetPageCount(author);
 
         string pageNumStr = Request.Query["page"];
 
         if (pageNumStr == null)
         {
             Console.WriteLine("Page number is a null value.");
-            Cheeps = await _service.GetCheepsFromAuthor(author);
+            Cheeps = await _repository.GetCheeps(1, author);
             return Page();
         }
 
@@ -40,18 +40,18 @@ public class UserTimelineModel : PageModel
         if (!int.TryParse(pageNumStr, out pageNum))
         {
             Console.WriteLine("Page number isn't an integer.");
-            Cheeps = await _service.GetCheepsFromAuthor(author, -1);
+            Cheeps = await _repository.GetCheeps(1, author);
             return Page();
         }
 
         if (pageNum < 0)
         {
             Console.WriteLine("Page number is less than 0.");
-            Cheeps = await _service.GetCheepsFromAuthor(author, -1);
+            Cheeps = await _repository.GetCheeps(1, author);
             return Page();
         }
 
-        Cheeps = await _service.GetCheepsFromAuthor(author, pageNum);
+        Cheeps = await _repository.GetCheeps(pageNum, author);
         return Page();
     }
 }
