@@ -5,19 +5,18 @@ public class AuthorRepository : IAuthorRepository
 
     public AuthorRepository(ChirpDBContext context)
     {
-
+        this.context = context;
     }
 
     public async Task<AuthorInfo> GetAuthorInfo(string userName)
     {
-        var cheeps = context.Cheeps.Where(c => c.Author.Name == userName)
-        .select();
+        var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == userName);
 
-        //var authors = context.Cheeps.Where(c => c.Author.Name == author);
         var authorInfo = new AuthorInfo(
-            UserName: "Peter File",
-            Email: "ben@dover.cum"
+            UserName: author.Name,
+            Email: author.Email
         );
+
         return authorInfo;
     }
 

@@ -5,13 +5,13 @@ namespace Chirp.Razor.Pages;
 
 public class PublicModel : PageModel
 {
-    private readonly ICheepService _service;
+    private readonly ICheepRepository _repository;
     public IEnumerable<CheepDTO> Cheeps { get; set; }
     public int PageCount { get; private set; }
 
-    public PublicModel(ICheepService service)
+    public PublicModel(ICheepRepository repository)
     {
-        _service = service;
+        _repository = repository;
     }
 
     /// <summary>
@@ -23,13 +23,13 @@ public class PublicModel : PageModel
     /// <returns></returns>
     public async Task<ActionResult> OnGet()
     {
-        PageCount = _service.GetPageCount();
+        PageCount = _repository.GetPageCount();
 
         string pageNumStr = Request.Query["page"];
 
         if (pageNumStr == null) {
             Console.WriteLine("Page number is a null value.");
-            Cheeps = await _service.GetCheeps();
+            Cheeps = await _repository.GetCheeps();
             return Page();
         }
 
@@ -47,7 +47,7 @@ public class PublicModel : PageModel
             return Page();
         }
 
-        Cheeps = await _service.GetCheeps(pageNum);
+        Cheeps = await _repository.GetCheeps(pageNum);
         return Page();
     }
 }

@@ -1,14 +1,11 @@
 
-public class ChirpRepository : IChirpRepository
+public class CheepRepository : ICheepRepository
 {
     private int pageLength = 32;
     private ChirpDBContext context;
-    public ChirpRepository(ChirpDBContext context)
+    public CheepRepository(ChirpDBContext context)
     {
         this.context = context;
-        context.Database.Migrate();
-        // Adds example data to the database if nothing has been added yet
-        DbInitializer.SeedDatabase(context);
     }
 
     public async Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1, string? author = null)
