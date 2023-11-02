@@ -13,7 +13,7 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<AuthorInfo> GetAuthorInfo(string userName)
     {
-        List<Cheep> cheeps = await context.Cheeps.Where(c => c.Author.Name == userName);
+        IQueryable<Cheep> cheeps = context.Cheeps.Where(c => c.Author.Name == userName);
         //var authors = context.Cheeps.Where(c => c.Author.Name == author);
         var authorInfo = new AuthorInfo(
             UserName: "Peter File",
