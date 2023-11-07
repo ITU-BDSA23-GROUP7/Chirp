@@ -22,7 +22,7 @@ public class AuthorRepository : IAuthorRepository
 
     protected virtual void Dispose(bool disposing)
     {
-        throw new NotImplementedException("The dispose method is not implemented for ChirpRepository");
+        throw new NotImplementedException("The dispose method is not implemented for AuthorRepository");
     }
     public void Dispose()
     {
