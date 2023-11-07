@@ -17,19 +17,9 @@ builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
 // Authentication with AD B2C
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-        .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureADB2C"));
-/*builder.Services.AddAuthorization(options =>
-{
-    // By default, all incoming requests will be authorized according to 
-    // the default policy
-    options.FallbackPolicy = options.DefaultPolicy;
-});*/
-builder.Services.AddRazorPages()/*(options =>
-{
-    options.Conventions.AllowAnonymousToPage("/Index");
-})
-.AddMvcOptions(options => { }) */
-.AddMicrosoftIdentityUI();
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureADB2C"));
+builder.Services.AddRazorPages()
+    .AddMicrosoftIdentityUI();
 
 Trace.WriteLine("Programmet kører");
 
@@ -57,6 +47,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseCookiePolicy(new CookiePolicyOptions()
+{
+    Secure = CookieSecurePolicy.Always
+});
 
 app.UseRouting();
 
