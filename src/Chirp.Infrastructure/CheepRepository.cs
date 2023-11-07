@@ -51,13 +51,5 @@ public class CheepRepository : ICheepRepository
             .Count();
         return (int)MathF.Ceiling(1f * cheepCount / pageLength);
     }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        throw new NotImplementedException("The dispose method is not implemented for ChirpRepository");
-    }
-    public void Dispose()
-    {
-        Dispose(true);
-    }
+    
 }

@@ -3,12 +3,12 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace Chirp.Razor.Tests;
 
-public class CheepServiceIntegrationTest: IClassFixture<WebApplicationFactory<Program>>
+public class IntegrationTest: IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
-    public CheepServiceIntegrationTest(WebApplicationFactory<Program> fixture){
+    public IntegrationTest(WebApplicationFactory<Program> fixture){
         // Arrange
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
