@@ -1,8 +1,8 @@
-public record AuthorInfo(string UserName, string Email);
+public record AuthorInfo(string Username, string Email);
 
 public interface IAuthorRepository : IDisposable
 {
-    Task<AuthorInfo> GetAuthorInfo(string userName);
+    Task<AuthorInfo> GetAuthorInfo(string username);
     void CreateNewAuthor(int authorId, string name, string email);
 
 }

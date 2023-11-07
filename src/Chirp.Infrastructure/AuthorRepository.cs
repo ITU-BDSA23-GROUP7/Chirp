@@ -9,24 +9,31 @@ public class AuthorRepository : IAuthorRepository
     }
 
     public async void CreateNewAuthor(int authorId, string name, string email){
-        var alreadyExists = GetAuthorInfo(name);
-
-
-        if(alreadyExists.Result.UserName == name){
-            Console.WriteLine("User already exists, so user has not been created");
-            //return;
+        
+        bool usernameExists = await UsernameExists(name);
+        if (usernameExists) {
+            throw new Exception("Username already exists exception");
         }
 
         context.Authors.Add(new Author{AuthorId = authorId, Name=name, Email=email, Cheeps = new List<Cheep>()});
         context.SaveChanges();
     }
 
-    public async Task<AuthorInfo> GetAuthorInfo(string userName)
+    private async Task<bool> UsernameExists(string username) {
+        var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
+        return author != null;
+    }
+
+    public async Task<AuthorInfo> GetAuthorInfo(string username)
     {
-        var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == userName);
+        var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
+
+        if (author == null) {
+            throw new UsernameNotFoundException($"The username {username} doesn't exist in the database.");
+        }
 
         var authorInfo = new AuthorInfo(
-            UserName: author.Name,
+            Username: author.Name,
             Email: author.Email
         );
 
