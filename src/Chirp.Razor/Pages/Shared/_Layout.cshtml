@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -17,9 +18,10 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <div>
-                    <a href="/@("bro what")">my timeline</a> |
+                    <a href="/@(User.Identity.Name)">my timeline</a> |
                     <a href="/">public timeline</a> |
-                    <partial name="_LoginPartial" />
+                    <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out
+                        [@(User.Identity.Name)]</a>
                 </div>
             }
             else
@@ -27,7 +29,7 @@
                 <div>
                     <a href="/">public timeline</a> |
                     <a href="/">register</a> |
-                    <partial name="_LoginPartial" />
+                    <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Sign in</a>
                 </div>
             }
         </div>
