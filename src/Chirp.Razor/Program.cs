@@ -1,5 +1,9 @@
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +15,11 @@ builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite($"Dat
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
-builder.Services.AddRazorPages();
+// Authentication with AD B2C
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureADB2C"));
+builder.Services.AddRazorPages()
+    .AddMicrosoftIdentityUI();
 
 Trace.WriteLine("Programmet kører");
 
@@ -40,9 +48,16 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseCookiePolicy(new CookiePolicyOptions()
+{
+    Secure = CookieSecurePolicy.Always
+});
+
 app.UseRouting();
 
+app.MapControllers();
 app.MapRazorPages();
+
 
 Trace.WriteLine("Programmet skal til at runne");
 
