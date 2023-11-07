@@ -39,13 +39,4 @@ public class AuthorRepository : IAuthorRepository
 
         return authorInfo;
     }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        throw new NotImplementedException("The dispose method is not implemented for AuthorRepository");
-    }
-    public void Dispose()
-    {
-        Dispose(true);
-    }
 }

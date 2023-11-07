@@ -1,6 +1,6 @@
 public record CheepDTO(string Author, string Message, string Timestamp);
 
-public interface ICheepRepository : IDisposable
+public interface ICheepRepository
 {
     Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1, string? author = null);
 
