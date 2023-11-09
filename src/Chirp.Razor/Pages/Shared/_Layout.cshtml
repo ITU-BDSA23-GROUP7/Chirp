@@ -20,7 +20,8 @@
                 <div>
                     <a href="/@(User.Identity.Name)">my timeline</a> |
                     <a href="/">public timeline</a> |
-                    <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out
+                    <a href="/addcheep">add cheep</a> | 
+                    <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">logout
                         [@(User.Identity.Name)]</a>
                 </div>
             }
@@ -28,8 +29,8 @@
             {
                 <div>
                     <a href="/">public timeline</a> |
-                    <a href="/">register</a> |
-                    <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Sign in</a>
+                    <a href="/addcheep">add cheep</a> |
+                    <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">login</a>
                 </div>
             }
         </div>

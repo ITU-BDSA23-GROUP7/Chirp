@@ -1,0 +1,18 @@
+﻿@page "/addcheep"
+@model Chirp.Razor.Pages.AddCheepModel
+@{
+    ViewData["Title"] = "Add Cheep!";
+    Layout = "Shared/_Layout";
+}
+<div>
+    <form method="post">
+        <h2>Add Cheep:</h2>
+        <p>Whats on your mind? <br />
+            <textarea cols="60%" rows="5" style="resize:none" asp-for="CheepText" id="CheepText" name="CheepText"
+                maxlength="160"></textarea>
+        </p>
+
+        @Html.AntiForgeryToken()
+        <input type="submit" value="Post!">
+    </form>
+</div>
