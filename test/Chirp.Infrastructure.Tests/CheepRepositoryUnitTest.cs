@@ -75,4 +75,28 @@ public class CheepServiceUnitTest
         // Assert
         Assert.Equal(expectedPageCount, actualPageCount);
     }
+
+    // Test will currently only work under the assumption that "Helge" has less than 31 cheeps
+    [Fact]
+    public async void PostCheepWillAddCheepToUser()
+    {
+        // Arrange
+        var newCheep = new CheepDTO(
+            Author: "Helge",
+            Message: "Hello world",
+            Timestamp: ""
+        );
+
+        // Act
+        IEnumerable<CheepDTO> cheepList = await _cheepService.GetCheeps(1, newCheep.Author);
+        int beforeCheepCount = cheepList.Count();
+
+        _cheepService.PostCheep(newCheep);
+
+        cheepList = await _cheepService.GetCheeps(1, newCheep.Author);
+        int afterCheepCount = cheepList.Count();
+
+        // Assert
+        Assert.Equal(beforeCheepCount + 1, afterCheepCount);
+    }
 }

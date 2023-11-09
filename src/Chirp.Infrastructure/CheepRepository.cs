@@ -52,4 +52,7 @@ public class CheepRepository : ICheepRepository
         return (int)MathF.Ceiling(1f * cheepCount / pageLength);
     }
     
+    public void PostCheep(CheepDTO cheep) {
+        throw new NotImplementedException();
+    }
 }
