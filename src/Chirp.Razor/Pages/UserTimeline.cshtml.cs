@@ -24,9 +24,11 @@ public class UserTimelineModel : PageModel
     /// <returns></returns>
     public async Task<IActionResult> OnGet(string author)
     {
+        /*
         if(!User.Identity!.IsAuthenticated){
             return RedirectToPage("Public");
         }
+        */
         PageCount = _repository.GetPageCount(author);
 
         string pageNumStr = Request.Query["page"];
