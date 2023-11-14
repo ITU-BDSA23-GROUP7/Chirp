@@ -15,6 +15,12 @@ namespace Chirp.Razor.Pages
 
         public IActionResult OnGet()
         {
+            //Please uncomment when AddCheeps implemented...
+            /*
+            if(!User.Identity!.IsAuthenticated){
+                return RedirectToPage("Public");
+            }
+            */
             return Page();
         }
 
