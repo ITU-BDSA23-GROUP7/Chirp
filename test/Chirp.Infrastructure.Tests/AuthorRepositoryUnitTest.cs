@@ -36,11 +36,11 @@ public class AuthorRepositoryUnitTest
         //Arrange
 
         //Act
-        _authorRepository.CreateNewAuthor("Casper", "123@abc.com");
+        _authorRepository.CreateNewAuthor("Casper");
         AuthorInfo newUser = await _authorRepository.GetAuthorInfo("Casper");
 
         //Assert
-        Assert.Equal("123@abc.com", newUser.Email);
+        Assert.Equal("Casper", newUser.Username);
     }
 
     [Fact]

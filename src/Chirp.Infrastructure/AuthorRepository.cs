@@ -8,20 +8,20 @@ public class AuthorRepository : IAuthorRepository
         this.context = context;
     }
 
-    public async void CreateNewAuthor(string name, string email)
+    public async void CreateNewAuthor(string name)
     {
 
-        bool usernameExists = await UsernameExists(name);
+        bool usernameExists = await UsernameExistsAsync(name);
         if (usernameExists)
         {
             throw new Exception("Username already exists exception");
         }
 
-        context.Authors.Add(new Author { AuthorId = Guid.NewGuid(), Name = name, Email = email, Cheeps = new List<Cheep>() });
+        context.Authors.Add(new Author { AuthorId = Guid.NewGuid(), Name = name, Cheeps = new List<Cheep>() });
         context.SaveChanges();
     }
 
-    private async Task<bool> UsernameExists(string username)
+    public async Task<bool> UsernameExistsAsync(string username)
     {
         var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
         return author != null;

@@ -22,7 +22,7 @@ namespace Chirp.Razor.Pages
         public string CheepText { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
-            await _repository.AddCheepAsync("Helge", CheepText);
+            await _repository.AddCheepAsync(User.Identity.Name, CheepText);
             return RedirectToPage("Public");
         }
     }
