@@ -4,7 +4,8 @@ public class AuthorRepositoryUnitTest
 {
     private readonly IAuthorRepository _authorRepository;
     private readonly SqliteConnection _connection;
-    public AuthorRepositoryUnitTest(){
+    public AuthorRepositoryUnitTest()
+    {
         //Building the connection to a database
         _connection = new SqliteConnection("Filename=:memory:");
         _connection.Open();
@@ -26,7 +27,7 @@ public class AuthorRepositoryUnitTest
     [Fact]
     public void Test()
     {
-        Assert.Equal(1,1);
+        Assert.Equal(1, 1);
     }
 
     [Fact]
@@ -35,11 +36,11 @@ public class AuthorRepositoryUnitTest
         //Arrange
 
         //Act
-        _authorRepository.CreateNewAuthor(23, "Casper", "Ben@Dover.com");
+        _authorRepository.CreateNewAuthor("Casper", "123@abc.com");
         AuthorInfo newUser = await _authorRepository.GetAuthorInfo("Casper");
 
         //Assert
-        Assert.Equal("Ben@Dover.com", newUser.Email);
+        Assert.Equal("123@abc.com", newUser.Email);
     }
 
     [Fact]
@@ -49,7 +50,7 @@ public class AuthorRepositoryUnitTest
         var notExistingName = "Bobby";
 
         //Act & Assert
-       await Assert.ThrowsAsync<UsernameNotFoundException>(async () => await _authorRepository.GetAuthorInfo(notExistingName));
+        await Assert.ThrowsAsync<UsernameNotFoundException>(async () => await _authorRepository.GetAuthorInfo(notExistingName));
     }
 
     [Fact]

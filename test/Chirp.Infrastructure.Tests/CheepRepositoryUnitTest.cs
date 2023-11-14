@@ -4,13 +4,14 @@ public class CheepServiceUnitTest
 {
     private readonly ICheepRepository _cheepService;
     private readonly SqliteConnection _connection;
-    public CheepServiceUnitTest(){
+    public CheepServiceUnitTest()
+    {
         //Building the connection to a database
         _connection = new SqliteConnection("Filename=:memory:");
-        _connection.Open(); 
+        _connection.Open();
         var builder = new DbContextOptionsBuilder<ChirpDBContext>()
             .UseSqlite(_connection);
-        
+
         //injectin the context into the database
         var context = new ChirpDBContext(builder.Options);
         context.Database.EnsureCreatedAsync(); // Applies the schema to the database
@@ -40,7 +41,7 @@ public class CheepServiceUnitTest
     public async void GetCheepsFromAuthorHelgeHasMoreThanZeroCheeps()
     {
         // Arrange
-        IEnumerable<CheepDTO> helgeCheepList = await _cheepService.GetCheeps(author:"Helge");
+        IEnumerable<CheepDTO> helgeCheepList = await _cheepService.GetCheeps(author: "Helge");
 
         // Act
         int length = helgeCheepList.Count();
@@ -55,7 +56,7 @@ public class CheepServiceUnitTest
         //OBS. This test doesn't function if a Author has the name "6A6F6E726164"
 
         // Arrange
-        IEnumerable<CheepDTO> cheepList = await _cheepService.GetCheeps(author:"6A6F6E726164");
+        IEnumerable<CheepDTO> cheepList = await _cheepService.GetCheeps(author: "6A6F6E726164");
 
         // Act
         int length = cheepList.Count();
@@ -65,7 +66,8 @@ public class CheepServiceUnitTest
     }
 
     [Fact]
-    public void GetPageCountPageCountIsCorrect(){
+    public void GetPageCountPageCountIsCorrect()
+    {
         // Arrange
         int expectedPageCount = 21;
 
@@ -78,25 +80,33 @@ public class CheepServiceUnitTest
 
     // Test will currently only work under the assumption that "Helge" has less than 31 cheeps
     [Fact]
-    public async void PostCheepWillAddCheepToUser()
+    public async void AddCheepWillAddCheepToUser()
     {
         // Arrange
-        var newCheep = new CheepDTO(
-            Author: "Helge",
-            Message: "Hello world",
-            Timestamp: ""
-        );
+        string author = "Helge";
+        string message = "Hello World!";
 
         // Act
-        IEnumerable<CheepDTO> cheepList = await _cheepService.GetCheeps(1, newCheep.Author);
+        IEnumerable<CheepDTO> cheepList = await _cheepService.GetCheeps(1, author);
         int beforeCheepCount = cheepList.Count();
 
-        _cheepService.PostCheep(newCheep);
+        await _cheepService.AddCheepAsync(author, message);
 
-        cheepList = await _cheepService.GetCheeps(1, newCheep.Author);
+        cheepList = await _cheepService.GetCheeps(1, author);
         int afterCheepCount = cheepList.Count();
 
         // Assert
         Assert.Equal(beforeCheepCount + 1, afterCheepCount);
+    }
+
+    [Fact]
+    public async void UserDoesNotExistWhenAddingCheep()
+    {
+        //Arrange
+        var notExistingName = "Bobby";
+        var message = "Hello World";
+
+        //Act & Assert
+        await Assert.ThrowsAsync<UsernameNotFoundException>(async () => await _cheepService.AddCheepAsync(notExistingName, message));
     }
 }
