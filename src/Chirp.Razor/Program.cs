@@ -4,6 +4,7 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
+//Test if Tests are misbehaving?
 
 var builder = WebApplication.CreateBuilder(args);
 
