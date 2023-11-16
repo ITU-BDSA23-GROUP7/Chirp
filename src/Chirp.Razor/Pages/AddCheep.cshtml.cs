@@ -25,7 +25,7 @@ namespace Chirp.Razor.Pages
         }
 
         [BindProperty]
-        public string CheepText { get; set; }
+        public required string CheepText { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
             Console.WriteLine(CheepText);
