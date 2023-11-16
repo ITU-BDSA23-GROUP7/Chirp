@@ -10,7 +10,8 @@
 
     <p>
         <strong>
-            @for (int n = 1; n <= Model.PageCount; n++) {
+            @for (int n = 1; n <= Model.PageCount; n++)
+            {
                 <a href="/?page=@n">@n</a>
             }
         </strong>
@@ -26,6 +27,8 @@
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>
                         </strong>
+
+                        <br />
                         @cheep.Message
                         <small>&mdash; @cheep.Timestamp</small>
                     </p>
@@ -39,7 +42,8 @@
     }
     <p>
         <strong>
-            @for (int n = 1; n <= Model.PageCount; n++) {
+            @for (int n = 1; n <= Model.PageCount; n++)
+            {
                 <a href="/?page=@n">@n</a>
             }
         </strong>
