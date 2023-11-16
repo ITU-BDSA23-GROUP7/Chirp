@@ -27,7 +27,7 @@ namespace MyApp.Namespace
                         _repository.CreateNewAuthor(User.Identity.Name);
                     }
                     AuthorInfo authorInfo = await _repository.GetAuthorInfo(User.Identity.Name);
-                    _cache.Set<string>("user", authorInfo.Username);
+                    _cache.Set<string>("user", "true");
                 }
             }
         }
