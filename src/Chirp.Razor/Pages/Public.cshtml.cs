@@ -5,8 +5,8 @@ namespace Chirp.Razor.Pages;
 
 public class PublicModel : PageModel
 {
-    public readonly ICheepRepository _repository;
-    public IEnumerable<CheepDTO> Cheeps { get; set; }
+    private readonly ICheepRepository _repository;
+    public required IEnumerable<CheepDTO> Cheeps { get; set; }
     public int PageCount { get; private set; }
 
     public PublicModel(ICheepRepository repository)
@@ -26,7 +26,7 @@ public class PublicModel : PageModel
         Console.WriteLine("OnGet");
         PageCount = _repository.GetPageCount();
 
-        string pageNumStr = Request.Query["page"];
+        string pageNumStr = Request.Query["page"]!;
 
         if (pageNumStr == null)
         {

@@ -16,11 +16,17 @@ namespace Chirp.Razor.Pages
 
         public IActionResult OnGet()
         {
+            //Please uncomment when AddCheeps implemented...
+            /*
+            if(!User.Identity!.IsAuthenticated){
+                return RedirectToPage("Public");
+            }
+            */
             return Page();
         }
 
         [BindProperty]
-        public string CheepText { get; set; }
+        public required string CheepText { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
             Console.WriteLine($"CheepText: {CheepText}");
