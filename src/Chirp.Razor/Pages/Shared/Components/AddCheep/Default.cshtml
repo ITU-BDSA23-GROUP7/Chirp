@@ -1,0 +1,10 @@
+﻿@model Chirp.Razor.Pages.AddCheepModel
+<div>
+    <form method="post">
+        <p>Whats on your mind? <br />
+            <input type="text" size="80%" maxlength="160" asp-for="CheepText" id="CheepText" name="CheepText" />
+            <input type="submit" value="Cheep" />
+        </p>
+        @Html.AntiForgeryToken()
+    </form>
+</div>

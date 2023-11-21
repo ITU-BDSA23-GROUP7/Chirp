@@ -32,4 +32,20 @@ namespace MyApp.Namespace
             }
         }
     }
+
+    public class IndexViewComponent : ViewComponent
+    {
+        private IMemoryCache _cache;
+        private IAuthorRepository _repository;
+        public IndexViewComponent(IMemoryCache cache, IAuthorRepository repository)
+        {
+            _cache = cache;
+            _repository = repository;
+        }
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var model = new IndexModel(_cache, _repository);
+            return View(model);
+        }
+    }
 }
