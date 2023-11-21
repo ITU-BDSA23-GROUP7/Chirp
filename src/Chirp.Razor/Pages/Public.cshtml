@@ -27,6 +27,10 @@
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>
                         </strong>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <input type="button" value="Follow" onclick="location.href='@Url.Action()'" />
+                        }
 
                         <br />
                         @cheep.Message
