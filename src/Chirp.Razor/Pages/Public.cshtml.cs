@@ -23,6 +23,7 @@ public class PublicModel : PageModel
     /// <returns></returns>
     public async Task<ActionResult> OnGet()
     {
+        Console.WriteLine("OnGet");
         PageCount = _repository.GetPageCount();
 
         string pageNumStr = Request.Query["page"];
@@ -46,8 +47,11 @@ public class PublicModel : PageModel
             Cheeps = new List<CheepDTO>();
             return Page();
         }
-
+        Console.WriteLine("Getting cheeps");
+        Console.WriteLine($"Cheeps: {Cheeps}");
         Cheeps = await _repository.GetCheeps(pageNum);
+        Console.WriteLine("Got cheeps");
+        Console.WriteLine($"Cheeps: {Cheeps}");
         return Page();
     }
 }

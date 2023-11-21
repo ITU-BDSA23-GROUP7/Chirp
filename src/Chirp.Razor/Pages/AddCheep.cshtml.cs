@@ -10,6 +10,7 @@ namespace Chirp.Razor.Pages
 
         public AddCheepModel(ICheepRepository repository)
         {
+            Console.WriteLine("AddCheepModel constructor");
             _repository = repository;
         }
 
