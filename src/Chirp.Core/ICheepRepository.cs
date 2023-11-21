@@ -1,5 +1,4 @@
-public record CheepDTO(string Author, string Message, string Timestamp);
-
+namespace Chirp.Core;
 public interface ICheepRepository
 {
     Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1, string? author = null);
