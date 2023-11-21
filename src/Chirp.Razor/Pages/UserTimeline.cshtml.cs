@@ -33,7 +33,6 @@ public class UserTimelineModel : PageModel
 
         if (pageNumStr == null)
         {
-            Console.WriteLine("Page number is a null value.");
             Cheeps = await _repository.GetCheeps(1, author);
             return Page();
         }
@@ -42,14 +41,12 @@ public class UserTimelineModel : PageModel
 
         if (!int.TryParse(pageNumStr, out pageNum))
         {
-            Console.WriteLine("Page number isn't an integer.");
             Cheeps = await _repository.GetCheeps(1, author);
             return Page();
         }
 
         if (pageNum < 0)
         {
-            Console.WriteLine("Page number is less than 0.");
             Cheeps = await _repository.GetCheeps(1, author);
             return Page();
         }

@@ -29,7 +29,6 @@ public class PublicModel : PageModel
 
         if (pageNumStr == null)
         {
-            Console.WriteLine("Page number is a null value.");
             Cheeps = await _repository.GetCheeps();
             return Page();
         }
@@ -38,20 +37,17 @@ public class PublicModel : PageModel
 
         if (!int.TryParse(pageNumStr, out pageNum))
         {
-            Console.WriteLine("Page number isn't an integer.");
             Cheeps = new List<CheepDTO>();
             return Page();
         }
 
         if (pageNum <= 0)
         {
-            Console.WriteLine("Page number is less than or equal to 0.");
             Cheeps = new List<CheepDTO>();
             return Page();
         }
 
         Cheeps = await _repository.GetCheeps(pageNum);
-        Console.WriteLine($"Cheeps: {Cheeps}");
         return Page();
     }
 }
