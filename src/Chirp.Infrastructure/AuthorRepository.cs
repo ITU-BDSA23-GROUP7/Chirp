@@ -54,23 +54,29 @@ public class AuthorRepository : IAuthorRepository
     }
 
 
-    public async Task FollowAuthor(AuthorDTO authorDTO, AuthorDTO followAuthorDTO)
+    public async Task FollowAuthor(AuthorDTO currentAuthorDTO, AuthorDTO authorToFollowDTO)
     {
-        var author = await FindAuthorByDTO(authorDTO);
-        var followAuthor = await FindAuthorByDTO(followAuthorDTO);
+        var findCurrentAuthorTask = FindAuthorByDTO(currentAuthorDTO);
+        var findAuthorToFollowTask = FindAuthorByDTO(authorToFollowDTO);
 
-        author.Following.Add(followAuthor);
-        followAuthor.Followers.Add(author);
+        var currentAuthor = await findCurrentAuthorTask;
+        var authorToFollow = await findAuthorToFollowTask;
+
+        currentAuthor.Following.Add(authorToFollow);
+        authorToFollow.Followers.Add(currentAuthor);
         await context.SaveChangesAsync();
     }
 
-    public async Task UnfollowAuthor(AuthorDTO authorDTO, AuthorDTO unfollowAuthorDTO)
+    public async Task UnfollowAuthor(AuthorDTO currentAuthorDTO, AuthorDTO authorToUnfollowDTO)
     {
-        var author = await FindAuthorByDTO(authorDTO);
-        var authorToUnfollow = await FindAuthorByDTO(unfollowAuthorDTO);
+        var findCurrentAuthorTask = FindAuthorByDTO(currentAuthorDTO);
+        var findAuthorToUnfollowTask = FindAuthorByDTO(authorToUnfollowDTO);
 
-        author.Following.Remove(authorToUnfollow);
-        authorToUnfollow.Followers.Remove(author);
+        var currentAuthor = await findCurrentAuthorTask;
+        var authorToUnfollow = await findAuthorToUnfollowTask;
+
+        currentAuthor.Following.Remove(authorToUnfollow);
+        authorToUnfollow.Followers.Remove(currentAuthor);
         await context.SaveChangesAsync();
     }
 
