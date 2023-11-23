@@ -1,7 +1,10 @@
 
-
 using System.ComponentModel.DataAnnotations;
 
+/// <summary>
+/// Each cheep represents a post a user makes at a specific moment in time. For that reason
+/// each attribute is required (not nullable).
+/// </summary>
 public class Cheep
 {
     public required int CheepId { get; set; }
