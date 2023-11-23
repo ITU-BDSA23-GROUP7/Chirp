@@ -28,11 +28,17 @@ public class CheepRepository : ICheepRepository
         var cheepDTOs = new List<CheepDTO>();
         foreach (Cheep cheep in cheeps)
         {
-            var cheepDTO = new CheepDTO(
-                Author: cheep.Author.Name,
-                Message: cheep.Text,
-                Timestamp: cheep.TimeStamp.ToString()
-            );
+            var cheepDTO = new CheepDTO
+            {
+                Author = new AuthorDTO
+                {
+                    AuthorId = cheep.Author.AuthorId,
+                    Name = cheep.Author.Name,
+                    Email = cheep.Author.Email
+                },
+                Message = cheep.Text,
+                Timestamp = cheep.TimeStamp.ToString()
+            };
 
             cheepDTOs.Add(cheepDTO);
         }

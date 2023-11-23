@@ -54,8 +54,9 @@ public class PublicModel : PageModel
 
     [BindProperty]
     public string CheepText { get; set; }
-    public async Task OnPostAsync()
+    public async Task<ActionResult> OnPostAsync()
     {
         await AddCheepModel.OnPostAsync(User.Identity.Name, CheepText);
+        return RedirectToPage("Public");
     }
 }

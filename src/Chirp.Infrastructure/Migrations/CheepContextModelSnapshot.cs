@@ -14,7 +14,7 @@ namespace Chirp.EFCoreDatabase.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
 
             modelBuilder.Entity("Author", b =>
                 {
@@ -34,6 +34,21 @@ namespace Chirp.EFCoreDatabase.Migrations
                     b.ToTable("Authors");
                 });
 
+            modelBuilder.Entity("AuthorAuthor", b =>
+                {
+                    b.Property<Guid>("FollowersAuthorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("FollowingAuthorId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("FollowersAuthorId", "FollowingAuthorId");
+
+                    b.HasIndex("FollowingAuthorId");
+
+                    b.ToTable("AuthorAuthor");
+                });
+
             modelBuilder.Entity("Cheep", b =>
                 {
                     b.Property<Guid>("CheepId")
@@ -45,6 +60,7 @@ namespace Chirp.EFCoreDatabase.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
+                        .HasMaxLength(160)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("TimeStamp")
@@ -55,6 +71,21 @@ namespace Chirp.EFCoreDatabase.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Cheeps");
+                });
+
+            modelBuilder.Entity("AuthorAuthor", b =>
+                {
+                    b.HasOne("Author", null)
+                        .WithMany()
+                        .HasForeignKey("FollowersAuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Author", null)
+                        .WithMany()
+                        .HasForeignKey("FollowingAuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cheep", b =>
