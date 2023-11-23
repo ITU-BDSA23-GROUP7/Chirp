@@ -8,10 +8,12 @@ public class UserTimelineModel : PageModel
     private readonly ICheepRepository _repository;
     public required IEnumerable<CheepDTO> Cheeps { get; set; }
     public int PageCount { get; private set; }
+    public AddCheepModel AddCheepModel{ get; set; }
 
     public UserTimelineModel(ICheepRepository repository)
     {
         _repository = repository;
+        AddCheepModel = new AddCheepModel(repository);
     }
 
     /// <summary>
@@ -50,5 +52,13 @@ public class UserTimelineModel : PageModel
 
         Cheeps = await _repository.GetCheeps(pageNum, author);
         return Page();
+    }
+
+    [BindProperty]
+    public string CheepText { get; set; }
+    public async Task<ActionResult> OnPostAsync()
+    {
+        await AddCheepModel.OnPostAsync(User.Identity.Name, CheepText);
+        return RedirectToPage("UserTimeline", new { author = User.Identity.Name });
     }
 }

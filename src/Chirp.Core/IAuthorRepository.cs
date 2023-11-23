@@ -5,6 +5,6 @@ public interface IAuthorRepository
     Task<AuthorInfo> GetAuthorInfo(string username);
 
     Task<bool> UsernameExistsAsync(string username);
-    void CreateNewAuthor(string name);
+    Task CreateNewAuthor(string name);
 
 }

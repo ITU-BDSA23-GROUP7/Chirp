@@ -18,9 +18,11 @@
     </p>
 
     <ul id="messagelist" class="cheeps">
-        <li>
-            @await Component.InvokeAsync("AddCheep")
-        </li>
+        @if(User.Identity.IsAuthenticated){
+            <li>
+                @await Html.PartialAsync("AddCheep.cshtml", Model.AddCheepModel)
+            </li>
+        }
         @if (Model.Cheeps.Any())
 
         {

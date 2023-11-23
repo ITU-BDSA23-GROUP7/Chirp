@@ -8,7 +8,7 @@ public class AuthorRepository : IAuthorRepository
         this.context = context;
     }
 
-    public async void CreateNewAuthor(string name)
+    public async Task CreateNewAuthor(string name)
     {
 
         bool usernameExists = await UsernameExistsAsync(name);

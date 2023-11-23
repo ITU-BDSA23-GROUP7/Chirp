@@ -16,10 +16,14 @@
             }
         </strong>
     </p>
-
-    @if (Model.Cheeps.Any())
-    {
-        <ul id="messagelist" class="cheeps">
+    <ul id="messagelist" class="cheeps">
+        @if(User.Identity.IsAuthenticated && User.Identity.Name.Equals(routeName)){
+            <li>
+                @await Html.PartialAsync("AddCheep.cshtml", Model.AddCheepModel)
+            </li>
+        }
+        @if (Model.Cheeps.Any())
+        {
             @foreach (var cheep in Model.Cheeps)
             {
                 <li>
@@ -32,12 +36,13 @@
                     </p>
                 </li>
             }
-        </ul>
-    }
-    else
-    {
-        <em>There are no cheeps so far.</em>
-    }
+            
+        }
+        else
+        {
+            <em>There are no cheeps so far.</em>
+        }
+    </ul>
     <p>
         <strong>
             @for (int n = 1; n <= Model.PageCount; n++) {

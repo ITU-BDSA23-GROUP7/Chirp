@@ -14,40 +14,11 @@ namespace Chirp.Razor.Pages
             _repository = repository;
         }
 
-        public IActionResult OnGet()
-        {
-            //Please uncomment when AddCheeps implemented...
-            /*
-            if(!User.Identity!.IsAuthenticated){
-                return RedirectToPage("Public");
-            }
-            */
-            return Page();
-        }
-
-        [BindProperty]
-        public required string CheepText { get; set; }
-        public async Task<IActionResult> OnPostAsync()
+        public async Task OnPostAsync(String Username, String CheepText)
         {
             Console.WriteLine($"CheepText: {CheepText}");
-            await _repository.AddCheepAsync(User.Identity.Name, CheepText);
-            return RedirectToPage("Public");
+            await _repository.AddCheepAsync(Username, CheepText);
         }
     }
 
-    public class AddCheepViewComponent : ViewComponent
-    {
-        private readonly ICheepRepository _repository;
-
-        public AddCheepViewComponent(ICheepRepository repository)
-        {
-            _repository = repository;
-        }
-
-        public async Task<IViewComponentResult> InvokeAsync()
-        {
-            var model = new AddCheepModel(_repository);
-            return View(model);
-        }
-    }
 }
