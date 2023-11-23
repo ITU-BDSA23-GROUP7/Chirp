@@ -19,7 +19,7 @@ public class CheepRepository : ICheepRepository
                 context.Cheeps :
                 context.Cheeps.Where(c => c.Author.Name == author)
             )
-            .OrderBy(c => c.TimeStamp)
+            .OrderByDescending(c => c.TimeStamp)
             .Skip(pageIndex * pageLength)
             .Take(pageLength)
             .Include(c => c.Author)
@@ -58,8 +58,24 @@ public class CheepRepository : ICheepRepository
         return (int)MathF.Ceiling(1f * cheepCount / pageLength);
     }
 
-    public void PostCheep(CheepDTO cheep)
+    public async Task AddCheepAsync(string username, string message)
     {
-        throw new NotImplementedException();
+        Author? author = await context.Authors.Where(a => a.Name == username).FirstOrDefaultAsync();
+
+        if (author == null)
+        {
+            throw new UsernameNotFoundException($"The username {username} does not exist in the database");
+        }
+
+        await context.Cheeps.AddAsync(new Cheep
+        {
+            CheepId = Guid.NewGuid(),
+            Text = message,
+            TimeStamp = DateTime.Now,
+            Author = author,
+        });
+
+        context.SaveChanges();
+
     }
 }

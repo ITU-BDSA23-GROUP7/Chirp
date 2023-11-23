@@ -8,20 +8,20 @@ public class AuthorRepository : IAuthorRepository
         this.context = context;
     }
 
-    public async void CreateNewAuthor(int authorId, string name, string email)
+    public async Task CreateNewAuthor(string name)
     {
 
-        bool usernameExists = await UsernameExists(name);
+        bool usernameExists = await UsernameExistsAsync(name);
         if (usernameExists)
         {
             throw new Exception("Username already exists exception");
         }
 
-        context.Authors.Add(new Author { AuthorId = authorId, Name = name, Email = email, Cheeps = new List<Cheep>(), Following = new List<Author>(), Followers = new List<Author>() });
+        context.Authors.Add(new Author { AuthorId = Guid.NewGuid(), Name = name, Cheeps = new List<Cheep>(), Followers = new List<Author>(), Following = new List<Author>()});
         context.SaveChanges();
     }
 
-    private async Task<bool> UsernameExists(string username)
+    public async Task<bool> UsernameExistsAsync(string username)
     {
         var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
         return author != null;
@@ -33,7 +33,7 @@ public class AuthorRepository : IAuthorRepository
 
         if (author == null)
         {
-            throw new UsernameNotFoundException($"The username {username} doesn't exist in the database.");
+            throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
         }
 
         var authorInfo = new AuthorInfo(

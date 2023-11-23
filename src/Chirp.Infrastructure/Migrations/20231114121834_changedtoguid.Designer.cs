@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,12 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.EFCoreDatabase.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    partial class CheepContextModelSnapshot : ModelSnapshot
+    [Migration("20231114121834_changedtoguid")]
+    partial class changedtoguid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
 
             modelBuilder.Entity("Author", b =>
                 {
@@ -23,6 +26,7 @@ namespace Chirp.EFCoreDatabase.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -32,21 +36,6 @@ namespace Chirp.EFCoreDatabase.Migrations
                     b.HasKey("AuthorId");
 
                     b.ToTable("Authors");
-                });
-
-            modelBuilder.Entity("AuthorAuthor", b =>
-                {
-                    b.Property<Guid>("FollowersAuthorId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("FollowingAuthorId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("FollowersAuthorId", "FollowingAuthorId");
-
-                    b.HasIndex("FollowingAuthorId");
-
-                    b.ToTable("AuthorAuthor");
                 });
 
             modelBuilder.Entity("Cheep", b =>
@@ -60,7 +49,6 @@ namespace Chirp.EFCoreDatabase.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasMaxLength(160)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("TimeStamp")
@@ -71,21 +59,6 @@ namespace Chirp.EFCoreDatabase.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Cheeps");
-                });
-
-            modelBuilder.Entity("AuthorAuthor", b =>
-                {
-                    b.HasOne("Author", null)
-                        .WithMany()
-                        .HasForeignKey("FollowersAuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Author", null)
-                        .WithMany()
-                        .HasForeignKey("FollowingAuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cheep", b =>

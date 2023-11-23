@@ -10,26 +10,15 @@ namespace Chirp.Razor.Pages
 
         public AddCheepModel(ICheepRepository repository)
         {
+            Console.WriteLine("AddCheepModel constructor");
             _repository = repository;
         }
 
-        public IActionResult OnGet()
+        public async Task OnPostAsync(String Username, String CheepText)
         {
-            //Please uncomment when AddCheeps implemented...
-            /*
-            if(!User.Identity!.IsAuthenticated){
-                return RedirectToPage("Public");
-            }
-            */
-            return Page();
-        }
-
-        [BindProperty]
-        public required string CheepText { get; set; }
-        public async Task<IActionResult> OnPostAsync()
-        {
-            Console.WriteLine(CheepText);
-            return RedirectToPage("Public");
+            Console.WriteLine($"CheepText: {CheepText}");
+            await _repository.AddCheepAsync(Username, CheepText);
         }
     }
+
 }

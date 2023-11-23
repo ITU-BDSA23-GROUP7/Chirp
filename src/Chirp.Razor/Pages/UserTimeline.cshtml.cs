@@ -8,10 +8,12 @@ public class UserTimelineModel : PageModel
     private readonly ICheepRepository _repository;
     public required IEnumerable<CheepDTO> Cheeps { get; set; }
     public int PageCount { get; private set; }
+    public AddCheepModel AddCheepModel{ get; set; }
 
     public UserTimelineModel(ICheepRepository repository)
     {
         _repository = repository;
+        AddCheepModel = new AddCheepModel(repository);
     }
 
     /// <summary>
@@ -30,7 +32,6 @@ public class UserTimelineModel : PageModel
 
         if (pageNumStr == null)
         {
-            Console.WriteLine("Page number is a null value.");
             Cheeps = await _repository.GetCheeps(1, author);
             return Page();
         }
@@ -39,19 +40,25 @@ public class UserTimelineModel : PageModel
 
         if (!int.TryParse(pageNumStr, out pageNum))
         {
-            Console.WriteLine("Page number isn't an integer.");
             Cheeps = await _repository.GetCheeps(1, author);
             return Page();
         }
 
         if (pageNum < 0)
         {
-            Console.WriteLine("Page number is less than 0.");
             Cheeps = await _repository.GetCheeps(1, author);
             return Page();
         }
 
         Cheeps = await _repository.GetCheeps(pageNum, author);
         return Page();
+    }
+
+    [BindProperty]
+    public string CheepText { get; set; }
+    public async Task<ActionResult> OnPostAsync()
+    {
+        await AddCheepModel.OnPostAsync(User.Identity.Name, CheepText);
+        return RedirectToPage("UserTimeline", new { author = User.Identity.Name });
     }
 }
