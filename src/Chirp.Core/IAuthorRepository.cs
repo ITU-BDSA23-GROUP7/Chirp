@@ -1,10 +1,12 @@
 namespace Chirp.Core;
-public record AuthorInfo(string Username, string Email);
 public interface IAuthorRepository
 {
-    Task<AuthorInfo> GetAuthorInfo(string username);
+    public Task<AuthorDTO> GetAuthorDTOByUsername(string username);
+    public Task CreateNewAuthor(string name);
+
+    public Task FollowAuthor(AuthorDTO authorDTO, AuthorDTO authorToFollowDTO);
+    public Task UnfollowAuthor(AuthorDTO authorDTO, AuthorDTO authorToUnfollowDTO);
+    public Task<IEnumerable<string>> GetFollowingUsernames(AuthorDTO authorDTO);
 
     Task<bool> UsernameExistsAsync(string username);
-    Task CreateNewAuthor(string name);
-
 }

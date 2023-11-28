@@ -5,7 +5,8 @@ public class AuthorDTO
     public required Guid AuthorId { get; set; }
     public required string Name { get; set; }
     public required string Email { get; set; }
-    public IEnumerable<CheepDTO> Cheeps { get; set; }
-    public IEnumerable<AuthorDTO> Following { get; set; }
-    public IEnumerable<AuthorDTO> Followers { get; set; }
+    public List<CheepDTO>? Cheeps { get; } = new(); //This should maybe be changed to an IEnumerable, but right now we need Add, so it is a list
+    public List<AuthorDTO>? Following { get; } = new(); //This should maybe be changed to an IEnumerable, but right now we need Add, so it is a list
+    public List<AuthorDTO>? Followers { get; } = new(); //This should maybe be changed to an IEnumerable, but right now we need Add, so it is a list
 };
+
