@@ -18,17 +18,17 @@ namespace MyApp.Namespace
             if (User.Identity.IsAuthenticated)
             {
                 //Check if there is a cache with the key 'user'
-                var user = _cache.Get<string>("user");
-                if (user == null)
-                {
+                //var user = _cache.Get<string>("user");
+                //if (user == null)
+                //{
                     bool usernameExists = await _repository.UsernameExistsAsync(User.Identity.Name);
                     if (!usernameExists)
                     {
                         await _repository.CreateNewAuthor(User.Identity.Name);
                     }
                     AuthorDTO authorDTO = await _repository.GetAuthorDTOByUsername(User.Identity.Name);
-                    _cache.Set<string>("user", "true");
-                }
+                    //_cache.Set<string>("user", "true");
+                //}
             }
             return View();
         }
