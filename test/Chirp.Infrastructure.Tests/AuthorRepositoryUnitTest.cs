@@ -37,10 +37,10 @@ public class AuthorRepositoryUnitTest
 
         //Act
         _authorRepository.CreateNewAuthor("Casper");
-        AuthorInfo newUser = await _authorRepository.GetAuthorInfo("Casper");
+        AuthorDTO newUser = await _authorRepository.GetAuthorDTOByUsername("Casper");
 
         //Assert
-        Assert.Equal("Casper", newUser.Username);
+        Assert.Equal("Casper", newUser.Name);
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class AuthorRepositoryUnitTest
         var notExistingName = "Bobby";
 
         //Act & Assert
-        await Assert.ThrowsAsync<UsernameNotFoundException>(async () => await _authorRepository.GetAuthorInfo(notExistingName));
+        await Assert.ThrowsAsync<UsernameNotFoundException>(async () => await _authorRepository.GetAuthorDTOByUsername(notExistingName));
     }
 
     [Fact]
@@ -60,6 +60,6 @@ public class AuthorRepositoryUnitTest
         var existingName = "Rasmus";
 
         //Act & Assert
-        var foundAuthor = await _authorRepository.GetAuthorInfo(existingName);
+        var foundAuthor = await _authorRepository.GetAuthorDTOByUsername(existingName);
     }
 }
