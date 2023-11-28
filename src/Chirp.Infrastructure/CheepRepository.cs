@@ -75,7 +75,7 @@ public class CheepRepository : ICheepRepository
             Author = author,
         });
 
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
     }
 }
