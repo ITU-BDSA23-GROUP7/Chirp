@@ -15,6 +15,7 @@ var dbPath = Path.Join(tempDirectoryPath, "chirp.db");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddMemoryCache();
 
 // Authentication with AD B2C
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)

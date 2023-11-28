@@ -8,10 +8,12 @@ public class PublicModel : PageModel
     private readonly ICheepRepository _repository;
     public required IEnumerable<CheepDTO> Cheeps { get; set; }
     public int PageCount { get; private set; }
+    public AddCheepModel AddCheepModel{ get; set; }
 
     public PublicModel(ICheepRepository repository)
     {
         _repository = repository;
+        AddCheepModel = new AddCheepModel(repository);
     }
 
     /// <summary>
@@ -29,7 +31,6 @@ public class PublicModel : PageModel
 
         if (pageNumStr == null)
         {
-            Console.WriteLine("Page number is a null value.");
             Cheeps = await _repository.GetCheeps();
             return Page();
         }
@@ -38,19 +39,24 @@ public class PublicModel : PageModel
 
         if (!int.TryParse(pageNumStr, out pageNum))
         {
-            Console.WriteLine("Page number isn't an integer.");
             Cheeps = new List<CheepDTO>();
             return Page();
         }
 
         if (pageNum <= 0)
         {
-            Console.WriteLine("Page number is less than or equal to 0.");
             Cheeps = new List<CheepDTO>();
             return Page();
         }
-
         Cheeps = await _repository.GetCheeps(pageNum);
         return Page();
+    }
+
+    [BindProperty]
+    public string CheepText { get; set; }
+    public async Task<ActionResult> OnPostAsync()
+    {
+        await AddCheepModel.OnPostAsync(User.Identity.Name, CheepText);
+        return RedirectToPage("Public");
     }
 }

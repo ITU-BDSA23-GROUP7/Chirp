@@ -80,32 +80,33 @@ public class CheepServiceUnitTest
 
     // Test will currently only work under the assumption that "Helge" has less than 31 cheeps
     [Fact]
-    public async void PostCheepWillAddCheepToUser()
+    public async void AddCheepWillAddCheepToUser()
     {
         // Arrange
-        var newCheep = new CheepDTO
-        {
-            Author = new AuthorDTO
-            {
-                AuthorId = 0,
-                Name = "Helge",
-                Email = "test@test.test"
-            },
-            Message = "Hello world",
-            Timestamp = ""
-        };
-
+        string author = "Helge";
+        string message = "Hello World!";
 
         // Act
-        IEnumerable<CheepDTO> cheepList = await _cheepService.GetCheeps(1, newCheep.Author.Name);
+        IEnumerable<CheepDTO> cheepList = await _cheepService.GetCheeps(1, author);
         int beforeCheepCount = cheepList.Count();
 
-        _cheepService.PostCheep(newCheep);
+        await _cheepService.AddCheepAsync(author, message);
 
-        cheepList = await _cheepService.GetCheeps(1, newCheep.Author.Name);
+        cheepList = await _cheepService.GetCheeps(1, author);
         int afterCheepCount = cheepList.Count();
 
         // Assert
         Assert.Equal(beforeCheepCount + 1, afterCheepCount);
+    }
+
+    [Fact]
+    public async void UserDoesNotExistWhenAddingCheep()
+    {
+        //Arrange
+        var notExistingName = "Bobby";
+        var message = "Hello World";
+
+        //Act & Assert
+        await Assert.ThrowsAsync<UsernameNotFoundException>(async () => await _cheepService.AddCheepAsync(notExistingName, message));
     }
 }
