@@ -1,0 +1,30 @@
+@page "/about-me"
+@model Chirp.Razor.Pages.AboutMe
+
+@{
+    ViewData["Title"] = "Chirp!";
+
+    Layout = "Shared/_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div>
+    <h2> About Me </h2>
+    <p>
+        Name: @User.Identity.Name 
+        <br/>
+        Email: @Model.Email
+        <br/>
+        Cheeps: @Model.NumberOfCheeps
+        
+    </p>
+    
+</div>
+</body>
+</html>
