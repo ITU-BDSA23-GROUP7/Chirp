@@ -1,5 +1,6 @@
+namespace Chirp.Infrastructure;
 public class UsernameNotFoundException : Exception
 {
     public UsernameNotFoundException() { }
-    public UsernameNotFoundException(string message) : base (message) { }
+    public UsernameNotFoundException(string message) : base(message) { }
 }

@@ -1,4 +1,4 @@
-
+namespace Chirp.Infrastructure;
 public class AuthorRepository : IAuthorRepository
 {
     private ChirpDBContext context;
@@ -17,7 +17,7 @@ public class AuthorRepository : IAuthorRepository
             throw new Exception("Username already exists exception");
         }
 
-        context.Authors.Add(new Author { AuthorId = Guid.NewGuid(), Name = name, Cheeps = new List<Cheep>()});
+        context.Authors.Add(new Author { AuthorId = Guid.NewGuid(), Name = name, Cheeps = new List<Cheep>() });
         context.SaveChanges();
     }
 
