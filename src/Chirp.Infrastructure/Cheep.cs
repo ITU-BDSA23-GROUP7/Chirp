@@ -1,4 +1,4 @@
-
+namespace Chirp.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 
 /// <summary>

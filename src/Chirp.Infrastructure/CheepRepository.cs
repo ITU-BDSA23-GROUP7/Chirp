@@ -1,4 +1,4 @@
-
+namespace Chirp.Infrastructure;
 public class CheepRepository : ICheepRepository
 {
     private int pageLength = 32;
@@ -32,7 +32,6 @@ public class CheepRepository : ICheepRepository
             {
                 Author = new AuthorDTO
                 {
-                    AuthorId = cheep.Author.AuthorId,
                     Name = cheep.Author.Name,
                     Email = cheep.Author.Email
                 },

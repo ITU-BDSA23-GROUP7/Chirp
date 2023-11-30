@@ -1,3 +1,4 @@
+namespace Chirp.Infrastructure;
 using System;
 
 public static class DbInitializer
