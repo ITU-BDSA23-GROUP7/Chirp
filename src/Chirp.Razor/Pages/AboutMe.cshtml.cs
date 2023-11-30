@@ -20,9 +20,9 @@ public class AboutMe : PageModel
         _cheepRepository = cheepRepository;
     }
 
-    public async Task SetUserinfo()
+    public async Task SetUserinfo(string author)
     {
-        Author = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
+        Author = await _authorRepository.GetAuthorDTOByUsername(author);
 
         Email = Author.Email;
         Console.WriteLine($"-{Author.Email}-");
@@ -31,7 +31,7 @@ public class AboutMe : PageModel
             Email = "[No email stored]";
         }
         //Cheeps not implementet in repository yet...
-        NumberOfCheeps = 0;
+        NumberOfCheeps = await _authorRepository.GetAmmountOfCheeps(author);
     }
 
     public async Task SetCheeps(string author) {
@@ -70,7 +70,7 @@ public class AboutMe : PageModel
             return Redirect("/");
         }
 
-        await SetUserinfo();
+        await SetUserinfo(User.Identity.Name);
 
         await SetCheeps(User.Identity.Name);
 
