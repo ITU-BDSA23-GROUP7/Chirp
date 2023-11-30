@@ -38,7 +38,6 @@ public class AuthorRepository : IAuthorRepository
 
         var authorInfo = new AuthorDTO
         {
-            AuthorId = author.AuthorId,
             Name = author.Name,
             Email = author.Email
         };
@@ -49,7 +48,7 @@ public class AuthorRepository : IAuthorRepository
     public async Task<Author> FindAuthorByDTO(AuthorDTO authorDTO)
     {
         var author = await context.Authors.Include(a => a.Following)
-                        .FirstOrDefaultAsync(a => a.AuthorId == authorDTO.AuthorId);
+                        .FirstOrDefaultAsync(a => a.Name == authorDTO.Name);
         return author!;
     }
 
