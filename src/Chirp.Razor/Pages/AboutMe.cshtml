@@ -24,6 +24,48 @@
         Cheeps: @Model.NumberOfCheeps
         
     </p>
+    <p>
+        <strong>
+            @for (int n = 1; n <= Model.PageCount; n++)
+            {
+                <a href="/about-me?page=@n">@n</a>
+            }
+        </strong>
+    </p>
+
+    <ul id="messagelist" class="cheeps">
+        
+        @if (Model.Cheeps.Any())
+        {
+            @foreach (var cheep in Model.Cheeps)
+            {
+                <li>
+                    <p>
+                        <strong>
+                            <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
+                        </strong>
+
+
+                        <br />
+                        @cheep.Message
+                        <small>&mdash; @cheep.Timestamp</small>
+                    </p>
+                </li>
+            }
+        }
+        else
+        {
+            <em>There are no cheeps so far.</em>
+        }
+    </ul>
+    <p>
+        <strong>
+            @for (int n = 1; n <= Model.PageCount; n++)
+            {
+                <a href="/about-me?page=@n">@n</a>
+            }
+        </strong>
+    </p>
     
 </div>
 </body>
