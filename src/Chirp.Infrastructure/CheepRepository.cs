@@ -65,14 +65,17 @@ public class CheepRepository : ICheepRepository
         {
             throw new UsernameNotFoundException($"The username {username} does not exist in the database");
         }
+        Console.WriteLine($"CheepText 2. 0: {message}, and user {username}");
 
-        await context.Cheeps.AddAsync(new Cheep
+        Cheep input = new Cheep
         {
             CheepId = Guid.NewGuid(),
             Text = message,
             TimeStamp = DateTime.Now,
             Author = author,
-        });
+        };
+        context.Cheeps.Add(input);
+        Console.WriteLine("Did we reach this-?");
 
         await context.SaveChangesAsync();
 

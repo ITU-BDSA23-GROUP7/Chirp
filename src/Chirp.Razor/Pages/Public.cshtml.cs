@@ -6,14 +6,21 @@ namespace Chirp.Razor.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepRepository _repository;
+    private readonly IAuthorRepository _authorRepository;
     public required IEnumerable<CheepDTO> Cheeps { get; set; }
+    public required List<string> Following { get; set; }
     public int PageCount { get; private set; }
-    public AddCheepModel AddCheepModel{ get; set; }
+    public AddCheepModel AddCheepModel { get; set; }
 
-    public PublicModel(ICheepRepository repository)
+    [BindProperty]
+    public CheepDTO CheepDTO { get; set; }
+    [BindProperty]
+    public AuthorDTO AuthorDTO { get; set; }
+
+    public PublicModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
+        _authorRepository = authorRepository;
         _repository = repository;
-        AddCheepModel = new AddCheepModel(repository);
     }
 
     /// <summary>
@@ -28,6 +35,24 @@ public class PublicModel : PageModel
         PageCount = _repository.GetPageCount();
 
         string pageNumStr = Request.Query["page"]!;
+
+        if (User.Identity.IsAuthenticated)
+        {
+            var username = User.Identity.Name;
+            if (!await _authorRepository.UsernameExistsAsync(username))
+            {
+                await _authorRepository.CreateNewAuthor(username);
+            }
+            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
+
+            //temp test
+            var authorDTO2 = await _authorRepository.GetAuthorDTOByUsername("Roger Histand");
+            //await _authorRepository.FollowAuthor(authorDTO, authorDTO2);
+
+
+            var following = await _authorRepository.GetFollowingUsernames(authorDTO);
+            Following = following.ToList();
+        }
 
         if (pageNumStr == null)
         {
@@ -54,9 +79,34 @@ public class PublicModel : PageModel
 
     [BindProperty]
     public string CheepText { get; set; }
-    public async Task<ActionResult> OnPostAsync()
+    public async Task OnPostAsync(String Username, String CheepText)
     {
-        await AddCheepModel.OnPostAsync(User.Identity.Name, CheepText);
+        Console.WriteLine($"CheepText: {CheepText}, and user {User.Identity.Name}");
+        await _repository.AddCheepAsync(User.Identity.Name, CheepText);
+    }
+    
+
+    public async Task<IActionResult> OnPostFollow(string authorName)
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
+            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
+            await _authorRepository.FollowAuthor(userDTO, authorDTO);
+        }
         return RedirectToPage("Public");
     }
+
+    public async Task<IActionResult> OnPostUnfollow(string authorName)
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
+            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
+            await _authorRepository.UnfollowAuthor(userDTO, authorDTO);
+        }
+        return RedirectToPage("Public");
+    }
+
+
 }
