@@ -8,7 +8,7 @@ public class CheepRepository : ICheepRepository
         this.context = context;
     }
 
-    public async Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1, string? author = null)
+    public async Task<List<CheepDTO>> GetCheeps(int pageNum = 1, string? author = null)
     {
         int pageIndex = pageNum - 1;
 

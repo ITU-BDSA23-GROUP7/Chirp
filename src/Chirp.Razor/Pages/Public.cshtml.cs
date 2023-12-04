@@ -7,7 +7,7 @@ public class PublicModel : PageModel
 {
     private readonly ICheepRepository _repository;
     private readonly IAuthorRepository _authorRepository;
-    public required IEnumerable<CheepDTO> Cheeps { get; set; }
+    public required List<CheepDTO> Cheeps { get; set; }
     public required List<string> Following { get; set; }
     public int PageCount { get; private set; }
     public AddCheepModel AddCheepModel { get; set; }
@@ -79,15 +79,11 @@ public class PublicModel : PageModel
 
     [BindProperty]
     public string CheepText { get; set; }
-    public async Task OnPostAsync(String Username, String CheepText)
-    {
-        Console.WriteLine($"CheepText: {CheepText}, and user {User.Identity.Name}");
-        await _repository.AddCheepAsync(User.Identity.Name, CheepText);
-    }
     
 
     public async Task<IActionResult> OnPostFollow(string authorName)
     {
+        Console.WriteLine($"antallet af cheeps er lige nu {Cheeps.Count}");
         if (User.Identity.IsAuthenticated)
         {
             var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);

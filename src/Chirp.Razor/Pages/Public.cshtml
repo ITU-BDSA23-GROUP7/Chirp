@@ -20,16 +20,26 @@
     <ul id="messagelist" class="cheeps">
         @if(User.Identity.IsAuthenticated){
             <div>
-                <form method="post">
-                    <p>Whats on your mind? <br />
-                        <input type="text" size="80%" maxlength="160" asp-for="CheepText" id="CheepText" name="CheepText" />
-                        <input type="submit" value="Cheep" />
-                    </p>
-                    @Html.AntiForgeryToken()
-                </form>
             </div>
         }
-        @if (Model.Cheeps.Any())
+        @if (Model.Cheeps != null)
+        {
+            Console.WriteLine("This should be magni piiii");
+            List<CheepDTO> chep = Model.Cheeps;
+            foreach(CheepDTO c in chep){
+                Console.WriteLine($"Test {c.Message}");
+            }
+        }
+        @if (Model.Cheeps == null)
+        {
+            Console.WriteLine("This should'nt be magni piiii");
+            List<CheepDTO> chep = Model.Cheeps;
+            foreach(CheepDTO c in chep){
+                Console.WriteLine($"Test {c.Message}");
+            }
+        }
+
+        @if (Model.Cheeps.Count > 0)
 
         {
             @foreach (var cheep in Model.Cheeps)
