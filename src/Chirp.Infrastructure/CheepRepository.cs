@@ -20,6 +20,7 @@ public class CheepRepository : ICheepRepository
                 context.Cheeps.Where(c => c.Author.Name == author)
             )
             .OrderByDescending(c => c.TimeStamp)
+            .Where(c => !c.Author.Hidden)
             .Skip(pageIndex * pageLength)
             .Take(pageLength)
             .Include(c => c.Author)
@@ -53,6 +54,7 @@ public class CheepRepository : ICheepRepository
                 context.Cheeps :
                 context.Cheeps.Where(c => c.Author.Name == author)
             )
+            .Where(c => !c.Author.Hidden)
             .Count();
         return (int)MathF.Ceiling(1f * cheepCount / pageLength);
     }

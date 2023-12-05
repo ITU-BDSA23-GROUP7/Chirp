@@ -101,6 +101,11 @@ public class AuthorRepository : IAuthorRepository
             throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
         }
 
+        if (author.Hidden)
+        {
+            return 0;
+        }
+
         return author.Cheeps.Count;
     }
 }
