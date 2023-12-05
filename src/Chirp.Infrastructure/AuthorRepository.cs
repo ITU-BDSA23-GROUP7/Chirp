@@ -91,4 +91,16 @@ public class AuthorRepository : IAuthorRepository
 
         return following;
     }
+
+    public async Task<int> GetAmmountOfCheeps(string username)
+    {
+        var author = await context.Authors.Include(a => a.Cheeps).FirstOrDefaultAsync(c => c.Name == username);
+
+        if (author == null)
+        {
+            throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
+        }
+
+        return author.Cheeps.Count;
+    }
 }

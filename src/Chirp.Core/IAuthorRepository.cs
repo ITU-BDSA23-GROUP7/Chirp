@@ -9,4 +9,5 @@ public interface IAuthorRepository
     public Task<IEnumerable<string>> GetFollowingUsernames(AuthorDTO authorDTO);
 
     Task<bool> UsernameExistsAsync(string username);
+    public Task<int> GetAmmountOfCheeps(string username);
 }
