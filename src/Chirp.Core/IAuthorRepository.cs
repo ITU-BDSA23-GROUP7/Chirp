@@ -10,4 +10,5 @@ public interface IAuthorRepository
 
     Task<bool> UsernameExistsAsync(string username);
     public Task<int> GetAmmountOfCheeps(string username);
+    public Task SetHidden(string username, bool hidden);
 }
