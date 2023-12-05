@@ -81,7 +81,11 @@ public class PublicModel : PageModel
     public string CheepText { get; set; }
     
 
-    public async Task<IActionResult> OnPostFollow(string authorName)
+    public void OnPost(){
+        Console.WriteLine("on post hit");
+    }
+
+    public async Task OnPostFollow(string authorName)
     {
         Console.WriteLine($"antallet af cheeps er lige nu {Cheeps.Count}");
         if (User.Identity.IsAuthenticated)
@@ -90,10 +94,10 @@ public class PublicModel : PageModel
             var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
             await _authorRepository.FollowAuthor(userDTO, authorDTO);
         }
-        return RedirectToPage("Public");
+        
     }
 
-    public async Task<IActionResult> OnPostUnfollow(string authorName)
+    public async Task OnPostUnfollow(string authorName)
     {
         if (User.Identity.IsAuthenticated)
         {
@@ -101,7 +105,6 @@ public class PublicModel : PageModel
             var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
             await _authorRepository.UnfollowAuthor(userDTO, authorDTO);
         }
-        return RedirectToPage("Public");
     }
 
 

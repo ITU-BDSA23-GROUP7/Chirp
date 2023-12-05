@@ -1,9 +1,13 @@
 ﻿@page "/"
 @model Chirp.Razor.Pages.PublicModel
+@inject Chirp.Core.ICheepRepository cheepRepo
+
 @{
     ViewData["Title"] = "Chirp!";
 
     Layout = "Shared/_Layout";
+
+    Model.Cheeps = await cheepRepo.GetCheeps();
 }
 
 <div>
@@ -52,22 +56,19 @@
 
                         @if (User.Identity.IsAuthenticated) //Check lige om du selv er authoren??????
                         {
+                            <form method="post" >
                             @if (Model.Following.Contains(cheep.Author.Name))
                             {
-                            <form method="post" asp-page-handler="Unfollow" asp-route-authorName="@cheep.Author.Name">
-                                <input type="hidden" name="author" value="@cheep.Author.Name" />
-                                <button type="submit" style="float: right">Unfollow</button>
-                                @Html.AntiForgeryToken()
-                            </form>
+                                @* <input type="hidden" name="author" value="@cheep.Author.Name" /> *@
+                                <button type="submit" asp-page-handler="Unfollow" asp-route-authorName="@cheep.Author.Name" style="float: right">Unfollow</button>
                             }
                             else
                             {
-                            <form method="post" asp-page-handler="Follow" asp-route-authorName="@cheep.Author.Name">
-                                <input type="hidden" name="author" value="@cheep.Author.Name" />
-                                <button type="submit" style="float: right">Follow</button>
+                                @* <input type="hidden" name="author" value="@cheep.Author.Name" /> *@
+                                <button type="submit"  asp-page-handler="Follow" asp-route-authorName="@cheep.Author.Name" style="float: right">Follow</button>
+                            }
                                 @Html.AntiForgeryToken()
                             </form>
-                            }
                         }
                         
                         <br />
