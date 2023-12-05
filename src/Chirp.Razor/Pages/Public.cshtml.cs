@@ -21,6 +21,7 @@ public class PublicModel : PageModel
     {
         _authorRepository = authorRepository;
         _repository = repository;
+        AddCheepModel = new AddCheepModel(repository);
     }
 
     /// <summary>
@@ -34,7 +35,7 @@ public class PublicModel : PageModel
     {
         PageCount = _repository.GetPageCount();
 
-        string pageNumStr = Request.Query["page"]!;
+        string PageNumStr = Request.Query["page"]!;
 
         if (User.Identity.IsAuthenticated)
         {
@@ -54,7 +55,7 @@ public class PublicModel : PageModel
             Following = following.ToList();
         }
 
-        if (pageNumStr == null)
+        if (PageNumStr == null)
         {
             Cheeps = await _repository.GetCheeps();
             return Page();
@@ -62,7 +63,7 @@ public class PublicModel : PageModel
 
         int pageNum;
 
-        if (!int.TryParse(pageNumStr, out pageNum))
+        if (!int.TryParse(PageNumStr, out pageNum))
         {
             Cheeps = new List<CheepDTO>();
             return Page();
@@ -77,17 +78,30 @@ public class PublicModel : PageModel
         return Page();
     }
 
-    [BindProperty]
-    public string CheepText { get; set; }
-    
 
-    public void OnPost(){
-        Console.WriteLine("on post hit");
+
+    [BindProperty]
+    public string method { get; set; }
+    public async Task<IActionResult> OnPostAsync(){
+        switch (method)
+        {
+            case "follow":
+                await OnPostFollow();
+                break;
+            case "unfollow":
+                await OnPostUnfollow();
+                break;
+            case "addCheep":
+                await OnPostAddCheep();
+                break;
+        }
+        return RedirectToPage("Public");
     }
 
-    public async Task OnPostFollow(string authorName)
+    [BindProperty]
+    public string authorName { get; set; }
+    public async Task OnPostFollow()
     {
-        Console.WriteLine($"antallet af cheeps er lige nu {Cheeps.Count}");
         if (User.Identity.IsAuthenticated)
         {
             var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
@@ -97,7 +111,7 @@ public class PublicModel : PageModel
         
     }
 
-    public async Task OnPostUnfollow(string authorName)
+    public async Task OnPostUnfollow()
     {
         if (User.Identity.IsAuthenticated)
         {
@@ -105,6 +119,13 @@ public class PublicModel : PageModel
             var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
             await _authorRepository.UnfollowAuthor(userDTO, authorDTO);
         }
+    }
+
+    [BindProperty]
+    public string CheepText { get; set; }
+    public async Task OnPostAddCheep()
+    {
+        await AddCheepModel.OnPostAsync(User.Identity.Name, CheepText);
     }
 
 
