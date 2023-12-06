@@ -29,16 +29,7 @@ public class CheepRepository : ICheepRepository
         var cheepDTOs = new List<CheepDTO>();
         foreach (Cheep cheep in cheeps)
         {
-            var cheepDTO = new CheepDTO
-            {
-                Author = new AuthorDTO
-                {
-                    Name = cheep.Author.Name,
-                    Email = cheep.Author.Email
-                },
-                Message = cheep.Text,
-                Timestamp = cheep.TimeStamp.ToString()
-            };
+            var cheepDTO = cheep.ToCheepDTO();
 
             cheepDTOs.Add(cheepDTO);
         }
@@ -70,16 +61,7 @@ public class CheepRepository : ICheepRepository
         var cheepDTOs = new List<CheepDTO>();
         foreach (Cheep cheep in cheeps)
         {
-            var cheepDTO = new CheepDTO
-            {
-                Author = new AuthorDTO
-                {
-                    Name = cheep.Author.Name,
-                    Email = cheep.Author.Email
-                },
-                Message = cheep.Text,
-                Timestamp = cheep.TimeStamp.ToString()
-            };
+            var cheepDTO = cheep.ToCheepDTO();
 
             cheepDTOs.Add(cheepDTO);
         }
