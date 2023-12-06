@@ -78,4 +78,9 @@ public class AboutMe : PageModel
 
         return null;
     }
+
+    public async Task<IActionResult> OnPostAsync(){
+        Console.WriteLine("delete this");
+        return null;
+    }
 }
