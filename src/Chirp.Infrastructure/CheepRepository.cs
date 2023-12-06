@@ -8,7 +8,7 @@ public class CheepRepository : ICheepRepository
         this.context = context;
     }
 
-    public async Task<IEnumerable<CheepDTO>> GetCheeps(int pageNum = 1, string? author = null)
+    public async Task<List<CheepDTO>> GetCheeps(int pageNum = 1, string? author = null)
     {
         int pageIndex = pageNum - 1;
 
@@ -71,13 +71,15 @@ public class CheepRepository : ICheepRepository
             throw new Exception($"The username {username} is hidden and can therefore not cheep!");
         }
 
-        await context.Cheeps.AddAsync(new Cheep
+        Cheep input = new Cheep
         {
             CheepId = Guid.NewGuid(),
             Text = message,
             TimeStamp = DateTime.Now,
             Author = author,
-        });
+        };
+        context.Cheeps.Add(input);
+        Console.WriteLine("Did we reach this-?");
 
         await context.SaveChangesAsync();
 

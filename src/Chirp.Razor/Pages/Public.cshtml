@@ -1,5 +1,7 @@
 ﻿@page "/"
 @model Chirp.Razor.Pages.PublicModel
+@inject Chirp.Core.ICheepRepository cheepRepo
+
 @{
     ViewData["Title"] = "Chirp!";
 
@@ -19,11 +21,22 @@
 
     <ul id="messagelist" class="cheeps">
         @if(User.Identity.IsAuthenticated){
-            <li>
-                @await Html.PartialAsync("AddCheep.cshtml", Model.AddCheepModel)
-            </li>
+            <div>
+                <li>
+                        @await Html.PartialAsync("AddCheep.cshtml", Model.AddCheepModel)
+                </li>
+            </div>
         }
-        @if (Model.Cheeps.Any())
+        @if (Model.Cheeps != null)
+        {
+            Console.WriteLine("This should be magni piiii");
+            List<CheepDTO> chep = Model.Cheeps;
+            foreach(CheepDTO c in chep){
+                Console.WriteLine($"Test {c.Message}");
+            }
+        }
+
+        @if (Model.Cheeps.Count > 0)
 
         {
             @foreach (var cheep in Model.Cheeps)
@@ -34,7 +47,26 @@
                             <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
                         </strong>
 
-
+                        @if (User.Identity.IsAuthenticated && cheep.Author.Name != User.Identity.Name) //Check lige om du selv er authoren??????
+                        {
+                            <form method="post" >
+                                <input type="hidden" value='@cheep.Author.Name' asp-for="authorName" id="authorName" name="authorName"/>
+                                @if (Model.Following.Contains(cheep.Author.Name))
+                                {
+                                    @* <input type="hidden" name="author" value="@cheep.Author.Name" /> *@
+                                    <input type="hidden" value="unfollow" asp-for="method" id="method" name="method" />
+                                    <button type="submit" style="float: right">Unfollow</button>
+                                }
+                                else
+                                {
+                                    @* <input type="hidden" name="author" value="@cheep.Author.Name" /> *@
+                                    <input type="hidden" value="follow" asp-for="method" id="method" name="method" />
+                                    <button type="submit" style="float: right">Follow</button>
+                                }
+                                @Html.AntiForgeryToken()
+                            </form>
+                        }
+                        
                         <br />
                         @cheep.Message
                         <small>&mdash; @cheep.Timestamp</small>
