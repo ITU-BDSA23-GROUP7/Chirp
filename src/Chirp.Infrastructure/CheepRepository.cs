@@ -84,6 +84,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task AddCheepAsync(string username, string message)
     {
+
         Author? author = await context.Authors.Where(a => a.Name == username).FirstOrDefaultAsync();
 
         if (author == null)
@@ -93,6 +94,28 @@ public class CheepRepository : ICheepRepository
         if (author.Hidden == true){
             throw new Exception($"The username {username} is hidden and can therefore not cheep!");
         }
+
+        IQueryable<Cheep> Cheeps = context.Cheeps
+            .Where(c => c.Author.Name == username)
+            .OrderByDescending(c => c.TimeStamp);
+        if (Cheeps.Any())
+        {
+            Cheep lastCheep = Cheeps.First();
+            if (lastCheep != null)
+            {
+                DateTime yesterday = DateTime.Today.AddDays(-1);
+                DateTime today = DateTime.Today;
+                if (lastCheep.TimeStamp.Date == yesterday)
+                {
+                    author.CheepStreak++;
+                }
+                else if (lastCheep.TimeStamp.Date != today)
+                {
+                    author.CheepStreak = 0;
+                }
+            }
+        }
+        
 
         Cheep input = new Cheep
         {

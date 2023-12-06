@@ -158,4 +158,44 @@ public class AuthorRepository : IAuthorRepository
 
         await context.SaveChangesAsync();
     }
+
+    public async Task<List<AuthorDTO>> GetScoreboardAsync()
+    {
+        List<Author> streaks = context.Authors.Where(a => a.CheepStreak > 0).ToList();
+        DateTime yesterday = DateTime.Today.AddDays(-1);
+        DateTime today = DateTime.Today;
+        foreach (Author author in streaks)
+        {
+            IQueryable<Cheep> Cheeps = context.Cheeps
+                .Where(c => c.Author.Name == author.Name)
+                .OrderByDescending(c => c.TimeStamp); ;
+            if (Cheeps.Any())
+            {
+                Cheep lastCheep = Cheeps.First();
+                if (lastCheep != null)
+                {
+                    if (!(lastCheep.TimeStamp.Date == yesterday || lastCheep.TimeStamp.Date == today))
+                    {
+                        author.CheepStreak = 0;
+                    }
+                }
+            }
+        }
+        await context.SaveChangesAsync();
+
+        streaks = await context.Authors.Where(a => a.CheepStreak > 0)
+            .OrderByDescending(a => a.CheepStreak)
+            .Where(a => !a.Hidden)
+            .Take(10)
+            .ToListAsync();
+
+        List<AuthorDTO> compressedStreaks = new List<AuthorDTO> ();
+
+        foreach (Author author in streaks)
+        {
+            compressedStreaks.Add(author.ToAuthorDTO());
+        }
+        return compressedStreaks;
+    }
+
 }
