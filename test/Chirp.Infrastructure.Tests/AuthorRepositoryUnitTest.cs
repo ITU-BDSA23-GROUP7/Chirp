@@ -29,7 +29,7 @@ public class AuthorRepositoryUnitTest
         //Arrange
 
         //Act
-        _authorRepository.CreateNewAuthor("Casper");
+        await _authorRepository.CreateNewAuthor("Casper");
         AuthorDTO newUser = await _authorRepository.GetAuthorDTOByUsername("Casper");
 
         //Assert
@@ -64,7 +64,7 @@ public class AuthorRepositoryUnitTest
 
 
         //Act
-        _authorRepository.SetHidden(user, true);
+        await _authorRepository.SetHidden(user, true);
 
         //Assert
         Assert.True(await _authorRepository.UsernameIsHidden(user));
@@ -78,8 +78,8 @@ public class AuthorRepositoryUnitTest
         await _authorRepository.CreateNewAuthor(user);
 
         //Act
-        _authorRepository.SetHidden(user, true);
-        _authorRepository.SetHidden(user, false);
+        await _authorRepository.SetHidden(user, true);
+        await _authorRepository.SetHidden(user, false);
 
         //Assert
         Assert.False(await _authorRepository.UsernameIsHidden(user));
