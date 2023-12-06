@@ -38,13 +38,7 @@ public class AuthorRepository : IAuthorRepository
             throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
         }
 
-        var authorInfo = new AuthorDTO
-        {
-            Name = author.Name,
-            Email = author.Email
-        };
-
-        return authorInfo;
+        return author.ToAuthorDTO();
     }
 
     public async Task<Author> FindAuthorByDTO(AuthorDTO authorDTO)
