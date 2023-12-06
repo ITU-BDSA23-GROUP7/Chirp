@@ -47,7 +47,7 @@
                             <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
                         </strong>
 
-                        @if (User.Identity.IsAuthenticated) //Check lige om du selv er authoren??????
+                        @if (User.Identity.IsAuthenticated && cheep.Author.Name != User.Identity.Name) //Check lige om du selv er authoren??????
                         {
                             <form method="post" >
                                 <input type="hidden" value='@cheep.Author.Name' asp-for="authorName" id="authorName" name="authorName"/>

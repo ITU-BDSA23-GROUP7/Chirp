@@ -46,11 +46,6 @@ public class PublicModel : PageModel
             }
             var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
 
-            //temp test
-            var authorDTO2 = await _authorRepository.GetAuthorDTOByUsername("Roger Histand");
-            //await _authorRepository.FollowAuthor(authorDTO, authorDTO2);
-
-
             var following = await _authorRepository.GetFollowingUsernames(authorDTO);
             Following = following.ToList();
         }
@@ -95,7 +90,7 @@ public class PublicModel : PageModel
                 await OnPostAddCheep();
                 break;
         }
-        return RedirectToPage("Public");
+        return await OnGet();
     }
 
     [BindProperty]

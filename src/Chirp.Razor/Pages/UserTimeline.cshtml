@@ -32,6 +32,25 @@
                         <strong>
                             <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
                         </strong>
+                        @if (User.Identity.IsAuthenticated && cheep.Author.Name != User.Identity.Name) //Check lige om du selv er authoren??????
+                        {
+                            <form method="post">
+                                <input type="hidden" value='@cheep.Author.Name' asp-for="authorName" id="authorName" name="authorName" />
+                                @if (Model.Following.Contains(cheep.Author.Name))
+                                {
+                                    @* <input type="hidden" name="author" value="@cheep.Author.Name" /> *@
+                                    <input type="hidden" value="unfollow" asp-for="method" id="method" name="method" />
+                                    <button type="submit" style="float: right">Unfollow</button>
+                                }
+                                else
+                                {
+                                    @* <input type="hidden" name="author" value="@cheep.Author.Name" /> *@
+                                    <input type="hidden" value="follow" asp-for="method" id="method" name="method" />
+                                    <button type="submit" style="float: right">Follow</button>
+                                }
+                                @Html.AntiForgeryToken()
+                            </form>
+                        }
                         @cheep.Message
                         <small>&mdash; @cheep.Timestamp</small>
                     </p>
