@@ -113,16 +113,23 @@ public class CheepRepository : ICheepRepository
             throw new Exception($"The username {username} is hidden and can therefore not cheep!");
         }
 
-        IQueryable<Cheep> Cheeps = context.Cheeps.Where(c => c.Author.Name == username);
+        IQueryable<Cheep> Cheeps = context.Cheeps
+            .Where(c => c.Author.Name == username)
+            .OrderByDescending(c => c.TimeStamp);
         if (Cheeps.Any())
         {
             Cheep lastCheep = Cheeps.First();
             if (lastCheep != null)
             {
                 DateTime yesterday = DateTime.Today.AddDays(-1);
+                DateTime today = DateTime.Today;
                 if (lastCheep.TimeStamp.Date == yesterday)
                 {
                     author.CheepStreak++;
+                }
+                else if (lastCheep.TimeStamp.Date != today)
+                {
+                    author.CheepStreak = 0;
                 }
             }
         }
