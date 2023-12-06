@@ -35,8 +35,14 @@ public class CheepAndAuthorRepositoryUnitTest
         await _cheepService.AddCheepAsync(username, "Hello world!!!");
 
         //Act
+        var visibleUsersCheeps = await _cheepService.GetCheeps(1 , username);
+
+        //Assert
+        Assert.NotEmpty(visibleUsersCheeps);
+
+        //Act
         await _authorService.SetHidden(username, true);
-        IEnumerable<CheepDTO> hiddenUsersCheeps = await _cheepService.GetCheeps(1 , username);
+        var hiddenUsersCheeps = await _cheepService.GetCheeps(1 , username);
 
         //Assert
         Assert.Empty(hiddenUsersCheeps);
