@@ -5,4 +5,5 @@ public interface ICheepRepository
     int GetPageCount(string? auhtor = null);
     Task AddCheepAsync(string username, string message);
     Task<List<CheepDTO>> GetFollowerCheeps(string author, int pageNum = 1);
+    Task RemoveCheep(Guid cheepId);
 }

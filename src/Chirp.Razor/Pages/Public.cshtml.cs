@@ -90,7 +90,7 @@ public class PublicModel : PageModel
                 await OnPostAddCheep();
                 break;
         }
-        return await OnGet();
+        return RedirectToPage("Public");
     }
 
     [BindProperty]

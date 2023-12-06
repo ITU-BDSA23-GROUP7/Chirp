@@ -49,6 +49,12 @@
                         </strong>
 
 
+                        <form method="post" asp-page-handler="delete">
+                            <input type="hidden" name="cheepId" value='@cheep.CheepId'/>
+                            <button type="submit" style="float: right">Remove</button>
+                            @Html.AntiForgeryToken()
+                        </form>
+
                         <br />
                         @cheep.Message
                         <small>&mdash; @cheep.Timestamp</small>

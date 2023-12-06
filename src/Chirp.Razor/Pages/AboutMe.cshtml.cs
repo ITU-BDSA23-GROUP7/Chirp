@@ -30,7 +30,7 @@ public class AboutMe : PageModel
         {
             Email = "[No email stored]";
         }
-        //Cheeps not implementet in repository yet...
+        //Amount of cheeps the user has Cheeped
         NumberOfCheeps = await _authorRepository.GetAmmountOfCheeps(author);
     }
 
@@ -77,5 +77,11 @@ public class AboutMe : PageModel
         await SetCheeps(User.Identity.Name);
 
         return null;
+    }
+
+    public async Task<IActionResult> OnPostAsync(Guid cheepId)
+    {
+        await _cheepRepository.RemoveCheep(cheepId);
+        return RedirectToPage("AboutMe");
     }
 }
