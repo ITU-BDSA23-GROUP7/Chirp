@@ -107,4 +107,15 @@ public class CheepRepository : ICheepRepository
         await context.SaveChangesAsync();
 
     }
+
+    public async Task RemoveCheep(Guid cheepId)
+    {
+        var cheepToRemove = await context.Cheeps.Where(c => c.CheepId == cheepId).FirstOrDefaultAsync();
+
+        if (cheepToRemove == null) {
+            throw new Exception($"Cheep not found. GUID: {cheepId}");
+        }
+
+        context.Cheeps.Remove(cheepToRemove);
+    }
 }
