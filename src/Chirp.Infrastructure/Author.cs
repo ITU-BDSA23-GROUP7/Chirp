@@ -14,7 +14,8 @@ public class Author
         var authorDTO = new AuthorDTO
         {
             Name = Name,
-            Email = Email
+            Email = Email,
+            CheepStreak = CheepStreak
         };
 
         return authorDTO;

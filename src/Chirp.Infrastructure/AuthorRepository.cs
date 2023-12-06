@@ -193,12 +193,7 @@ public class AuthorRepository : IAuthorRepository
 
         foreach (Author author in streaks)
         {
-            compressedStreaks.Add(new AuthorDTO
-            {
-                Name = author.Name,
-                Email = author.Email,
-                CheepStreak = author.CheepStreak
-            });
+            compressedStreaks.Add(author.ToAuthorDTO());
         }
         return compressedStreaks;
     }
