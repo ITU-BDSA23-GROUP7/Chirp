@@ -1,3 +1,5 @@
+using SQLitePCL;
+
 namespace Chirp.Infrastructure;
 public class AuthorRepository : IAuthorRepository
 {
@@ -51,7 +53,8 @@ public class AuthorRepository : IAuthorRepository
                         .FirstOrDefaultAsync(a => a.Name == authorDTO.Name);
         return author!;
     }
-    public async Task<bool> UsernameIsHidden(string username){
+    public async Task<bool> UsernameIsHidden(string username)
+    {
         var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
 
         if (author == null)
@@ -71,9 +74,16 @@ public class AuthorRepository : IAuthorRepository
         var currentAuthor = await findCurrentAuthorTask;
         var authorToFollow = await findAuthorToFollowTask;
 
-        currentAuthor.Following.Add(authorToFollow);
-        authorToFollow.Followers.Add(currentAuthor);
-        await context.SaveChangesAsync();
+        if (currentAuthor != authorToFollow)
+        {
+            currentAuthor.Following.Add(authorToFollow);
+            authorToFollow.Followers.Add(currentAuthor);
+            await context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new CannotFollowSelfException("You cannot follow yourself.");
+        }
     }
 
     public async Task UnfollowAuthor(AuthorDTO currentAuthorDTO, AuthorDTO authorToUnfollowDTO)
@@ -84,22 +94,44 @@ public class AuthorRepository : IAuthorRepository
         var currentAuthor = await findCurrentAuthorTask;
         var authorToUnfollow = await findAuthorToUnfollowTask;
 
-        currentAuthor.Following.Remove(authorToUnfollow);
-        authorToUnfollow.Followers.Remove(currentAuthor);
-        await context.SaveChangesAsync();
+        if (currentAuthor != authorToUnfollow)
+        {
+            currentAuthor.Following.Remove(authorToUnfollow);
+            authorToUnfollow.Followers.Remove(currentAuthor);
+            await context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new CannotFollowSelfException("You cannot unfollow yourself.");
+        }
     }
 
     public async Task<IEnumerable<string>> GetFollowingUsernames(AuthorDTO authorDTO)
     {
         var author = await FindAuthorByDTO(authorDTO);
-        var following = new List<string>();
+        var followingUsernames = new List<string>();
+        var following = author.Following.Where(c => !c.Hidden);
 
-        foreach (var followingAuthor in author.Following)
+        foreach (var followingAuthor in following)
         {
-            following.Add(followingAuthor.Name);
+            followingUsernames.Add(followingAuthor.Name);
         }
 
-        return following;
+        return followingUsernames;
+    }
+
+    public async Task<IEnumerable<string>> GetFollowersUsernames(AuthorDTO authorDTO)
+    {
+        var author = await FindAuthorByDTO(authorDTO);
+        var followerUsernames = new List<string>();
+        var followers = author.Followers.Where(c => !c.Hidden);
+
+        foreach (var followersAuthor in followers)
+        {
+            followerUsernames.Add(followersAuthor.Name);
+        }
+
+        return followerUsernames;
     }
 
     public async Task<int> GetAmmountOfCheeps(string username)
