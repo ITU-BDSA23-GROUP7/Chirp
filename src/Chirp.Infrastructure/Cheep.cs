@@ -16,6 +16,7 @@ public class Cheep
     public CheepDTO ToCheepDTO() {
         var cheepDTO = new CheepDTO
         {
+            CheepId = CheepId,
             Author = Author.ToAuthorDTO(),
             Message = Text,
             Timestamp = TimeStamp.ToString()
