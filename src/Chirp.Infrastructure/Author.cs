@@ -8,4 +8,14 @@ public class Author
     public List<Author> Following { get; } = new();  //List of people the user follows
     public List<Author> Followers { get; } = new(); //List of people the user is following
     public bool Hidden { get; set; } = false;
+
+    public AuthorDTO ToAuthorDTO() {
+        var authorDTO = new AuthorDTO
+        {
+            Name = Name,
+            Email = Email
+        };
+
+        return authorDTO;
+    }
 }
