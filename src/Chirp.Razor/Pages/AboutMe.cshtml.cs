@@ -82,6 +82,6 @@ public class AboutMe : PageModel
     public async Task<IActionResult> OnPostAsync(Guid cheepId)
     {
         await _cheepRepository.RemoveCheep(cheepId);
-        return await OnGet();
+        return RedirectToPage("AboutMe");
     }
 }
