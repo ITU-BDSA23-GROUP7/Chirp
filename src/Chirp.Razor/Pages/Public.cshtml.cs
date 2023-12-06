@@ -6,12 +6,20 @@ namespace Chirp.Razor.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepRepository _repository;
-    public required IEnumerable<CheepDTO> Cheeps { get; set; }
+    private readonly IAuthorRepository _authorRepository;
+    public required List<CheepDTO> Cheeps { get; set; }
+    public required List<string> Following { get; set; }
     public int PageCount { get; private set; }
-    public AddCheepModel AddCheepModel{ get; set; }
+    public AddCheepModel AddCheepModel { get; set; }
 
-    public PublicModel(ICheepRepository repository)
+    [BindProperty]
+    public CheepDTO CheepDTO { get; set; }
+    [BindProperty]
+    public AuthorDTO AuthorDTO { get; set; }
+
+    public PublicModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
+        _authorRepository = authorRepository;
         _repository = repository;
         AddCheepModel = new AddCheepModel(repository);
     }
@@ -27,9 +35,22 @@ public class PublicModel : PageModel
     {
         PageCount = _repository.GetPageCount();
 
-        string pageNumStr = Request.Query["page"]!;
+        string PageNumStr = Request.Query["page"]!;
 
-        if (pageNumStr == null)
+        if (User.Identity.IsAuthenticated)
+        {
+            var username = User.Identity.Name;
+            if (!await _authorRepository.UsernameExistsAsync(username))
+            {
+                await _authorRepository.CreateNewAuthor(username);
+            }
+            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
+
+            var following = await _authorRepository.GetFollowingUsernames(authorDTO);
+            Following = following.ToList();
+        }
+
+        if (PageNumStr == null)
         {
             Cheeps = await _repository.GetCheeps();
             return Page();
@@ -37,7 +58,7 @@ public class PublicModel : PageModel
 
         int pageNum;
 
-        if (!int.TryParse(pageNumStr, out pageNum))
+        if (!int.TryParse(PageNumStr, out pageNum))
         {
             Cheeps = new List<CheepDTO>();
             return Page();
@@ -52,11 +73,55 @@ public class PublicModel : PageModel
         return Page();
     }
 
+
+
+    [BindProperty]
+    public string method { get; set; }
+    public async Task<IActionResult> OnPostAsync(){
+        switch (method)
+        {
+            case "follow":
+                await OnPostFollow();
+                break;
+            case "unfollow":
+                await OnPostUnfollow();
+                break;
+            case "addCheep":
+                await OnPostAddCheep();
+                break;
+        }
+        return await OnGet();
+    }
+
+    [BindProperty]
+    public string authorName { get; set; }
+    public async Task OnPostFollow()
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
+            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
+            await _authorRepository.FollowAuthor(userDTO, authorDTO);
+        }
+        
+    }
+
+    public async Task OnPostUnfollow()
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
+            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
+            await _authorRepository.UnfollowAuthor(userDTO, authorDTO);
+        }
+    }
+
     [BindProperty]
     public string CheepText { get; set; }
-    public async Task<ActionResult> OnPostAsync()
+    public async Task OnPostAddCheep()
     {
         await AddCheepModel.OnPostAsync(User.Identity.Name, CheepText);
-        return RedirectToPage("Public");
     }
+
+
 }
