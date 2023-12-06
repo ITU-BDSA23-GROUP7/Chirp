@@ -50,13 +50,16 @@ public class CheepRepository : ICheepRepository
     {
         int pageIndex = pageNum - 1;
 
+        List<string> following = new List<string>();
+
+        foreach (Author a in context.Authors.Where(a => a.Name == author).First().Following)
+        {
+            following.Add(a.Name);
+        }
+
         // Checks wether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
-        List<Cheep> cheeps = await
-            (
-                author == null ?
-                context.Cheeps :
-                context.Cheeps.Where(c => c.Author.Name == author)
-            )
+        List<Cheep> cheeps = await context.Cheeps
+            .Where(c => c.Author.Name == author || following.Contains(c.Author.Name))
             .OrderByDescending(c => c.TimeStamp)
             .Where(c => !c.Author.Hidden)
             .Skip(pageIndex * pageLength)

@@ -33,7 +33,6 @@ public class UserTimelineModel : PageModel
         _author = author;
         PageCount = _cheepRepository.GetPageCount(author);
 
-        string pageNumStr = Request.Query["page"]!;
 
         if (User.Identity.IsAuthenticated)
         {
@@ -48,10 +47,54 @@ public class UserTimelineModel : PageModel
             Following = following.ToList();
         }
 
+        if(User.Identity.IsAuthenticated && author == User.Identity.Name)
+        {
+            await LoadPersonalTimeline(author);
+        }
+        else
+        {
+            await LoadAuthorTimeline(author);
+        }
+
+        return Page();
+    }
+
+    private async Task LoadPersonalTimeline(string author)
+    {
+        string pageNumStr = Request.Query["page"]!;
+
+        if (pageNumStr == null)
+        {
+            Cheeps = await _cheepRepository.GetFollowerCheeps(author, 1);
+
+        }
+
+        int pageNum;
+
+        if (!int.TryParse(pageNumStr, out pageNum))
+        {
+            Cheeps = await _cheepRepository.GetFollowerCheeps(author, 1);
+
+        }
+
+        if (pageNum < 0)
+        {
+            Cheeps = await _cheepRepository.GetFollowerCheeps(author, 1);
+
+        }
+
+        Cheeps = await _cheepRepository.GetFollowerCheeps(author, pageNum);
+    }
+
+    private async Task LoadAuthorTimeline(string author)
+
+    {
+        string pageNumStr = Request.Query["page"]!;
+
         if (pageNumStr == null)
         {
             Cheeps = await _cheepRepository.GetCheeps(1, author);
-            return Page();
+            
         }
 
         int pageNum;
@@ -59,17 +102,17 @@ public class UserTimelineModel : PageModel
         if (!int.TryParse(pageNumStr, out pageNum))
         {
             Cheeps = await _cheepRepository.GetCheeps(1, author);
-            return Page();
+            
         }
 
         if (pageNum < 0)
         {
             Cheeps = await _cheepRepository.GetCheeps(1, author);
-            return Page();
+            
         }
 
         Cheeps = await _cheepRepository.GetCheeps(pageNum, author);
-        return Page();
+        
     }
 
     [BindProperty]
