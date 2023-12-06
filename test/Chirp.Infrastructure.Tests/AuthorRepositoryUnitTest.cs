@@ -23,20 +23,13 @@ public class AuthorRepositoryUnitTest
         _authorRepository = new AuthorRepository(context);//Here the repository should be created with our context data
     }
 
-
-    [Fact]
-    public void Test()
-    {
-        Assert.Equal(1, 1);
-    }
-
     [Fact]
     public async void CreateNewAuthorTest()
     {
         //Arrange
 
         //Act
-        _authorRepository.CreateNewAuthor("Casper");
+        await _authorRepository.CreateNewAuthor("Casper");
         AuthorDTO newUser = await _authorRepository.GetAuthorDTOByUsername("Casper");
 
         //Assert
@@ -61,5 +54,34 @@ public class AuthorRepositoryUnitTest
 
         //Act & Assert
         var foundAuthor = await _authorRepository.GetAuthorDTOByUsername(existingName);
+    }
+
+    [Fact]
+    public async void UserCanBeHidden(){
+        //Arrange
+        var user = "John Doe";
+        await _authorRepository.CreateNewAuthor(user);
+
+
+        //Act
+        await _authorRepository.SetHidden(user, true);
+
+        //Assert
+        Assert.True(await _authorRepository.UsernameIsHidden(user));
+    }
+
+
+    [Fact]
+    public async void UserCanBecomeVisibleAgain(){
+        //Arrange
+        var user = "John Doe";
+        await _authorRepository.CreateNewAuthor(user);
+
+        //Act
+        await _authorRepository.SetHidden(user, true);
+        await _authorRepository.SetHidden(user, false);
+
+        //Assert
+        Assert.False(await _authorRepository.UsernameIsHidden(user));
     }
 }

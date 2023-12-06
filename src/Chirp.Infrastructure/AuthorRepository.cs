@@ -51,6 +51,16 @@ public class AuthorRepository : IAuthorRepository
                         .FirstOrDefaultAsync(a => a.Name == authorDTO.Name);
         return author!;
     }
+    public async Task<bool> UsernameIsHidden(string username){
+        var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
+
+        if (author == null)
+        {
+            throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
+        }
+
+        return author.Hidden;
+    }
 
 
     public async Task FollowAuthor(AuthorDTO currentAuthorDTO, AuthorDTO authorToFollowDTO)

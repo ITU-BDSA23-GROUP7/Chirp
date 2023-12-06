@@ -4,6 +4,7 @@ public class CheepServiceUnitTest
 {
     private readonly ICheepRepository _cheepService;
     private readonly SqliteConnection _connection;
+
     public CheepServiceUnitTest()
     {
         //Building the connection to a database
@@ -12,7 +13,7 @@ public class CheepServiceUnitTest
         var builder = new DbContextOptionsBuilder<ChirpDBContext>()
             .UseSqlite(_connection);
 
-        //injectin the context into the database
+        //injecting the context into the database
         var context = new ChirpDBContext(builder.Options);
         context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 

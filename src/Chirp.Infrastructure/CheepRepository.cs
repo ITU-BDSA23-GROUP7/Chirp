@@ -67,7 +67,9 @@ public class CheepRepository : ICheepRepository
         {
             throw new UsernameNotFoundException($"The username {username} does not exist in the database");
         }
-        Console.WriteLine($"CheepText 2. 0: {message}, and user {username}");
+        if (author.Hidden == true){
+            throw new Exception($"The username {username} is hidden and can therefore not cheep!");
+        }
 
         Cheep input = new Cheep
         {
