@@ -76,10 +76,9 @@ public class AuthorRepositoryUnitTest
         //Arrange
         var user = "John Doe";
         await _authorRepository.CreateNewAuthor(user);
-        _authorRepository.SetHidden(user, true);
-
 
         //Act
+        _authorRepository.SetHidden(user, true);
         _authorRepository.SetHidden(user, false);
 
         //Assert
