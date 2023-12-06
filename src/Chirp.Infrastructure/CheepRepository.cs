@@ -117,5 +117,7 @@ public class CheepRepository : ICheepRepository
         }
 
         context.Cheeps.Remove(cheepToRemove);
+    
+        await context.SaveChangesAsync();
     }
 }

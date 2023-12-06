@@ -79,10 +79,9 @@ public class AboutMe : PageModel
         return null;
     }
 
-    public async Task<IActionResult> OnPostAsync(string date)
+    public async Task<IActionResult> OnPostAsync(Guid cheepId)
     {
-        Console.WriteLine("BRRRRRRRRR");
-        Console.WriteLine(date);
+        await _cheepRepository.RemoveCheep(cheepId);
         return await OnGet();
     }
 }
