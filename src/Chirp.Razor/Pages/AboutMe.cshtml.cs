@@ -30,7 +30,7 @@ public class AboutMe : PageModel
         {
             Email = "[No email stored]";
         }
-        //Cheeps not implementet in repository yet...
+        //Amount of cheeps the user has Cheeped
         NumberOfCheeps = await _authorRepository.GetAmmountOfCheeps(author);
     }
 
@@ -79,8 +79,10 @@ public class AboutMe : PageModel
         return null;
     }
 
-    public async Task<IActionResult> OnPostAsync(){
-        Console.WriteLine("delete this");
-        return null;
+    public async Task<IActionResult> OnPostAsync(string date)
+    {
+        Console.WriteLine("BRRRRRRRRR");
+        Console.WriteLine(date);
+        return await OnGet();
     }
 }

@@ -48,9 +48,9 @@
                             <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
                         </strong>
 
-                        <form method="post" >
-                            <input type="hidden" value='@cheep.Author.Name' asp-for="authorName" id="authorName" name="authorName"/>
-                            <input type="hidden" value="unfollow" asp-for="method" id="method" name="method" />
+
+                        <form method="post" asp-page-handler="delete">
+                            <input type="hidden" name="date" value='@cheep.Timestamp'/>
                             <button type="submit" style="float: right">Remove</button>
                             @Html.AntiForgeryToken()
                         </form>
