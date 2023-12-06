@@ -1,0 +1,36 @@
+﻿@page "/scoreboard"
+@model Chirp.Razor.Pages.ScoreboardModel
+@{
+    ViewData["Title"] = "Chirp!";
+
+    Layout = "Shared/_Layout";
+}
+
+<div>
+    <h2> Top Streaks </h2>
+
+    <ul id="messagelist" class="cheeps">
+
+        @if (Model.Scores.Count > 0)
+        {
+            @foreach (var score in Model.Scores)
+            {
+        <li>
+            <p>
+                <strong>
+                    <a href="/@score.Name">@score.Name</a>
+                </strong>
+                <b>CHEEP STREAK : @score.CheepStreak</b>
+                <br />
+            </p>
+        </li>
+            }
+        }
+        else
+        {
+            <em>There are no scores so far.</em>
+        }
+    </ul>
+
+</div>
+
