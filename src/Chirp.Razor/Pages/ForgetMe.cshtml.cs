@@ -14,10 +14,4 @@ public class ForgetMe : PageModel
 
         return null;
     }
-
-    public async Task<IActionResult> OnPostAsync() {
-
-        Console.WriteLine("yo");
-        return RedirectToPage("Public");
-    }
 }
