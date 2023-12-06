@@ -27,14 +27,6 @@
                 </li>
             </div>
         }
-        @if (Model.Cheeps != null)
-        {
-            Console.WriteLine("This should be magni piiii");
-            List<CheepDTO> chep = Model.Cheeps;
-            foreach(CheepDTO c in chep){
-                Console.WriteLine($"Test {c.Message}");
-            }
-        }
 
         @if (Model.Cheeps.Count > 0)
 
