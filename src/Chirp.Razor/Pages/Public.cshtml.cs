@@ -79,7 +79,7 @@ public class PublicModel : PageModel
     }
 
     [BindProperty]
-    public string method { get; set; }
+    public string? method { get; set; }
     public async Task<IActionResult> OnPostAsync(){
         switch (method)
         {
@@ -97,10 +97,10 @@ public class PublicModel : PageModel
     }
 
     [BindProperty]
-    public string authorName { get; set; }
+    public string? authorName { get; set; }
     public async Task OnPostFollow()
     {
-        if (User.Identity == null) {
+        if (User.Identity == null || User.Identity.Name == null || authorName == null) {
             return;
         }
 
@@ -114,7 +114,7 @@ public class PublicModel : PageModel
 
     public async Task OnPostUnfollow()
     {
-        if (User.Identity == null) {
+        if (User.Identity == null || User.Identity.Name == null || authorName == null) {
             return;
         }
 
@@ -127,10 +127,11 @@ public class PublicModel : PageModel
     }
 
     [BindProperty]
-    public string CheepText { get; set; }
+    public string? CheepText { get; set; }
     public async Task OnPostAddCheep()
     {
-        if (User.Identity == null) {
+        if (User.Identity == null || User.Identity.Name == null || CheepText == null)
+        {
             return;
         }
 
