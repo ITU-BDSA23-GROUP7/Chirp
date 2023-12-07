@@ -10,16 +10,11 @@ public class AuthorRepository : IAuthorRepository
         this.context = context;
     }
 
-    public async Task CreateNewAuthor(string name)
+    public async Task CreateNewAuthor(string username)
     {
+        await ValidateUsernameAsync(username);
 
-        bool usernameExists = await UsernameExistsAsync(name);
-        if (usernameExists)
-        {
-            throw new Exception("Username already exists exception");
-        }
-
-        context.Authors.Add(new Author { AuthorId = Guid.NewGuid(), Name = name, Cheeps = new List<Cheep>() });
+        context.Authors.Add(new Author { AuthorId = Guid.NewGuid(), Name = username, Cheeps = new List<Cheep>() });
         context.SaveChanges();
     }
 
@@ -27,6 +22,13 @@ public class AuthorRepository : IAuthorRepository
     {
         var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
         return author != null;
+    }
+    private async Task ValidateUsernameAsync(string username) {
+        bool usernameExists = await UsernameExistsAsync(username);
+        if (usernameExists)
+        {
+            throw new Exception("Username already exists exception");
+        }
     }
 
     public async Task<AuthorDTO> GetAuthorDTOByUsername(string username)
@@ -41,12 +43,6 @@ public class AuthorRepository : IAuthorRepository
         return author.ToAuthorDTO();
     }
 
-    private async Task<Author> FindAuthorByDTO(AuthorDTO authorDTO)
-    {
-        var author = await context.Authors.Include(a => a.Following)
-                        .FirstOrDefaultAsync(a => a.Name == authorDTO.Name);
-        return author!;
-    }
     private async Task<Author> GetAuthorAsync(string username) {
         var author = await context.Authors.FirstOrDefaultAsync(a => a.Name == username) 
             ?? throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
@@ -98,7 +94,6 @@ public class AuthorRepository : IAuthorRepository
         }
 
         // Check if newUnFollowerAuthor follows newUnFollowingAuthor
-        Console.WriteLine($"{newUnFollowerUsername} - {newUnFollowingUsername}");
 
         newUnFollowerAuthor.Following.Remove(newUnFollowingAuthor);
         newUnFollowingAuthor.Followers.Remove(newUnFollowerAuthor);
