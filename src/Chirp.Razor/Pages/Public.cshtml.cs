@@ -79,28 +79,10 @@ public class PublicModel : PageModel
     }
 
     [BindProperty]
-    public string method { get; set; }
-    public async Task<IActionResult> OnPostAsync(){
-        switch (method)
-        {
-            case "follow":
-                await OnPostFollow();
-                break;
-            case "unfollow":
-                await OnPostUnfollow();
-                break;
-            case "addCheep":
-                await OnPostAddCheep();
-                break;
-        }
-        return RedirectToPage("Public");
-    }
-
-    [BindProperty]
-    public string authorName { get; set; }
+    public string? authorName { get; set; }
     public async Task OnPostFollow()
     {
-        if (User.Identity == null) {
+        if (User.Identity == null || User.Identity.Name == null || authorName == null) {
             return;
         }
 
@@ -110,11 +92,12 @@ public class PublicModel : PageModel
             var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
             await _authorRepository.FollowAuthor(userDTO, authorDTO);
         }
+
     }
 
     public async Task OnPostUnfollow()
     {
-        if (User.Identity == null) {
+        if (User.Identity == null || User.Identity.Name == null || authorName == null) {
             return;
         }
 
@@ -127,10 +110,11 @@ public class PublicModel : PageModel
     }
 
     [BindProperty]
-    public string CheepText { get; set; }
+    public string? CheepText { get; set; }
     public async Task OnPostAddCheep()
     {
-        if (User.Identity == null) {
+        if (User.Identity == null || User.Identity.Name == null || CheepText == null)
+        {
             return;
         }
 
