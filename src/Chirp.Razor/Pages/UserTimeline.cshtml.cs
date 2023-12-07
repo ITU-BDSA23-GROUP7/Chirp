@@ -11,7 +11,6 @@ public class UserTimelineModel : PageModel
     public required List<string> Following { get; set; }
     public int PageCount { get; private set; }
     public AddCheepModel AddCheepModel{ get; set; }
-    private string _author {  get; set; }
 
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
@@ -30,7 +29,6 @@ public class UserTimelineModel : PageModel
     /// <returns></returns>
     public async Task<IActionResult> OnGet(string author)
     {
-        _author = author;
         PageCount = _cheepRepository.GetPageCount(author);
 
 
@@ -116,7 +114,7 @@ public class UserTimelineModel : PageModel
     }
 
     [BindProperty]
-    public string method { get; set; }
+    public string? method { get; set; }
     public async Task<IActionResult> OnPostAsync()
     {
         switch (method)
@@ -135,7 +133,7 @@ public class UserTimelineModel : PageModel
     }
 
     [BindProperty]
-    public string authorName { get; set; }
+    public string? authorName { get; set; }
     public async Task OnPostFollow()
     {
         if (User.Identity.IsAuthenticated)
@@ -158,9 +156,14 @@ public class UserTimelineModel : PageModel
     }
 
     [BindProperty]
-    public string CheepText { get; set; }
+    public string? CheepText { get; set; }
     public async Task OnPostAddCheep()
     {
+        if (CheepText == null)
+        {
+            return;
+        }
+
         await AddCheepModel.OnPostAsync(User.Identity.Name, CheepText);
     }
 }
