@@ -38,14 +38,17 @@ public class UserTimelineModel : PageModel
         if (User.Identity.IsAuthenticated)
         {
             var username = User.Identity.Name;
-            if (!await _authorRepository.UsernameExistsAsync(username))
+            if (username != null) 
             {
-                await _authorRepository.CreateNewAuthor(username);
-            }
-            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
+                if (!await _authorRepository.UsernameExistsAsync(username))
+                {
+                    await _authorRepository.CreateNewAuthor(username);
+                }
+                var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
 
-            var following = await _authorRepository.GetFollowingUsernames(authorDTO);
-            Following = following.ToList();
+                var following = await _authorRepository.GetFollowingUsernames(authorDTO);
+                Following = following.ToList();
+            }
         }
 
         if(User.Identity.IsAuthenticated && author == User.Identity.Name)
@@ -132,14 +135,21 @@ public class UserTimelineModel : PageModel
                 await OnPostAddCheep();
                 break;
         }
-        return await OnGet((string) HttpContext.GetRouteValue("author"));
+
+        var routeValue = HttpContext.GetRouteValue("author");
+
+        if (routeValue == null) {
+            return Page();
+        }
+
+        return await OnGet((string) routeValue);
     }
 
     [BindProperty]
     public string? authorName { get; set; }
     public async Task OnPostFollow()
     {
-        if (User.Identity == null) {
+        if (User.Identity == null || User.Identity.Name == null || authorName == null) {
             return;
         }
 
@@ -154,7 +164,7 @@ public class UserTimelineModel : PageModel
 
     public async Task OnPostUnfollow()
     {
-        if (User.Identity == null) {
+        if (User.Identity == null || User.Identity.Name == null || authorName == null) {
             return;
         }
 
@@ -170,7 +180,7 @@ public class UserTimelineModel : PageModel
     public string? CheepText { get; set; }
     public async Task OnPostAddCheep()
     {
-        if (CheepText == null)
+        if (User.Identity == null || User.Identity.Name == null || CheepText == null)
         {
             return;
         }

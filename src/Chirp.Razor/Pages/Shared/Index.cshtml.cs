@@ -15,21 +15,18 @@ namespace MyApp.Namespace
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                //Check if there is a cache with the key 'user'
-                //var user = _cache.Get<string>("user");
-                //if (user == null)
-                //{
-                    bool usernameExists = await _repository.UsernameExistsAsync(User.Identity.Name);
-                    if (!usernameExists)
-                    {
-                        await _repository.CreateNewAuthor(User.Identity.Name);
-                    }
-                    AuthorDTO authorDTO = await _repository.GetAuthorDTOByUsername(User.Identity.Name);
-                    //_cache.Set<string>("user", "true");
-                //}
+            if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null) {
+                return View();
             }
+
+            bool usernameExists = await _repository.UsernameExistsAsync(User.Identity.Name);
+            if (!usernameExists)
+            {
+                await _repository.CreateNewAuthor(User.Identity.Name);
+            }
+
+            AuthorDTO authorDTO = await _repository.GetAuthorDTOByUsername(User.Identity.Name);
+
             return View();
         }
     }

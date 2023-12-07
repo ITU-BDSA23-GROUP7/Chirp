@@ -12,11 +12,6 @@ public class PublicModel : PageModel
     public int PageCount { get; private set; }
     public AddCheepModel AddCheepModel { get; set; }
 
-    [BindProperty]
-    public CheepDTO CheepDTO { get; set; }
-    [BindProperty]
-    public AuthorDTO AuthorDTO { get; set; }
-
     public PublicModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         _authorRepository = authorRepository;
@@ -37,18 +32,7 @@ public class PublicModel : PageModel
 
         string PageNumStr = Request.Query["page"]!;
 
-        if (User.Identity.IsAuthenticated)
-        {
-            var username = User.Identity.Name;
-            if (!await _authorRepository.UsernameExistsAsync(username))
-            {
-                await _authorRepository.CreateNewAuthor(username);
-            }
-            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
-
-            var following = await _authorRepository.GetFollowingUsernames(authorDTO);
-            Following = following.ToList();
-        }
+        await CheckUserIdentity();
 
         if (PageNumStr == null)
         {
@@ -73,7 +57,26 @@ public class PublicModel : PageModel
         return Page();
     }
 
+    private async Task CheckUserIdentity() {
+        if (User.Identity == null || !User.Identity.IsAuthenticated) {
+            return;
+        }
 
+        var username = User.Identity.Name;
+
+        if (username == null) {
+            return;
+        }
+
+        if (!await _authorRepository.UsernameExistsAsync(username))
+        {
+            await _authorRepository.CreateNewAuthor(username);
+        }
+        var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
+
+        var following = await _authorRepository.GetFollowingUsernames(authorDTO);
+        Following = following.ToList();
+    }
 
     [BindProperty]
     public string method { get; set; }
