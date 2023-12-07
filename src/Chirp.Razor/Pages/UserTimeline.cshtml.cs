@@ -155,9 +155,7 @@ public class UserTimelineModel : PageModel
 
         if (User.Identity.IsAuthenticated)
         {
-            var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
-            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
-            await _authorRepository.FollowAuthor(userDTO, authorDTO);
+            await _authorRepository.FollowAuthor(User.Identity.Name, authorName);
         }
 
     }
@@ -170,9 +168,7 @@ public class UserTimelineModel : PageModel
 
         if (User.Identity.IsAuthenticated)
         {
-            var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
-            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
-            await _authorRepository.UnfollowAuthor(userDTO, authorDTO);
+            await _authorRepository.UnfollowAuthor(User.Identity.Name, authorName);
         }
     }
 
