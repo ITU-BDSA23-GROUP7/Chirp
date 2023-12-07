@@ -12,7 +12,11 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task CreateNewAuthor(string username)
     {
-        await ValidateUsernameAsync(username);
+        bool usernameExists = await UsernameExistsAsync(username);
+        if (usernameExists)
+        {
+            throw new Exception("Username already exists exception");
+        }
 
         context.Authors.Add(new Author { AuthorId = Guid.NewGuid(), Name = username, Cheeps = new List<Cheep>() });
         context.SaveChanges();
@@ -22,13 +26,6 @@ public class AuthorRepository : IAuthorRepository
     {
         var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
         return author != null;
-    }
-    private async Task ValidateUsernameAsync(string username) {
-        bool usernameExists = await UsernameExistsAsync(username);
-        if (usernameExists)
-        {
-            throw new Exception("Username already exists exception");
-        }
     }
 
     public async Task<AuthorDTO> GetAuthorDTOByUsername(string username)
