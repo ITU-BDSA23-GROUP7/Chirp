@@ -31,6 +31,9 @@ public class UserTimelineModel : PageModel
     {
         PageCount = _cheepRepository.GetPageCount(author);
 
+        if (User.Identity == null) {
+            return Page();
+        }
 
         if (User.Identity.IsAuthenticated)
         {
@@ -136,6 +139,10 @@ public class UserTimelineModel : PageModel
     public string? authorName { get; set; }
     public async Task OnPostFollow()
     {
+        if (User.Identity == null) {
+            return;
+        }
+
         if (User.Identity.IsAuthenticated)
         {
             var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
@@ -147,6 +154,10 @@ public class UserTimelineModel : PageModel
 
     public async Task OnPostUnfollow()
     {
+        if (User.Identity == null) {
+            return;
+        }
+
         if (User.Identity.IsAuthenticated)
         {
             var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);

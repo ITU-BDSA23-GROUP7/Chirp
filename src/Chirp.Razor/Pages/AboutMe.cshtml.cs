@@ -10,6 +10,7 @@ public class AboutMe : PageModel
     public required IEnumerable<CheepDTO> Cheeps { get; set; }
     public int PageCount { get; private set; }
     public required AuthorDTO Author { get; set; }
+    public required string Username { get; set; }
     public required string Email { get; set; }
     public required int NumberOfCheeps { get; set; }
 
@@ -18,23 +19,33 @@ public class AboutMe : PageModel
     {
         _authorRepository = authorRepository;
         _cheepRepository = cheepRepository;
+        Username = "[No username]";
+        Email = "[No email stored]";
+        NumberOfCheeps = 0;
     }
 
-    public async Task SetUserinfo(string author)
+    public async Task SetUserinfo(string? author)
     {
+        if (author == null) {
+            return;
+        }
+
+        Username = author;
         Author = await _authorRepository.GetAuthorDTOByUsername(author);
 
-        Email = Author.Email;
-        Console.WriteLine($"-{Author.Email}-");
-        if (Email == null || Email.Equals(""))
+        if (Author.Email != null && !Email.Equals(""))
         {
-            Email = "[No email stored]";
+            Email = Author.Email;
         }
         //Amount of cheeps the user has Cheeped
         NumberOfCheeps = await _authorRepository.GetAmmountOfCheeps(author);
     }
 
-    public async Task SetCheeps(string author) {
+    public async Task SetCheeps(string? author) {
+        if (author == null) {
+            return;
+        }
+
         PageCount = _cheepRepository.GetPageCount(author);
 
         string pageNumStr = Request.Query["page"]!;
@@ -65,7 +76,7 @@ public class AboutMe : PageModel
 
     public async Task<IActionResult> OnGet()
     {
-        if(!User.Identity.IsAuthenticated)
+        if(User.Identity == null || !User.Identity.IsAuthenticated)
         {
             return Redirect("/");
         }
@@ -76,7 +87,7 @@ public class AboutMe : PageModel
 
         await SetCheeps(User.Identity.Name);
 
-        return null;
+        return Page();
     }
 
     public async Task<IActionResult> OnPostAsync(Guid cheepId)

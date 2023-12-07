@@ -5,13 +5,13 @@ namespace Chirp.Razor.Pages;
 
 public class ForgetMe : PageModel
 {
-    public async Task<IActionResult> OnGet()
+    public IActionResult OnGet()
     {
-        if(!User.Identity.IsAuthenticated)
+        if(User.Identity == null || !User.Identity.IsAuthenticated)
         {
             return Redirect("/");
         }
 
-        return null;
+        return Page();
     }
 }

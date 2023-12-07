@@ -97,17 +97,24 @@ public class PublicModel : PageModel
     public string authorName { get; set; }
     public async Task OnPostFollow()
     {
+        if (User.Identity == null) {
+            return;
+        }
+
         if (User.Identity.IsAuthenticated)
         {
             var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
             var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
             await _authorRepository.FollowAuthor(userDTO, authorDTO);
         }
-        
     }
 
     public async Task OnPostUnfollow()
     {
+        if (User.Identity == null) {
+            return;
+        }
+
         if (User.Identity.IsAuthenticated)
         {
             var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
@@ -120,6 +127,10 @@ public class PublicModel : PageModel
     public string CheepText { get; set; }
     public async Task OnPostAddCheep()
     {
+        if (User.Identity == null) {
+            return;
+        }
+
         await AddCheepModel.OnPostAsync(User.Identity.Name, CheepText);
     }
 
