@@ -44,9 +44,7 @@ public class UserTimelineModel : PageModel
                 {
                     await _authorRepository.CreateNewAuthor(username);
                 }
-                var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
-
-                var following = await _authorRepository.GetFollowingUsernames(authorDTO);
+                var following = await _authorRepository.GetFollowingUsernames(username);
                 Following = following.ToList();
             }
         }

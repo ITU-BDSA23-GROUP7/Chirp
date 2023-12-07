@@ -47,11 +47,7 @@ public class AuthorRepository : IAuthorRepository
                         .FirstOrDefaultAsync(a => a.Name == authorDTO.Name);
         return author!;
     }
-    private async Task<Author> GetAuthorAsync(string? username) {
-        if (username == null) {
-            throw new UsernameNotFoundException("The username provided is null.");
-        }
-
+    private async Task<Author> GetAuthorAsync(string username) {
         var author = await context.Authors.FirstOrDefaultAsync(a => a.Name == username) 
             ?? throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
         
@@ -70,7 +66,7 @@ public class AuthorRepository : IAuthorRepository
     }
 
 
-    public async Task FollowAuthor(string? newFollowerUsername, string? newFollowingUsername)
+    public async Task FollowAuthor(string newFollowerUsername, string newFollowingUsername)
     {
         var findNewFollowerAuthorTask = GetAuthorAsync(newFollowerUsername);
         var findNewFollowingAuthorTask = GetAuthorAsync(newFollowingUsername);
@@ -88,7 +84,7 @@ public class AuthorRepository : IAuthorRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task UnfollowAuthor(string? newUnFollowerUsername, string? newUnFollowingUsername)
+    public async Task UnfollowAuthor(string newUnFollowerUsername, string newUnFollowingUsername)
     {
         var findNewUnFollowerAuthorTask = GetAuthorAsync(newUnFollowerUsername);
         var findNewUnFollowingAuthorTask = GetAuthorAsync(newUnFollowingUsername);
@@ -109,9 +105,9 @@ public class AuthorRepository : IAuthorRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<string>> GetFollowingUsernames(AuthorDTO authorDTO)
+    public async Task<IEnumerable<string>> GetFollowingUsernames(string username)
     {
-        var author = await FindAuthorByDTO(authorDTO);
+        var author = await GetAuthorAsync(username);
         var followingUsernames = new List<string>();
         var following = author.Following.Where(c => !c.Hidden);
 
@@ -123,9 +119,9 @@ public class AuthorRepository : IAuthorRepository
         return followingUsernames;
     }
 
-    public async Task<IEnumerable<string>> GetFollowersUsernames(AuthorDTO authorDTO)
+    public async Task<IEnumerable<string>> GetFollowersUsernames(string username)
     {
-        var author = await FindAuthorByDTO(authorDTO);
+        var author = await GetAuthorAsync(username);
         var followerUsernames = new List<string>();
         var followers = author.Followers.Where(c => !c.Hidden);
 
