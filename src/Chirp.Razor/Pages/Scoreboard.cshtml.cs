@@ -5,7 +5,7 @@ namespace Chirp.Razor.Pages
 {
     public class ScoreboardModel : PageModel
     {
-        public List<AuthorDTO> Scores { get; set; }
+        public required List<AuthorDTO> Scores { get; set; }
         public IAuthorRepository _authorRepository { get; set; }
 
         public ScoreboardModel(IAuthorRepository authorRepository)

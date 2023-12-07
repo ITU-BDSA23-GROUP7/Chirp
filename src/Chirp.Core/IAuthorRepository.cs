@@ -1,16 +1,15 @@
 namespace Chirp.Core;
 public interface IAuthorRepository
 {
-    public Task<AuthorDTO> GetAuthorDTOByUsername(string username);
-    public Task CreateNewAuthor(string name);
-
-    public Task FollowAuthor(AuthorDTO authorDTO, AuthorDTO authorToFollowDTO);
-    public Task UnfollowAuthor(AuthorDTO authorDTO, AuthorDTO authorToUnfollowDTO);
-    public Task<IEnumerable<string>> GetFollowingUsernames(AuthorDTO authorDTO);
-    public Task<IEnumerable<string>> GetFollowersUsernames(AuthorDTO authorDTO);
-    public Task<bool> UsernameIsHidden(string username);
+    Task<AuthorDTO> GetAuthorDTOByUsername(string username);
+    Task CreateNewAuthor(string name);
+    Task FollowAuthor(AuthorDTO authorDTO, AuthorDTO authorToFollowDTO);
+    Task UnfollowAuthor(AuthorDTO authorDTO, AuthorDTO authorToUnfollowDTO);
+    Task<IEnumerable<string>> GetFollowingUsernames(AuthorDTO authorDTO);
+    Task<IEnumerable<string>> GetFollowersUsernames(AuthorDTO authorDTO);
+    Task<bool> UsernameIsHidden(string username);
     Task<bool> UsernameExistsAsync(string username);
-    public Task<int> GetAmmountOfCheeps(string username);
-    public Task SetHidden(string username, bool hidden);
-    public Task<List<AuthorDTO>> GetScoreboardAsync();
+    Task<int> GetAmmountOfCheeps(string username);
+    Task SetHidden(string username, bool hidden);
+    Task<List<AuthorDTO>> GetScoreboardAsync();
 }

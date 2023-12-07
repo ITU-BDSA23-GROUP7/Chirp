@@ -18,7 +18,7 @@
         </strong>
     </p>
     <ul id="messagelist" class="cheeps">
-        @if(User.Identity.IsAuthenticated && User.Identity.Name.Equals(routeName)){
+        @if(User.Identity != null && User.Identity.IsAuthenticated && User.Identity.Name != null && User.Identity.Name.Equals(routeName)){
             <li>
                 @await Html.PartialAsync("AddCheep.cshtml", Model.AddCheepModel)
             </li>
@@ -32,7 +32,7 @@
                         <strong>
                             <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
                         </strong>
-                        @if (User.Identity.IsAuthenticated && cheep.Author.Name != User.Identity.Name) //Check lige om du selv er authoren??????
+                        @if (User.Identity != null && User.Identity.IsAuthenticated && cheep.Author.Name != User.Identity.Name) //Check lige om du selv er authoren??????
                         {
                             <form method="post">
                                 <input type="hidden" value='@cheep.Author.Name' asp-for="authorName" id="authorName" name="authorName" />

@@ -12,13 +12,12 @@ public class Forgotten : PageModel
     }
     public async Task<IActionResult> OnGet()
     {
-        if(!User.Identity.IsAuthenticated)
-        {
+        if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null) {
             return Redirect("/");
         }
 
         await _authorRepository.SetHidden(User.Identity.Name, true);
 
-        return null;
+        return Page();
     }
 }

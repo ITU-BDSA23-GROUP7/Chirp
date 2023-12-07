@@ -11,7 +11,6 @@ public class UserTimelineModel : PageModel
     public required List<string> Following { get; set; }
     public int PageCount { get; private set; }
     public AddCheepModel AddCheepModel{ get; set; }
-    private string _author {  get; set; }
 
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
@@ -30,21 +29,26 @@ public class UserTimelineModel : PageModel
     /// <returns></returns>
     public async Task<IActionResult> OnGet(string author)
     {
-        _author = author;
         PageCount = _cheepRepository.GetPageCount(author);
 
+        if (User.Identity == null) {
+            return Page();
+        }
 
         if (User.Identity.IsAuthenticated)
         {
             var username = User.Identity.Name;
-            if (!await _authorRepository.UsernameExistsAsync(username))
+            if (username != null) 
             {
-                await _authorRepository.CreateNewAuthor(username);
-            }
-            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
+                if (!await _authorRepository.UsernameExistsAsync(username))
+                {
+                    await _authorRepository.CreateNewAuthor(username);
+                }
+                var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
 
-            var following = await _authorRepository.GetFollowingUsernames(authorDTO);
-            Following = following.ToList();
+                var following = await _authorRepository.GetFollowingUsernames(authorDTO);
+                Following = following.ToList();
+            }
         }
 
         if(User.Identity.IsAuthenticated && author == User.Identity.Name)
@@ -116,7 +120,7 @@ public class UserTimelineModel : PageModel
     }
 
     [BindProperty]
-    public string method { get; set; }
+    public string? method { get; set; }
     public async Task<IActionResult> OnPostAsync()
     {
         switch (method)
@@ -131,13 +135,24 @@ public class UserTimelineModel : PageModel
                 await OnPostAddCheep();
                 break;
         }
-        return await OnGet((string) HttpContext.GetRouteValue("author"));
+
+        var routeValue = HttpContext.GetRouteValue("author");
+
+        if (routeValue == null) {
+            return Page();
+        }
+
+        return await OnGet((string) routeValue);
     }
 
     [BindProperty]
-    public string authorName { get; set; }
+    public string? authorName { get; set; }
     public async Task OnPostFollow()
     {
+        if (User.Identity == null || User.Identity.Name == null || authorName == null) {
+            return;
+        }
+
         if (User.Identity.IsAuthenticated)
         {
             var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
@@ -149,6 +164,10 @@ public class UserTimelineModel : PageModel
 
     public async Task OnPostUnfollow()
     {
+        if (User.Identity == null || User.Identity.Name == null || authorName == null) {
+            return;
+        }
+
         if (User.Identity.IsAuthenticated)
         {
             var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
@@ -158,9 +177,14 @@ public class UserTimelineModel : PageModel
     }
 
     [BindProperty]
-    public string CheepText { get; set; }
+    public string? CheepText { get; set; }
     public async Task OnPostAddCheep()
     {
+        if (User.Identity == null || User.Identity.Name == null || CheepText == null)
+        {
+            return;
+        }
+
         await AddCheepModel.OnPostAsync(User.Identity.Name, CheepText);
     }
 }
