@@ -43,7 +43,9 @@ public class CheepRepository : ICheepRepository
 
         List<string> following = new List<string>();
 
-        foreach (Author a in context.Authors.Where(a => a.Name == author).First().Following)
+        var followingAuthors = context.Authors.Where(a => a.Name == author).Include(a => a.Following).First().Following;
+
+        foreach (Author a in followingAuthors)
         {
             following.Add(a.Name);
         }
@@ -142,5 +144,24 @@ public class CheepRepository : ICheepRepository
         context.Cheeps.Remove(cheepToRemove);
     
         await context.SaveChangesAsync();
+    }
+
+    public int GetFollowersPageCount(string author)
+    {
+        List<string> following = new List<string>();
+
+        var followingAuthors = context.Authors.Where(a => a.Name == author).Include(a => a.Following).First().Following;
+
+        foreach (Author a in followingAuthors)
+        {
+            following.Add(a.Name);
+        }
+
+        var cheepCount = context.Cheeps
+            .Where(c => c.Author.Name == author || following.Contains(c.Author.Name))
+            .Where(c => !c.Author.Hidden)
+            .Count();
+
+        return (int)MathF.Ceiling(1f * cheepCount / pageLength);
     }
 }
