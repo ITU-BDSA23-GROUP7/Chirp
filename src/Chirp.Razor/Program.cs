@@ -8,11 +8,20 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var tempDirectoryPath = Path.GetTempPath();
-var dbPath = Path.Join(tempDirectoryPath, "chirp.db");
+// Get connection string from user secrets
+var connection = String.Empty;
+if (builder.Environment.IsDevelopment())
+{
+    connection = builder.Configuration["ConnectionStrings:AZURE_SQL_CONNECTIONSTRING"];
+}
+else
+{
+    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+}
 
 // Add services to the container.
-builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite($"Data Source={dbPath}"));
+
+builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlServer(connection));
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddMemoryCache();
