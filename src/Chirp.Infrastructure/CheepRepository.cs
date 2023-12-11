@@ -50,8 +50,6 @@ public class CheepRepository : ICheepRepository
             following.Add(a.Name);
         }
 
-        Console.WriteLine("following count (GetFollowerCheeps): " + following.Count);
-
         // Checks wether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
         List<Cheep> cheeps = await context.Cheeps
             .Where(c => c.Author.Name == author || following.Contains(c.Author.Name))
@@ -159,14 +157,10 @@ public class CheepRepository : ICheepRepository
             following.Add(a.Name);
         }
 
-        Console.WriteLine("following count: (GetFollowersPageCount) " + following.Count);
-
         var cheepCount = context.Cheeps
             .Where(c => c.Author.Name == author || following.Contains(c.Author.Name))
             .Where(c => !c.Author.Hidden)
             .Count();
-        
-        Console.WriteLine("hehy: " + cheepCount);
 
         return (int)MathF.Ceiling(1f * cheepCount / pageLength);
     }

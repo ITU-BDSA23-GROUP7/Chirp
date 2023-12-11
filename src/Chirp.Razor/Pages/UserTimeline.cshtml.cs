@@ -29,9 +29,6 @@ public class UserTimelineModel : PageModel
     /// <returns></returns>
     public async Task<IActionResult> OnGet(string author)
     {
-        PageCount = _cheepRepository.GetFollowersPageCount(author);
-        Console.WriteLine("look over here " + PageCount);
-
         if (User.Identity == null) {
             return Page();
         }
@@ -64,6 +61,7 @@ public class UserTimelineModel : PageModel
 
     private async Task LoadPersonalTimeline(string author)
     {
+        PageCount = _cheepRepository.GetFollowersPageCount(author);
         string pageNumStr = Request.Query["page"]!;
 
         if (pageNumStr == null)
@@ -92,6 +90,7 @@ public class UserTimelineModel : PageModel
     private async Task LoadAuthorTimeline(string author)
 
     {
+        PageCount = _cheepRepository.GetPageCount(author);
         string pageNumStr = Request.Query["page"]!;
 
         if (pageNumStr == null)
