@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())
 {
-    connection = builder.Configuration["ConnectionStrings:AZURE_SQL_CONNECTIONSTRING"];
+    connection = builder.Configuration["AZURE_SQL_CONNECTIONSTRING"];
 }
 else
 {
