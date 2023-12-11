@@ -41,7 +41,19 @@ public class AuthorRepository : IAuthorRepository
     }
 
     private async Task<Author> GetAuthorAsync(string username) {
-        var author = await context.Authors.FirstOrDefaultAsync(a => a.Name == username) 
+        var author = await context.Authors.FirstOrDefaultAsync(a => a.Name == username)
+            ?? throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
+        
+        return author;
+    }
+    private async Task<Author> GetAuthorWithFollowingAsync(string username) {
+        var author = await context.Authors.Include(a => a.Following).FirstOrDefaultAsync(a => a.Name == username)
+            ?? throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
+        
+        return author;
+    }
+    private async Task<Author> GetAuthorWithFollowersAsync(string username) {
+        var author = await context.Authors.Include(a => a.Followers).FirstOrDefaultAsync(a => a.Name == username)
             ?? throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
         
         return author;
@@ -61,11 +73,8 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task FollowAuthor(string newFollowerUsername, string newFollowingUsername)
     {
-        var findNewFollowerAuthorTask = GetAuthorAsync(newFollowerUsername);
-        var findNewFollowingAuthorTask = GetAuthorAsync(newFollowingUsername);
-
-        var newFollowerAuthor = await findNewFollowerAuthorTask;
-        var newFollowingAuthor = await findNewFollowingAuthorTask;
+        var newFollowerAuthor = await GetAuthorAsync(newFollowerUsername);
+        var newFollowingAuthor = await GetAuthorAsync(newFollowingUsername);
 
         if (newFollowerAuthor == newFollowingAuthor)
         {
@@ -79,11 +88,8 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task UnfollowAuthor(string newUnFollowerUsername, string newUnFollowingUsername)
     {
-        var findNewUnFollowerAuthorTask = GetAuthorAsync(newUnFollowerUsername);
-        var findNewUnFollowingAuthorTask = GetAuthorAsync(newUnFollowingUsername);
-
-        var newUnFollowerAuthor = await findNewUnFollowerAuthorTask;
-        var newUnFollowingAuthor = await findNewUnFollowingAuthorTask;
+        var newUnFollowerAuthor = await GetAuthorWithFollowingAsync(newUnFollowerUsername);;
+        var newUnFollowingAuthor = await GetAuthorWithFollowersAsync(newUnFollowingUsername);
 
         if (newUnFollowerAuthor == newUnFollowingAuthor)
         {
@@ -99,7 +105,7 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<IEnumerable<string>> GetFollowingUsernames(string username)
     {
-        var author = await GetAuthorAsync(username);
+        var author = await GetAuthorWithFollowingAsync(username);
         var followingUsernames = new List<string>();
         var following = author.Following.Where(c => !c.Hidden);
 
@@ -113,7 +119,7 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<IEnumerable<string>> GetFollowersUsernames(string username)
     {
-        var author = await GetAuthorAsync(username);
+        var author = await GetAuthorWithFollowersAsync(username);
         var followerUsernames = new List<string>();
         var followers = author.Followers.Where(c => !c.Hidden);
 
