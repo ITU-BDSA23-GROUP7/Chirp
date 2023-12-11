@@ -43,7 +43,9 @@ public class CheepRepository : ICheepRepository
 
         List<string> following = new List<string>();
 
-        foreach (Author a in context.Authors.Where(a => a.Name == author).First().Following)
+        var followingAuthors = context.Authors.Where(a => a.Name == author).Include(a => a.Following).First().Following;
+
+        foreach (Author a in followingAuthors)
         {
             following.Add(a.Name);
         }
@@ -150,7 +152,9 @@ public class CheepRepository : ICheepRepository
     {
         List<string> following = new List<string>();
 
-        foreach (Author a in context.Authors.Where(a => a.Name == author).First().Following)
+        var followingAuthors = context.Authors.Where(a => a.Name == author).Include(a => a.Following).First().Following;
+
+        foreach (Author a in followingAuthors)
         {
             following.Add(a.Name);
         }
