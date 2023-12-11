@@ -18,9 +18,11 @@ jobs:
       with:
         dotnet-version: 7.0.x
       env:
-        credentials: ${{ secrets.AZURE_SQL_CONNECTIONSTRING }}
+        connectionstring: ${{ secrets.AZURE_SQL_CONNECTIONSTRING }}
     - name: Restore dependencies
       run: dotnet restore
+    - name: Set UserSecret
+      run: dotnet user-secrets set "AZURE_SQL_CONNECTIONSTRING" "$connectionstring"
     - name: Build
       run: dotnet build --no-restore
     - name: Test
