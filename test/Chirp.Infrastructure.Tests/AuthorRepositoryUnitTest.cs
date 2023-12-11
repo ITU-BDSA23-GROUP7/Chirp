@@ -97,14 +97,12 @@ public class AuthorRepositoryUnitTest
         await _authorRepository.CreateNewAuthor(secondUser);
 
         //Act
-        var casper = await _authorRepository.GetAuthorDTOByUsername(firstUser);
-        var sebastian = await _authorRepository.GetAuthorDTOByUsername(secondUser);
-        await _authorRepository.FollowAuthor(casper, sebastian);
+        await _authorRepository.FollowAuthor(firstUser, secondUser);
 
         //Assert
-        var casperFollowing = await _authorRepository.GetFollowingUsernames(casper);
+        var casperFollowing = await _authorRepository.GetFollowingUsernames(firstUser);
         Assert.Equal(secondUser, casperFollowing.First());
-        var sebastianFollowers = await _authorRepository.GetFollowersUsernames(sebastian);
+        var sebastianFollowers = await _authorRepository.GetFollowersUsernames(secondUser);
         Assert.Equal(firstUser, sebastianFollowers.First());
     }
 
@@ -113,29 +111,28 @@ public class AuthorRepositoryUnitTest
     public async void UnfollowAuthor_WhenUnfollowingOtherAuthor_RemovesAuthorFromFollowing()
     {
         //Arrange
-        var firstUser = "Max";
-        var secondUser = "Daniel";
+        var firstUser = "Casper";
+        var secondUser = "Sebastian";
         await _authorRepository.CreateNewAuthor(firstUser);
         await _authorRepository.CreateNewAuthor(secondUser);
 
-        var max = await _authorRepository.GetAuthorDTOByUsername(firstUser);
-        var daniel = await _authorRepository.GetAuthorDTOByUsername(secondUser);
-        await _authorRepository.FollowAuthor(max, daniel);
+        //Act
+        await _authorRepository.FollowAuthor(firstUser, secondUser);
 
-        var maxFollowing = await _authorRepository.GetFollowingUsernames(max);
+        var maxFollowing = await _authorRepository.GetFollowingUsernames(firstUser);
         Assert.Equal(secondUser, maxFollowing.First());
-        var sebastianFollowers = await _authorRepository.GetFollowersUsernames(daniel);
+        var sebastianFollowers = await _authorRepository.GetFollowersUsernames(secondUser);
         Assert.Equal(firstUser, sebastianFollowers.First());
 
 
         //Act
-        await _authorRepository.UnfollowAuthor(max, daniel);
+        await _authorRepository.UnfollowAuthor(firstUser, secondUser);
 
         //Assert
-        var maxNewFollowing = await _authorRepository.GetFollowingUsernames(max);
-        Assert.Equal(0, maxNewFollowing.Count());
-        var sebastianNewFollowers = await _authorRepository.GetFollowersUsernames(daniel);
-        Assert.Equal(0, sebastianNewFollowers.Count());
+        var maxNewFollowing = await _authorRepository.GetFollowingUsernames(firstUser);
+        Assert.Empty(maxNewFollowing);
+        var sebastianNewFollowers = await _authorRepository.GetFollowersUsernames(secondUser);
+        Assert.Empty(sebastianNewFollowers);
     }
 
     [Fact]
@@ -144,20 +141,19 @@ public class AuthorRepositoryUnitTest
         // Arrange
         var user = "max";
         await _authorRepository.CreateNewAuthor(user);
-        var max = await _authorRepository.GetAuthorDTOByUsername(user);
 
         // Act & Assert
-        await Assert.ThrowsAsync<CannotFollowSelfException>(async () => await _authorRepository.FollowAuthor(max, max));
+        await Assert.ThrowsAsync<CannotFollowSelfException>(async () => await _authorRepository.FollowAuthor(user, user));
     }
 
+    [Fact]
     public async void FollowAuthor_WhenAttemptToUnfollowsSelf_ThrowsCannotFollowSelfException()
     {
         // Arrange
         var user = "max";
         await _authorRepository.CreateNewAuthor(user);
-        var max = await _authorRepository.GetAuthorDTOByUsername(user);
 
         // Act & Assert
-        await Assert.ThrowsAsync<CannotFollowSelfException>(async () => await _authorRepository.UnfollowAuthor(max, max));
+        await Assert.ThrowsAsync<CannotFollowSelfException>(async () => await _authorRepository.UnfollowAuthor(user, user));
     }
 }

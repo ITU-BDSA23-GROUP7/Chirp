@@ -10,16 +10,15 @@ public class AuthorRepository : IAuthorRepository
         this.context = context;
     }
 
-    public async Task CreateNewAuthor(string name)
+    public async Task CreateNewAuthor(string username)
     {
-
-        bool usernameExists = await UsernameExistsAsync(name);
+        bool usernameExists = await UsernameExistsAsync(username);
         if (usernameExists)
         {
             throw new Exception("Username already exists exception");
         }
 
-        context.Authors.Add(new Author { AuthorId = Guid.NewGuid(), Name = name, Cheeps = new List<Cheep>() });
+        context.Authors.Add(new Author { AuthorId = Guid.NewGuid(), Name = username, Cheeps = new List<Cheep>() });
         context.SaveChanges();
     }
 
@@ -41,11 +40,11 @@ public class AuthorRepository : IAuthorRepository
         return author.ToAuthorDTO();
     }
 
-    public async Task<Author> FindAuthorByDTO(AuthorDTO authorDTO)
-    {
-        var author = await context.Authors.Include(a => a.Following)
-                        .FirstOrDefaultAsync(a => a.Name == authorDTO.Name);
-        return author!;
+    private async Task<Author> GetAuthorAsync(string username) {
+        var author = await context.Authors.FirstOrDefaultAsync(a => a.Name == username) 
+            ?? throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
+        
+        return author;
     }
     public async Task<bool> UsernameIsHidden(string username)
     {
@@ -60,49 +59,47 @@ public class AuthorRepository : IAuthorRepository
     }
 
 
-    public async Task FollowAuthor(AuthorDTO currentAuthorDTO, AuthorDTO authorToFollowDTO)
+    public async Task FollowAuthor(string newFollowerUsername, string newFollowingUsername)
     {
-        var findCurrentAuthorTask = FindAuthorByDTO(currentAuthorDTO);
-        var findAuthorToFollowTask = FindAuthorByDTO(authorToFollowDTO);
+        var findNewFollowerAuthorTask = GetAuthorAsync(newFollowerUsername);
+        var findNewFollowingAuthorTask = GetAuthorAsync(newFollowingUsername);
 
-        var currentAuthor = await findCurrentAuthorTask;
-        var authorToFollow = await findAuthorToFollowTask;
+        var newFollowerAuthor = await findNewFollowerAuthorTask;
+        var newFollowingAuthor = await findNewFollowingAuthorTask;
 
-        if (currentAuthor != authorToFollow)
-        {
-            currentAuthor.Following.Add(authorToFollow);
-            authorToFollow.Followers.Add(currentAuthor);
-            await context.SaveChangesAsync();
-        }
-        else
+        if (newFollowerAuthor == newFollowingAuthor)
         {
             throw new CannotFollowSelfException("You cannot follow yourself.");
         }
+
+        newFollowerAuthor.Following.Add(newFollowingAuthor);
+        newFollowingAuthor.Followers.Add(newFollowerAuthor);
+        await context.SaveChangesAsync();
     }
 
-    public async Task UnfollowAuthor(AuthorDTO currentAuthorDTO, AuthorDTO authorToUnfollowDTO)
+    public async Task UnfollowAuthor(string newUnFollowerUsername, string newUnFollowingUsername)
     {
-        var findCurrentAuthorTask = FindAuthorByDTO(currentAuthorDTO);
-        var findAuthorToUnfollowTask = FindAuthorByDTO(authorToUnfollowDTO);
+        var findNewUnFollowerAuthorTask = GetAuthorAsync(newUnFollowerUsername);
+        var findNewUnFollowingAuthorTask = GetAuthorAsync(newUnFollowingUsername);
 
-        var currentAuthor = await findCurrentAuthorTask;
-        var authorToUnfollow = await findAuthorToUnfollowTask;
+        var newUnFollowerAuthor = await findNewUnFollowerAuthorTask;
+        var newUnFollowingAuthor = await findNewUnFollowingAuthorTask;
 
-        if (currentAuthor != authorToUnfollow)
-        {
-            currentAuthor.Following.Remove(authorToUnfollow);
-            authorToUnfollow.Followers.Remove(currentAuthor);
-            await context.SaveChangesAsync();
-        }
-        else
+        if (newUnFollowerAuthor == newUnFollowingAuthor)
         {
             throw new CannotFollowSelfException("You cannot unfollow yourself.");
         }
+
+        // Check if newUnFollowerAuthor follows newUnFollowingAuthor
+
+        newUnFollowerAuthor.Following.Remove(newUnFollowingAuthor);
+        newUnFollowingAuthor.Followers.Remove(newUnFollowerAuthor);
+        await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<string>> GetFollowingUsernames(AuthorDTO authorDTO)
+    public async Task<IEnumerable<string>> GetFollowingUsernames(string username)
     {
-        var author = await FindAuthorByDTO(authorDTO);
+        var author = await GetAuthorAsync(username);
         var followingUsernames = new List<string>();
         var following = author.Following.Where(c => !c.Hidden);
 
@@ -114,9 +111,9 @@ public class AuthorRepository : IAuthorRepository
         return followingUsernames;
     }
 
-    public async Task<IEnumerable<string>> GetFollowersUsernames(AuthorDTO authorDTO)
+    public async Task<IEnumerable<string>> GetFollowersUsernames(string username)
     {
-        var author = await FindAuthorByDTO(authorDTO);
+        var author = await GetAuthorAsync(username);
         var followerUsernames = new List<string>();
         var followers = author.Followers.Where(c => !c.Hidden);
 
@@ -197,5 +194,4 @@ public class AuthorRepository : IAuthorRepository
         }
         return compressedStreaks;
     }
-
 }

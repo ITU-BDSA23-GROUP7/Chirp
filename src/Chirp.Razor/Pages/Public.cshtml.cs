@@ -72,9 +72,7 @@ public class PublicModel : PageModel
         {
             await _authorRepository.CreateNewAuthor(username);
         }
-        var authorDTO = await _authorRepository.GetAuthorDTOByUsername(username);
-
-        var following = await _authorRepository.GetFollowingUsernames(authorDTO);
+        var following = await _authorRepository.GetFollowingUsernames(username);
         Following = following.ToList();
     }
 
@@ -106,9 +104,7 @@ public class PublicModel : PageModel
 
         if (User.Identity.IsAuthenticated)
         {
-            var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
-            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
-            await _authorRepository.FollowAuthor(userDTO, authorDTO);
+            await _authorRepository.FollowAuthor(User.Identity.Name, authorName);
         }
     }
 
@@ -120,9 +116,7 @@ public class PublicModel : PageModel
 
         if (User.Identity.IsAuthenticated)
         {
-            var userDTO = await _authorRepository.GetAuthorDTOByUsername(User.Identity.Name);
-            var authorDTO = await _authorRepository.GetAuthorDTOByUsername(authorName);
-            await _authorRepository.UnfollowAuthor(userDTO, authorDTO);
+            await _authorRepository.UnfollowAuthor(User.Identity.Name, authorName);
         }
     }
 
