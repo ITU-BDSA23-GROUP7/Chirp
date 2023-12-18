@@ -82,10 +82,16 @@ sequenceDiagram
         app -->>- webBrowser: Response
     webBrowser -->>- user: Response
 ```
+This sequence diagram shows what happens when a user accesses the web application.
+
+It also shows what happens if the user is authenticated, including what happens if the user hasn't been added to the database yet.
 
 # Process
 
 ## Build, test, release, and deployment
+
+### automatic build and test
+
 ```mermaid
 stateDiagram
   state "Build Ubuntu" as build_ubuntu
@@ -103,6 +109,7 @@ stateDiagram
   Test --> [*]
 ```
 
+### build and deploy to azure
 ```mermaid
 stateDiagram
   state "Build Ubuntu" as build_ubuntu
@@ -129,6 +136,38 @@ stateDiagram
   build_ubuntu2 --> download : Build Ubuntu for deployment
   download --> deploy
   deploy --> [*]
+```
+### Automatic build and release to github
+```mermaid
+
+stateDiagram
+  state "Build Ubuntu" as build_ubuntu
+  state "Dotnet build" as dotnet_build
+  state if_state <<choice>> 
+  state "Publish project" as publish
+  state zip
+  state "Delete output directory" as Delete_output_directory
+  state "Publish on github" as Publish_on_Github
+  
+
+  [*] --> build_ubuntu : Push on tag format[v*.*.*]
+  build_ubuntu -->  dotnet_build : Build Ubuntu for publishing project
+  dotnet_build -->  if_state : Build Complete?
+
+  if_state --> publish : True
+ 
+  if_state --> [*] : False
+  publish --> zip
+  note left of publish
+  Both Zip and publishing and 
+  deletion of output directory is 
+  for Windows,  macOS and linux
+  end note
+
+  zip --> Delete_output_directory
+
+  Delete_output_directory --> Publish_on_Github
+  Publish_on_Github --> [*]
 ```
 
 ## Team work
