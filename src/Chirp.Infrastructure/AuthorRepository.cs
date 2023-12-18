@@ -107,8 +107,8 @@ public class AuthorRepository : IAuthorRepository
     /// Asynchronously checks if the given author's profile is hidden.
     /// If the username does not exist a <c>UsernameNotFoundException</c> is thrown.
     /// </summary>
-    /// <param name="username">Username to check for profile visibility </param>
-    /// <returns>True if the author's profile is hidden, false if it is not</returns>
+    /// <param name="username">Username whose hidden-status needs to be checked </param>
+    /// <returns>True if the profile is hidden, false if it is not</returns>
     public async Task<bool> UsernameIsHidden(string username)
     {
         var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
@@ -121,7 +121,12 @@ public class AuthorRepository : IAuthorRepository
         return author.Hidden;
     }
 
-
+    /// <summary>
+    /// Asynchronously creates a follow-relationship between two authors.
+    /// If the follower and the following author are the same a <c>CannotFollowSelfException</c> is thrown.
+    /// </summary>
+    /// <param name="newFollowerUsername">Username of the new follower</param>
+    /// <param name="newFollowingUsername">Username of the author being followed</param>
     public async Task FollowAuthor(string newFollowerUsername, string newFollowingUsername)
     {
         var newFollowerAuthor = await GetAuthorAsync(newFollowerUsername);
@@ -137,6 +142,12 @@ public class AuthorRepository : IAuthorRepository
         await context.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Asynchronously ends a follow-relationship between two authors.
+    /// If the un-follower and the un-following author are the same a <c>CannotFollowSelfException</c> is thrown.
+    /// </summary>
+    /// <param name="newUnFollowerUsername">Username of the author unfollowing</param>
+    /// <param name="newUnFollowingUsername">Username of the author being unfollowed</param>
     public async Task UnfollowAuthor(string newUnFollowerUsername, string newUnFollowingUsername)
     {
         var newUnFollowerAuthor = await GetAuthorWithFollowingAsync(newUnFollowerUsername);;
@@ -154,6 +165,10 @@ public class AuthorRepository : IAuthorRepository
         await context.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Asynchronously retrieves the usernames followed by a specific author.
+    /// </summary>
+    /// <param name="username">Username of author whose following list is retrieved</param>
     public async Task<IEnumerable<string>> GetFollowingUsernames(string username)
     {
         var author = await GetAuthorWithFollowingAsync(username);
@@ -168,6 +183,10 @@ public class AuthorRepository : IAuthorRepository
         return followingUsernames;
     }
 
+    /// <summary>
+    /// Asynchronously retrieves the usernames who follows the specific author.
+    /// </summary>
+    /// <param name="username">Username of author whose follower-list is retrieved</param>
     public async Task<IEnumerable<string>> GetFollowersUsernames(string username)
     {
         var author = await GetAuthorWithFollowersAsync(username);
@@ -182,6 +201,12 @@ public class AuthorRepository : IAuthorRepository
         return followerUsernames;
     }
 
+    /// <summary>
+    /// Asynchronously retrieves number of cheeps by specific author.
+    /// If the username does not exist a <c>UsernameNotFoundException</c> is thrown.
+    /// </summary>
+    /// <param name="username">Username of the author whose cheep-count is retrieved</param>
+    /// <returns>Returns author's cheep-count</returns>
     public async Task<int> GetAmmountOfCheeps(string username)
     {
         var author = await context.Authors.Include(a => a.Cheeps).FirstOrDefaultAsync(c => c.Name == username);
@@ -199,6 +224,12 @@ public class AuthorRepository : IAuthorRepository
         return author.Cheeps.Count;
     }
 
+    /// <summary>
+    ///  Asynchronously sets the hidden-status of the specific author's profile.
+    ///  If the username does not exist a <c>UsernameNotFoundException</c> is thrown.
+    /// </summary>
+    /// <param name="username">Username of the author whose hidden-status is changed</param>
+    /// <param name="hidden">Desired hidden-status for the author's profile.</param>
     public async Task SetHidden(string username, bool hidden)
     {
         var author = await context.Authors.Include(a => a.Cheeps).FirstOrDefaultAsync(c => c.Name == username);
@@ -213,6 +244,11 @@ public class AuthorRepository : IAuthorRepository
         await context.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Asynchronously retrieves a scoreboard consisting of the top ten authors with the highest cheep streaks.
+    /// An author's cheep-streak is reset if the author's newest cheep was not yesterday or today.
+    /// </summary>
+    /// <returns>Returns a list of <c>AuthorDTO</c>s representing the authors on the scoreboard</returns>
     public async Task<List<AuthorDTO>> GetScoreboardAsync()
     {
         List<Author> streaks = context.Authors.Where(a => a.CheepStreak > 0).ToList();
