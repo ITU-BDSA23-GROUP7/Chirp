@@ -1,15 +1,28 @@
 using SQLitePCL;
 
 namespace Chirp.Infrastructure;
+
+/// <summary>
+/// Repository class used to manage author related data.
+/// Implements the <c>IAuthorRepository</c> interface.
+/// </summary>
 public class AuthorRepository : IAuthorRepository
 {
     private ChirpDBContext context;
 
+    /// <summary>
+    /// Initializes new instance of AuthorRepository with specified ChirpDBContext.
+    /// </summary>
     public AuthorRepository(ChirpDBContext context)
     {
         this.context = context;
     }
 
+    /// <summary>
+    /// Creates new author with specified username.
+    /// Checks whether the username already exists, throws an exception if it does.
+    /// </summary>
+    /// <param name="username"> New author username </param>
     public async Task CreateNewAuthor(string username)
     {
         bool usernameExists = await UsernameExistsAsync(username);
@@ -22,12 +35,23 @@ public class AuthorRepository : IAuthorRepository
         context.SaveChanges();
     }
 
+    /// <summary>
+    /// Asynchronously checks whether a specific username already exists in authors.
+    /// </summary>
+    /// <param name="username">Username to check for existence</param>
+    /// <returns>True if username exists, false if it does not</returns>
     public async Task<bool> UsernameExistsAsync(string username)
     {
         var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
         return author != null;
     }
 
+    /// <summary>
+    /// Asynchronously retrieves the <c>AuthorDTO</c> for a specific username.
+    /// Throws a <c>UserNotFoundException</c> if the username does not exist.
+    /// </summary>
+    /// <param name="username">Username to retrieve the <c>AuthorDTO</c> for</param>
+    /// <returns><c>AuthorDTO</c> for the specified username</returns>
     public async Task<AuthorDTO> GetAuthorDTOByUsername(string username)
     {
         var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);
@@ -40,24 +64,51 @@ public class AuthorRepository : IAuthorRepository
         return author.ToAuthorDTO();
     }
 
+    /// <summary>
+    /// Asynchronously retrieves an <c>Author</c> based on the given username.
+    /// If a username does not exist a <c>UsernameNotFoundException</c> is thrown.
+    /// </summary>
+    /// <param name="username">Username to retrieve the <c>Author</c> for.</param>
+    /// <returns>Returns the <c>Author</c> object for the given username</returns>
     private async Task<Author> GetAuthorAsync(string username) {
         var author = await context.Authors.FirstOrDefaultAsync(a => a.Name == username)
             ?? throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
-        
+
         return author;
     }
+
+    /// <summary>
+    /// Asynchronously retrieves an <c>Author</c> with a list of authors followed by the specified author.
+    /// If the username does not exist a <c>UsernameNotFoundException</c> is thrown.
+    /// </summary>
+    /// <param name="username">Username to retrieve the <c>Author</c> for</param>
+    /// <returns>Returns the <c>Author</c> object with a list authors followed by the author </returns>
     private async Task<Author> GetAuthorWithFollowingAsync(string username) {
         var author = await context.Authors.Include(a => a.Following).FirstOrDefaultAsync(a => a.Name == username)
             ?? throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
-        
+
         return author;
     }
+
+    /// <summary>
+    /// Asynchronously retrieves an <c>Author</c> with a list of the author's followers included.
+    /// If the username does not exist a <c>UsernameNotFoundException</c> is thrown.
+    /// </summary>
+    /// <param name="username">Username to retrieve the <c>Author</c> for</param>
+    /// <returns>Returns the <c>Author</c> object with a list of the author's followers</returns>
     private async Task<Author> GetAuthorWithFollowersAsync(string username) {
         var author = await context.Authors.Include(a => a.Followers).FirstOrDefaultAsync(a => a.Name == username)
             ?? throw new UsernameNotFoundException($"The username {username} does not exist in the database.");
-        
+
         return author;
     }
+
+    /// <summary>
+    /// Asynchronously checks if the given author's profile is hidden.
+    /// If the username does not exist a <c>UsernameNotFoundException</c> is thrown.
+    /// </summary>
+    /// <param name="username">Username to check for profile visibility </param>
+    /// <returns>True if the author's profile is hidden, false if it is not</returns>
     public async Task<bool> UsernameIsHidden(string username)
     {
         var author = await context.Authors.FirstOrDefaultAsync(c => c.Name == username);

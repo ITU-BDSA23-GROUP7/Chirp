@@ -4,7 +4,6 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
-//Test if Tests are misbehaving?
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +30,6 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureADB2C"));
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
-
-Trace.WriteLine("Programmet kører");
 
 var app = builder.Build();
 
@@ -70,10 +67,7 @@ app.MapControllers();
 app.MapRazorPages();
 
 
-Trace.WriteLine("Programmet skal til at runne");
-
 app.Run();
 
-Trace.WriteLine("programmet er kørt");
 
 public partial class Program { }
