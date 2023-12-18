@@ -4,11 +4,6 @@ namespace Playwright.Tests;
 [TestFixture]
 public class NotLoggedInTests : PageTest
 {
-    [SetUp]
-    public void Setup()
-    {
-    }
-
     [Test]
     public async Task HelgeExistsTest()
     {
@@ -41,5 +36,4 @@ public class NotLoggedInTests : PageTest
         await Expect(Page.Locator("h2")).ToContainTextAsync("Public Timeline");
 
     }
-
 }
