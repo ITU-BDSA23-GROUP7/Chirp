@@ -13,19 +13,14 @@ var connection = String.Empty;
 if (builder.Environment.IsDevelopment())
 {
     connection = builder.Configuration["AZURE_SQL_CONNECTIONSTRING"];
-    var tempDirectoryPath = Path.GetTempPath();
-    var dbPath = Path.Join(tempDirectoryPath, "chirp.db");
-    builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 }
 else
 {
     connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
-    builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlServer(connection));
 }
 
 // Add services to the container.
-
-
+builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlServer(connection));
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddMemoryCache();
