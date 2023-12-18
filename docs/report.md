@@ -177,12 +177,44 @@ stateDiagram
 ## Team work
 
 ## How to make _Chirp!_ work locally
+To run our Chirp! locally, the first step is to clone our git repository:
+```
+git clone https://github.com/ITU-BDSA23-GROUP7/Chirp
+```
+
+When the repository is clone, make your way into the `Chirp/src/Chirp.Razor` directory:
+```
+cd Chirp
+cd src
+cd Chirp.Razor
+```
+In this directory you need to set up a user secret containing a connection string to an sql-server using the following command:
+```
+dotnet user-secrets set "AZURE_SQL_CONNECTIONSTRING" "[insert connection string]"
+```
+Where `[insert connection string]` is replaced with a connection string refering to an sql server.
+
+When the user secret is made, the program can be run from the same directory using one of the two following commands:
+```
+dotnet run
+```
+```
+dotnet watch
+```
+
+When the program is running you can find it in your browser by following the url in your terminal e.g. `localhost:5000`.
 
 ## How to run test suite locally
+To test our program run the command:
+```
+dotnet test
+```
+from the root of our repository, `/Chirp`
 
 # Ethics
 
 ## License
+We have chosen the MIT Licence for our application. 
 
 ## LLMs, ChatGPT, CoPilot, and others
 Through the project, we have used LLM's occasionally. Most of all we used ChatGPT to help us understand different new libraries or architechtures that we needed to use. ChatGPT was occasionally used to help us debug our code. It rarely had a direct influence on what we wrote, and has been co authored whenever this occured.
