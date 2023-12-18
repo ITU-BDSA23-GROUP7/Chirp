@@ -15,11 +15,11 @@ namespace Chirp.Infrastructure.Migrations
                 name: "Authors",
                 columns: table => new
                 {
-                    AuthorId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
-                    CheepStreak = table.Column<int>(type: "INTEGER", nullable: false),
-                    Hidden = table.Column<bool>(type: "INTEGER", nullable: false)
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CheepStreak = table.Column<int>(type: "int", nullable: false),
+                    Hidden = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,8 +30,8 @@ namespace Chirp.Infrastructure.Migrations
                 name: "AuthorAuthor",
                 columns: table => new
                 {
-                    FollowersAuthorId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    FollowingAuthorId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    FollowersAuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FollowingAuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,18 +46,17 @@ namespace Chirp.Infrastructure.Migrations
                         name: "FK_AuthorAuthor_Authors_FollowingAuthorId",
                         column: x => x.FollowingAuthorId,
                         principalTable: "Authors",
-                        principalColumn: "AuthorId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AuthorId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Cheeps",
                 columns: table => new
                 {
-                    CheepId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Text = table.Column<string>(type: "TEXT", maxLength: 160, nullable: false),
-                    TimeStamp = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AuthorId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    CheepId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
