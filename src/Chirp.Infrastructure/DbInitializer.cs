@@ -1,8 +1,15 @@
-﻿namespace Chirp.Infrastructure;
+namespace Chirp.Infrastructure;
 using System;
 
+/// <summary>
+/// Class responsible for seeding the Chirp database with initial data.
+/// </summary>
 public static class DbInitializer
 {
+    /// <summary>
+    ///  Adds initial data to the Chirp database if authors and cheeps are not already present.
+    /// </summary>
+    /// <param name="chirpContext">The Chirp database context</param>
     public static void SeedDatabase(ChirpDBContext chirpContext)
     {
         if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
@@ -20,7 +27,7 @@ public static class DbInitializer
             var a11 = new Author() { AuthorId = Guid.NewGuid(), Name = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
             var a12 = new Author() { AuthorId = Guid.NewGuid(), Name = "Rasmus", Email = "rnie@itu.dk", Cheeps = new List<Cheep>() };
 
-            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17 };
+            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 };
 
             var c1 = new Cheep() { CheepId = Guid.NewGuid(), Author = a10, Text = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };
             var c2 = new Cheep() { CheepId = Guid.NewGuid(), Author = a10, Text = "And then, as he listened to all that''s left o'' twenty-one people.", TimeStamp = DateTime.Parse("2023-08-01 13:15:21") };

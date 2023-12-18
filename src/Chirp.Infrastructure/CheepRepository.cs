@@ -8,6 +8,16 @@ public class CheepRepository : ICheepRepository
         this.context = context;
     }
 
+    /// <summary>
+    /// gets a list of CheepDTOs based on the given parameters
+    /// </summary>
+    /// <param name="pageNum">The page number of cheeps to retrieve (default is 1).</param>
+    /// <param name="author">The optional author's name to filter cheeps (default is null for all cheeps)
+    /// (if author is null, then all cheeps will be returned.).</param>
+    /// <returns>
+    /// A list of CheepDTOs representing the cheeps from the given author/all authors if author is null, ordered by timestamp,
+    /// excluding cheeps from hidden authors, and paginated based on the specified page number.
+    /// </returns>
     public async Task<List<CheepDTO>> GetCheeps(int pageNum = 1, string? author = null)
     {
         int pageIndex = pageNum - 1;
@@ -37,6 +47,15 @@ public class CheepRepository : ICheepRepository
         return cheepDTOs;
     }
 
+    /// <summary>
+    /// gets a list of CheepDTOs from the given authors followers cheeps.
+    /// </summary>
+    /// <param name="pageNum">The page number of cheeps to retrieve (default is 1).</param>
+    /// <param name="author">The author's name to find the followers from.</param>
+    /// <returns>
+    /// A list of CheepDTOs representing the cheeps from the given authors followers, ordered by timestamp,
+    /// excluding cheeps from hidden authors, and paginated based on the specified page number.
+    /// </returns>
     public async Task<List<CheepDTO>> GetFollowerCheeps(string author, int pageNum = 1)
     {
         int pageIndex = pageNum - 1;
@@ -71,6 +90,15 @@ public class CheepRepository : ICheepRepository
         return cheepDTOs;
     }
 
+    /// <summary>
+    /// gets an integer that represents the number of pages needed to display all cheeps of a user.
+    /// </summary>
+    /// <param name="author">The author's name to find the followers from.(default is null)
+    /// (if author is null, then the pagecount to display all cheeps is used instead)</param>
+    /// <returns>
+    /// A list of CheepDTOs representing the cheeps from the given authors followers, ordered by timestamp,
+    /// excluding cheeps from hidden authors, and paginated based on the specified page number.
+    /// </returns>
     public int GetPageCount(string? author = null)
     {
         // Checks wether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
@@ -84,6 +112,18 @@ public class CheepRepository : ICheepRepository
         return (int)MathF.Ceiling(1f * cheepCount / pageLength);
     }
 
+    /// <summary>
+    /// Adds a new cheep to the database for the specified author.
+    /// </summary>
+    /// <param name="username">The username of the author adding the cheep.</param>
+    /// <param name="message">The text of the cheep being added.</param>
+    /// <returns>A task representing the asynchronous operation of adding the cheep.</returns>
+    /// <exception cref="UsernameNotFoundException">
+    /// Thrown if the specified username does not exist in the database.
+    /// </exception>
+    /// <exception cref="Exception">
+    /// Thrown if the specified username is hidden, and therefore, cannot cheep.
+    /// </exception>
     public async Task AddCheepAsync(string username, string message)
     {
 
@@ -133,6 +173,14 @@ public class CheepRepository : ICheepRepository
 
     }
 
+    /// <summary>
+    /// Removes a cheep from the database based on its unique identifier.
+    /// </summary>
+    /// <param name="cheepId">The unique identifier of the cheep to be removed.</param>
+    /// <returns>A task representing the asynchronous operation of removing the cheep.</returns>
+    /// <exception cref="Exception">
+    /// Thrown if the cheep with the specified unique identifier is not found.
+    /// </exception>
     public async Task RemoveCheep(Guid cheepId)
     {
         var cheepToRemove = await context.Cheeps.Where(c => c.CheepId == cheepId).FirstOrDefaultAsync();
@@ -146,6 +194,14 @@ public class CheepRepository : ICheepRepository
         await context.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// gets an integer that represents the number of pages needed to display all cheeps from all followers.
+    /// </summary>
+    /// <param name="author">The author's name to find the followers from.</param>
+    /// <returns>
+    /// An int representing the amount of pages needed to display the cheeps of all followers,
+    /// excluding cheeps from hidden authors.
+    /// </returns>
     public int GetFollowersPageCount(string author)
     {
         List<string> following = new List<string>();
