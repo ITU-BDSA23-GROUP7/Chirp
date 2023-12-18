@@ -90,8 +90,8 @@ It also shows what happens if the user is authenticated, including what happens 
 
 ## Build, test, release, and deployment
 
-### automatic build and test
-
+### Automatic build and test
+Whenever a push is made to main, or a pull request is made, github will build and test our program, to make sure that we do not implement a feature that does not pass all our earlier defined tests.
 ```mermaid
 stateDiagram
   state "Build Ubuntu" as build_ubuntu
@@ -110,6 +110,7 @@ stateDiagram
 ```
 
 ### build and deploy to azure
+When a push is made to main, it is automatically deployed to our Azure website. We discussed having the program tested before deploying it to make sure that it would work, but decided not to do that since some of our tests was testing our website directly, which could cause problems.
 ```mermaid
 stateDiagram
   state "Build Ubuntu" as build_ubuntu
@@ -138,6 +139,7 @@ stateDiagram
   deploy --> [*]
 ```
 ### Automatic build and release to github
+Whenever a tag is pushed with the format v\*.\*.\* it is automatically build, published and released to github, with a zip folder for both windows, macos and linux.
 ```mermaid
 
 stateDiagram
@@ -170,6 +172,8 @@ stateDiagram
   Publish_on_Github --> [*]
 ```
 
+
+
 ## Team work
 
 ## How to make _Chirp!_ work locally
@@ -181,3 +185,6 @@ stateDiagram
 ## License
 
 ## LLMs, ChatGPT, CoPilot, and others
+Through the project, we have used LLM's occasionally. Most of all we used ChatGPT to help us understand different new libraries or architechtures that we needed to use. ChatGPT was occasionally used to help us debug our code. It rarely had a direct influence on what we wrote, and has been co authored whenever this occured.
+
+We used CoPilot once to speed up a task, but has never really used it for anything helpful. CoPilot was co authored as well.
