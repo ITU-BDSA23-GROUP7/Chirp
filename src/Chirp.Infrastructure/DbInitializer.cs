@@ -1,8 +1,15 @@
 ﻿namespace Chirp.Infrastructure;
 using System;
 
+/// <summary>
+/// Class responsible for seeding the Chirp database with initial data.
+/// </summary>
 public static class DbInitializer
 {
+    /// <summary>
+    ///  Adds initial data to the Chirp database if authors and cheeps are not already present.
+    /// </summary>
+    /// <param name="chirpContext">The Chirp database context</param>
     public static void SeedDatabase(ChirpDBContext chirpContext)
     {
         if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
