@@ -12,6 +12,74 @@ authors:
 
 numbersections: true
 
+<table>
+  <tr>
+    <th>
+      Author
+    </th>
+    <th>
+      ITU-mail
+    </th>
+    <th>
+      GitHub mail
+    </th>
+  </tr>
+  <tr>
+    <td>
+      Casper
+    </td>
+    <td>
+      @itu.dk
+    </td>
+    <td>
+      ccaassppeerr2411@gmail.com
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Line
+    </td>
+    <td>
+      ljni@itu.dk
+    </td>
+    <td>
+      linejkpraestegaard@gmail.com
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Max
+    </td>
+    <td>
+      @itu.dk
+    </td>
+    <td>
+      max@qbrix.dk
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Daniel
+    </td>
+    <td>
+      dafi@itu.dk
+    </td>
+    <td>
+      danielfich2@itu.dk
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Sebastian
+    </td>
+    <td>
+      sehy@itu.dk
+    </td>
+    <td>
+      hylandersebastian@itu.dk
+    </td>
+  </tr>
+</table>
 
 # Design and Architecture of _Chirp!_
 
@@ -27,6 +95,22 @@ Here comes a description of our domain model.
 
 ## User activities
 
+### Adding a cheepstreak
+```mermaid
+stateDiagram-v2
+    state "Public timeline" as public
+    state "Scoreboard" as scoreboard
+    state "Public timeline" as public2
+    state "Public timeline" as public3
+    state "Scoreboard" as scoreboard2
+
+
+    [*] --> public : logged in
+    public --> scoreboard : Check scoreboard
+    scoreboard --> public2
+    public2 --> public3 : Make a cheep
+    public3 --> scoreboard2 : Check scoreboard again
+```
 ### Log in
 
 ```mermaid
