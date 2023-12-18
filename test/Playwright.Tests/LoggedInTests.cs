@@ -6,7 +6,7 @@ public class LoggedInTests : PageTest
 {
 
     [Test]
-    public async Task TestUserCanLogInFollowAndUnfollowAndAddCheepsAndRemoveCheepsAndLogOut()
+    public async Task TestUserCanLogInFollowAndUnfollowAndAddCheepsAndRemoveCheepsAndLogOutPlaywright()
     {
         //go to website and log in
         await Page.GotoAsync("http://localhost:5273/");

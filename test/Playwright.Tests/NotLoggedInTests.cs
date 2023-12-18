@@ -5,7 +5,7 @@ namespace Playwright.Tests;
 public class NotLoggedInTests : PageTest
 {
     [Test]
-    public async Task HelgeExistsTest()
+    public async Task HelgeExistsTestPlaywright()
     {
         await Page.GotoAsync("http://localhost:5273/");
 
@@ -17,7 +17,7 @@ public class NotLoggedInTests : PageTest
     }
 
     [Test]
-    public async Task ScoreboardContainsAUserTest()
+    public async Task ScoreboardContainsAUserTestPlaywright()
     {
         await Page.GotoAsync("http://localhost:5273/");
 
@@ -27,7 +27,7 @@ public class NotLoggedInTests : PageTest
     }
 
     [Test]
-    public async Task FrontPageIsFirstPageTest()
+    public async Task FrontPageIsFirstPageTestPlaywright()
     {
         await Page.GotoAsync("http://localhost:5273/");
 
