@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    [Migration("20231211110144_Switch-To-SqlServer")]
-    partial class SwitchToSqlServer
+    [Migration("20231218104207_SqliteForTesting")]
+    partial class SqliteForTesting
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
