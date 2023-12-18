@@ -27,8 +27,6 @@ Here comes a description of our domain model.
 
 ## User activities
 
-## Sequence of functionality/calls trough _Chirp!_
-
 ### Log in
 
 ```mermaid
@@ -49,13 +47,89 @@ UML activity diagram
 
 [log-in.md](log-in.md)
 
+## Sequence of functionality/calls trough _Chirp!_
+
+#### Sequence diagram
+
+```mermaid
+sequenceDiagram
+    actor user as User
+    participant webBrowser as WebBrowser
+    participant app as Chirp.Razor
+    participant auth as Azure authorization server
+    participant db as Database
+
+    user ->>+ webBrowser: Access Chirp
+        webBrowser ->>+ app: GET
+
+        app ->>+ auth: User.Identity.IsAuthenticated
+        auth -->>- app: Response
+
+        opt User is authenticated
+            app -)+ db: UserNameExists()
+            db --)- app: Response
+            opt Username doesn't exist in db
+                app -)+ db: CreateNewAuthor()
+                db --)- app: New author
+            end
+            app -)+ db: GetFollowing()
+            db --)- app: IEnumerable<string>
+        end
+
+        app ->>+ db: GetCheeps()
+        db -->>- app: List<CheepDTO>
+
+        app -->>- webBrowser: Response
+    webBrowser -->>- user: Response
+```
+
 # Process
 
 ## Build, test, release, and deployment
 ```mermaid
+stateDiagram
+  state "Build Ubuntu" as build_ubuntu
+  state "Dotnet build" as dotnet_build
+  state if_state <<choice>> 
+  state "Run test" as Test
 
+  [*] --> build_ubuntu : Push or pull-request on main
+  build_ubuntu -->  dotnet_build 
+  dotnet_build -->  if_state : Build Complete?
+
+  if_state --> Test : True
+  if_state --> [*] : False
+
+  Test --> [*]
 ```
 
+```mermaid
+stateDiagram
+  state "Build Ubuntu" as build_ubuntu
+  state "Dotnet build" as dotnet_build
+  state if_state <<choice>> 
+  state "Publish project" as publish
+  state "Upload Artifacts" as upload
+
+  state "Build Ubuntu" as build_ubuntu2
+  state "Download Artifacts from Build" as download
+  state "Deploy to Azure" as deploy
+  
+
+  [*] --> build_ubuntu : Push on main
+  build_ubuntu -->  dotnet_build : Build Ubuntu for publishing project
+  dotnet_build -->  if_state : Build Complete?
+
+  if_state --> publish : True
+  if_state --> [*] : False
+
+  publish --> upload
+
+  upload --> build_ubuntu2
+  build_ubuntu2 --> download : Build Ubuntu for deployment
+  download --> deploy
+  deploy --> [*]
+```
 
 ## Team work
 
