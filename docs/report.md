@@ -4,11 +4,11 @@ subtitle: ITU BDSA 2023 Group 7
 coursetitle: Analysis, Design and Software Architecture
 coursecode: BSANDSA1KU
 authors:
-- Casper Storm Frøding <ccaassppeerr2411@gmail.com>
-- Line Juul Kabbeltved Præstegaard <linejkpraestegaard@gmail.com>
-- Max Brix Koch <max@qbrix.dk>
-- Daniel Fich <danielfich2@gmail.com>
-- Sebastian Cloos Hylander <hylandersebastian@gmail.com>
+- Casper Storm Frøding <csfr@itu.dk>
+- Line Juul Kabbeltved Præstegaard <ljni@itu.dk>
+- Max Brix Koch <mbko@itu.dk>
+- Daniel Fich <dafi@itu.dk>
+- Sebastian Cloos Hylander <sehy@itu.dk>
 numbersections: true
 ---
 
