@@ -1,12 +1,14 @@
 ---
 title: _Chirp!_ Project Report
 subtitle: ITU BDSA 2023 Group 7
+coursetitle: Analysis, Design and Software Architecture
+coursecode: BSANDSA1KU
 authors:
-- Casper <ccaassppeerr2411@gmail.com>
-- Line <linejkpraestegaard@gmail.com>
-- Max <max@qbrix.dk>
+- Casper Storm Frøding <ccaassppeerr2411@gmail.com>
+- Line Juul Kabbeltved Præstegaard <linejkpraestegaard@gmail.com>
+- Max Brix Koch <max@qbrix.dk>
 - Daniel Fich <danielfich2@gmail.com>
-- Sebastian <hylandersebastian@gmail.com>
+- Sebastian Cloos Hylander <hylandersebastian@gmail.com>
 numbersections: true
 ---
 
