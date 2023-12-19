@@ -78,7 +78,7 @@ Here comes a description of our domain model.
 
 ## Architecture — In the small
 
-![Illustration of the _Chirp!_ data model as UML class diagram.](images/BDSA_UML_Diagram_2.png)
+![Illustration of the _Chirp!_ data model as UML class diagram.](images/BDSA_UML.jpg)
 
 Here we have chosen some relevant classes, to show our onion architecture.
 The most important part to notice here are that dependencies flow inward, ensuring that the inner layers remain independent of the outer layers.
