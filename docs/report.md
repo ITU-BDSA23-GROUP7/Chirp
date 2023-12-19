@@ -1,4 +1,6 @@
 
+
+
 title: _Chirp!_ Project Report
 
 subtitle: ITU BDSA 2023 Group 7
@@ -41,42 +43,54 @@ numbersections: true
   <tr>
     <td>Sebastian</td>
     <td>sehy@itu.dk</td>
-    <td>hylandersebastian@itu.dk</td>
+    <td>hylandersebastian@gmail.dk</td>
   </tr>
 </table>
 
 # Design and Architecture of _Chirp!_
 
 ## Domain model
-
 Here comes a description of our domain model.
 
-![Illustration of the _Chirp!_ data model as UML class diagram.](images/BDSA_UML_Onion_architecture.png)
+```mermaid
+  classDiagram
+  direction LR
+      class Cheep{
+        +CheepId: Guid
+        +Text: string
+        +TimeStamp: DateTime
+        +ToCheepDTO() CheepDTO
+      }
+
+      class Author{
+        +AuthorID: Guid
+        +Name: string 
+        +Email:  string
+        +CheepStreak: int
+        +Hidden: bool
+        +ToAuthorDTO() AuthorDTO
+      }
+
+      Author "1" <--> "0..N" Cheep : Cheeps
+      Author "<span style='background-color:#2a303c'>0..N</span>" <--> "<span style='background-color:#2a303c'>0..N</span>" Author : Follows
+```
+
 
 ## Architecture — In the small
+
+![Illustration of the _Chirp!_ data model as UML class diagram.](images/BDSA_UML_Diagram_2.png)
+
+Here we have chosen some relevant classes, to show our onion architecture.
+The most important part to notice here are that dependencies flow inward, ensuring that the inner layers remain independent of the outer layers.
+This Makes sure that we try to hold the coupling low between the layers, and makes it more adaptable to change, because we make sure that the outer layers can change without affecting the inner layers.
 
 ## Architecture of deployed application
 
 ## User activities
 
-### Adding a cheepstreak
-```mermaid
-stateDiagram-v2
-    state "Public timeline" as public
-    state "Scoreboard" as scoreboard
-    state "Public timeline" as public2
-    state "Public timeline" as public3
-    state "Scoreboard" as scoreboard2
 
-
-    [*] --> public : logged in
-    public --> scoreboard : Check scoreboard
-    scoreboard --> public2
-    public2 --> public3 : Make a cheep
-    public3 --> scoreboard2 : Check scoreboard again
-```
 ### Log in
-
+The following diagram shows the process of signing into Chirp!
 ```mermaid
 stateDiagram-v2
     state "Public timeline" as public
@@ -93,7 +107,56 @@ stateDiagram-v2
 ```
 UML activity diagram
 
-[log-in.md](log-in.md)
+### Follow and unfollow
+The following diagram shows the process of following an author, viewing their timeline, viewing their cheeps on your own timeline and unfollowing the author.
+```mermaid
+stateDiagram-v2
+    state "Public timeline" as public
+    state "Public timeline" as public2
+    state "Authors timeline" as author
+    state "Private timeline" as private
+    state "Private timeline" as private2
+
+    [*] --> public : logged in
+    public --> public2 : follow author
+    public2 --> author : click on authors name
+    author --> private : go to own timeline
+    private --> private2 : unfollow author
+
+    note left of private2
+      The same as before, 
+      but no longer showing 
+      the cheeps of the author
+    end note
+
+    private2 --> [*]
+```
+
+### Adding a cheepstreak
+The following diagram shows the process of checking the scoreboard, writing a cheep on the public timeline, and checking the scoreboard again to check whether your streak has increased or not.
+```mermaid
+stateDiagram-v2
+    state "Public timeline" as public
+    state "Scoreboard" as scoreboard
+    state "Public timeline" as public2
+    state "Public timeline" as public3
+    state "Scoreboard" as scoreboard2
+
+
+    [*] --> public : logged in
+    public --> scoreboard : Check scoreboard
+    scoreboard --> public2
+    public2 --> public3 : Make a cheep
+    public3 --> scoreboard2 : Check scoreboard again
+
+    note left of scoreboard2
+      If your newest cheep 
+      was written
+       the day before,
+        your streak has
+         been increased by '1'
+    end note
+```
 
 ## Sequence of functionality/calls trough _Chirp!_
 
