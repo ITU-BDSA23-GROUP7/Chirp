@@ -193,7 +193,7 @@ stateDiagram
   Test --> [*]
 ```
 
-### build and deploy to azure
+### Build and deploy to Azure
 When a push is made to main, it is automatically deployed to our Azure website. We discussed having the program tested before deploying it to make sure that it would work, but decided not to do that since some of our tests was testing our website directly, which could cause problems.
 ```mermaid
 stateDiagram
