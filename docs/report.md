@@ -46,14 +46,17 @@ Here comes a description of our domain model.
 Here we have chosen some relevant classes, to show our onion architecture.
 The most important part to notice here are that dependencies flow inward, ensuring that the inner layers remain independent of the outer layers.
 This Makes sure that we try to hold the coupling low between the layers, and makes it more adaptable to change, because we make sure that the outer layers can change without affecting the inner layers.
+From the outer layer, the 'program.cs' class can create the razor pages, send it to azure, and also have access to the database.
 
 ## Architecture of deployed application
-
+The system has a Client Server architecture, where the web server and web database is hosted via Azure.
+![Illustration of the _Chirp!_ architecture between the client and the server.](images/Client-server_Architecture.jpg)
+it was chosen to show that multible clients can access the web application server at the same time.
 ## User activities
 
 
 ### Log in
-The following diagram shows the process of signing into Chirp!
+The following diagram shows the process of signing into Chirp! We decided to use ASP.NET identity for our authentication. We decided to do so, to avoid having to gather the information needed directly from the users. Instead ASP.NET indentity allows us to gather the information from the github account of the user that logged in.
 ```mermaid
 stateDiagram-v2
     state "Public timeline" as public
@@ -120,6 +123,26 @@ stateDiagram-v2
          been increased by '1'
     end note
 ```
+
+### Deleting account
+The following diagram shows the process of requesting a deletion of your account, and accepting or rejecting a deletion of the account.
+  ```mermaid
+stateDiagram-v2
+    state "Public timeline" as public
+    state "About me" as aboutMe
+    state "Forget me" as forgetMe
+    state "Public timeline" as public2
+    state "Sign out" as signOut
+
+
+    [*] --> public : logged in
+    public --> aboutMe : Go to about me page
+    aboutMe --> forgetMe: Request deletion
+    forgetMe --> signOut : Yes
+    signOut --> public2
+    forgetMe --> public2 : No
+
+``` 
 
 ## Sequence of functionality/calls trough _Chirp!_
 
@@ -250,6 +273,64 @@ stateDiagram
 
 ## Team work
 
+### Process of implementing new feature
+Here is a diagra of a normal process from having a new feature in mind, to having it made and integrated in our program.
+```mermaid
+stateDiagram-v2
+    state "Make issue" as issue
+    state "Create branch" as createbranch
+    state "Move to 'in progrss'" as inProgress
+    state "Code part" as code
+    state "Test locally" as test
+    state plswork <<choice>>
+    state "Debug" as debug
+    state isdone <<choice>>
+    state "Push to branch" as push
+    state "Create pull request" as request
+    state "Move to 'in review'" as review
+    state "Peer review feature" as peer
+    state isgood <<choice>>
+    state "Merge with main" as merge
+    state "Delete branch" as delete
+    state "Move to 'done'" as wedonehere
+
+    [*] --> issue : New Task
+    issue --> createbranch
+    createbranch --> inProgress
+    inProgress --> code
+    code --> test
+    test --> plswork : Did it work?
+    plswork --> push : Yes
+    plswork --> debug : No
+    debug --> test
+    push --> isdone : Is the feature done?
+    isdone --> code : No
+    isdone --> request : Yes
+    request --> review
+    review --> peer
+    peer --> isgood : Is the feature accepted?
+    isgood --> code : No
+    isgood --> merge : Yes
+    merge --> delete
+    delete --> wedonehere
+    wedonehere --> [*]
+```
+
+### Missing features/functionality
+
+The 'Forget me' feature is used by users to delete their accounts. In it's current form in the program the feature flips the boolean 'Hidden' on an Author to be set to true. This means the feature is not deleting anything from our database, but just hiding it on the web application. 
+With more time we would have liked to change the feature so it deletes users and their cheeps from the database. This way the feature would be more GDPR compliant, so we won't have to manually delete data from the database if a user requests for their data to be deleted. 
+
+
+### Project board workflow
+
+In our project board we have 5 columns, 'No status' is the first column, where all new issues end up, and this is where issues stay until we start working on them. 
+When a project is being worked on it should be moved to 'In progress', and once ready for review and the pull request is up it is intended to move to 'In review'. Once the pull request is accepted and issue is done, it should be moved to 'Done' and the issue closed. 
+We also have the column 'Backlog' which is used for issues that we decided are not a priority, and can be looked at if we have time after doing more pressing issues. 
+
+At first we had more columns in the board, but we deleted these, as we weren't using them, and as such they were just cluttering the board, and making it harder to get a grasp of the issues. 
+Much in the same vein we haven't been great at using the 'In review' column, but we decided to keep the column since it's purpose is still relevant.
+
 ## How to make _Chirp!_ work locally
 To run our Chirp! locally, the first step is to clone our git repository:
 ```
@@ -279,7 +360,10 @@ dotnet watch
 When the program is running you can find it in your browser by following the url in your terminal e.g. `localhost:5000`.
 
 ## How to run test suite locally
-To test our program run the command:
+To run our e2e test first download the VSCode extension 'Playwright Test for VSCode', and then enter ">Test: Install Playwright Browsers" into the search bar. When prompted to overwrite the 'playwright.config.ts' file in the terminal select no, by entering 'n'. 
+Then open a terminal and run the program.
+
+Open another terminal run the command:
 ```
 dotnet test
 ```
