@@ -1,51 +1,14 @@
-
-
-
+---
 title: _Chirp!_ Project Report
-
 subtitle: ITU BDSA 2023 Group 7
-
 authors:
 - Casper <ccaassppeerr2411@gmail.com>
 - Line <linejkpraestegaard@gmail.com>
 - Max <max@qbrix.dk>
 - Daniel Fich <danielfich2@gmail.com>
 - Sebastian <hylandersebastian@gmail.com>
-
 numbersections: true
-
-<table>
-  <tr>
-    <th>Author</th>
-    <th>ITU-mail</th>
-    <th>GitHub mail</th>
-  </tr>
-  <tr>
-    <td>Casper</td>
-    <td>csfr@itu.dk</td>
-    <td>ccaassppeerr2411@gmail.com</td>
-  </tr>
-  <tr>
-    <td>Daniel</td>
-    <td>dafi@itu.dk</td>
-    <td>danielfich2@itu.dk</td>
-  </tr>
-  <tr>
-    <td>Line</td>
-    <td>ljni@itu.dk</td>
-    <td>linejkpraestegaard@gmail.com</td>
-  </tr>
-  <tr>
-    <td>Max</td>
-    <td>mbko@itu.dk</td>
-    <td>max@qbrix.dk</td>
-  </tr>
-  <tr>
-    <td>Sebastian</td>
-    <td>sehy@itu.dk</td>
-    <td>hylandersebastian@gmail.dk</td>
-  </tr>
-</table>
+---
 
 # Design and Architecture of _Chirp!_
 
