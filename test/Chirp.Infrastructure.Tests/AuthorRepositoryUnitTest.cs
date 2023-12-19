@@ -12,14 +12,14 @@ public class AuthorRepositoryUnitTest
         var builder = new DbContextOptionsBuilder<ChirpDBContext>()
             .UseSqlite(_connection);
 
-        //injectin the context into the database
+        //Injecting the context into the database
         var context = new ChirpDBContext(builder.Options);
         context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
         //Creating sample Cheeps to the database
         DbInitializer.SeedDatabase(context);
 
-        //Making a AuthorRepository from the database.
+        //Making an AuthorRepository from the database.
         _authorRepository = new AuthorRepository(context);//Here the repository should be created with our context data
     }
 

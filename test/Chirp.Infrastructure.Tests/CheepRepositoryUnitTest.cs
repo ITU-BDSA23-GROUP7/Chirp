@@ -1,4 +1,4 @@
-namespace Chirp.Razor.Tests;
+namespace Chirp.Infrastructure.Tests;
 
 public class CheepServiceUnitTest
 {
@@ -13,7 +13,7 @@ public class CheepServiceUnitTest
         var builder = new DbContextOptionsBuilder<ChirpDBContext>()
             .UseSqlite(_connection);
 
-        //injecting the context into the database
+        //Injecting the context into the database
         var context = new ChirpDBContext(builder.Options);
         context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 

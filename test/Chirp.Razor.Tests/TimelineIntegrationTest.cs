@@ -3,12 +3,12 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace Chirp.Razor.Tests;
 
-public class IntegrationTest: IClassFixture<WebApplicationFactory<Program>>
+public class TimelineIntegrationTest: IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
-    public IntegrationTest(WebApplicationFactory<Program> fixture){
+    public TimelineIntegrationTest(WebApplicationFactory<Program> fixture){
         // Arrange
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
