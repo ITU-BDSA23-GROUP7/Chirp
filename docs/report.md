@@ -274,7 +274,7 @@ stateDiagram
 ## Team work
 
 ### Process of implementing new feature
-Here is a diagra of a normal process from having a new feature in mind, to having it made and integrated in our program.
+Here is a diagram of a normal process from having a new feature in mind, to having it made and integrated in our program. It shows, the coding and testing process as well as the issue's state on the projectboard
 ```mermaid
 stateDiagram-v2
     state "Make issue" as issue
