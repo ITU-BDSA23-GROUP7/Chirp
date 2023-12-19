@@ -66,19 +66,6 @@ public class CheepServiceUnitTest
         Assert.Equal(0, length);
     }
 
-    /*[Fact]
-    public void GetPageCountPageCountIsCorrect()
-    {
-        // Arrange
-        int expectedPageCount = 21;
-
-        // Act
-        int actualPageCount = _cheepService.GetPageCount();
-
-        // Assert
-        Assert.Equal(expectedPageCount, actualPageCount);
-    }*/
-
     // Test will currently only work under the assumption that "Helge" has less than 31 cheeps
     [Fact]
     public async void AddCheepWillAddCheepToUser()
