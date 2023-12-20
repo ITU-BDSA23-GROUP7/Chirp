@@ -13,7 +13,7 @@ public class Author
 
 
     /// <summary>
-    /// Returns a new <c>AuthorDTO</c> object with all its properties set to the ones in <c>Author</c>
+    /// Returns a new <c>AuthorDTO</c> object with all its properties set to the ones in <c>Author</c>.
     /// </summary>
     /// <returns></returns>
     public AuthorDTO ToAuthorDTO() {

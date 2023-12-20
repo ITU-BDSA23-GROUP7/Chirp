@@ -30,16 +30,6 @@ dotnet watch
 
 When the program is running you can find it in your browser by following the url in your terminal e.g. `localhost:5000`.
 
-## How to run test suite locally
-To run our e2e test first download the VSCode extension 'Playwright Test for VSCode', and then enter ">Test: Install Playwright Browsers" into the search bar. When prompted to overwrite the 'playwright.config.ts' file in the terminal select no, by entering 'n'. 
-Then open a terminal and run the program.
-
-Open another terminal run the command:
-```
-dotnet test
-```
-from the root of our repository, `/Chirp`
-
 ## How to access it online
 
 Go to [this website](https://bdsagroup7chirprazor.azurewebsites.net/) to access it hosted by Azure (in case it is still up online).
