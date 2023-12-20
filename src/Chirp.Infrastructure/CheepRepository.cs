@@ -167,7 +167,6 @@ public class CheepRepository : ICheepRepository
             Author = author,
         };
         context.Cheeps.Add(input);
-        Console.WriteLine("Did we reach this-?");
 
         await context.SaveChangesAsync();
 
