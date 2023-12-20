@@ -28,7 +28,7 @@ public class CheepAndAuthorRepositoryUnitTest
     }
 
     [Fact]
-    public async void HiddenCheepsAreNotShown(){
+    public async void GetCheeps_HiddenUserCheeps_HiddenCheepsAreNotShown(){
         //Arange
         var username="Casper";
         await _authorService.CreateNewAuthor(username);
@@ -48,9 +48,9 @@ public class CheepAndAuthorRepositoryUnitTest
         Assert.Empty(hiddenUsersCheeps);
     }
 
-    //Hidden user cannot cheep
+
     [Fact]
-    public async void HiddenUserCannotCheep(){
+    public async void AddCheepAsync_HiddenUser_HiddenUserCannotCheep(){
         //Arrange
         var hiddenName="Per";
         await _authorService.CreateNewAuthor(hiddenName);
