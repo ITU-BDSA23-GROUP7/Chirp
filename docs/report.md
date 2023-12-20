@@ -38,7 +38,7 @@ Here comes a description of our domain model.
       }
 
       Author "1" <--> "0..N" Cheep : Cheeps
-      Author "<span style='background-color:#2a303c'>0..N</span>" <--> "<span style='background-color:#2a303c'>0..N</span>" Author : Follows
+      Author "0..N" <--> "0..N" Author : Follows
 ```
 
 ## Architecture — In the small
