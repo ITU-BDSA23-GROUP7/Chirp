@@ -10,13 +10,11 @@ namespace Chirp.Razor.Pages
 
         public AddCheepModel(ICheepRepository repository)
         {
-            Console.WriteLine("AddCheepModel constructor");
             _repository = repository;
         }
 
         public async Task OnPostAsync(String Username, String CheepText)
         {
-            Console.WriteLine($"CheepText: {CheepText}");
             await _repository.AddCheepAsync(Username, CheepText);
         }
     }

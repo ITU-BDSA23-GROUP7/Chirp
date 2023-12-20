@@ -81,8 +81,6 @@ public class AboutMe : PageModel
             return Redirect("/");
         }
 
-        //await _authorRepository.SetHidden(User.Identity.Name, false);
-
         await SetUserinfo(User.Identity.Name);
 
         await SetCheeps(User.Identity.Name);
