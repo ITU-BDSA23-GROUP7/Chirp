@@ -4,12 +4,13 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
-//Test if Tests are misbehaving?
-
+// Initializes a web application builder
 var builder = WebApplication.CreateBuilder(args);
 
-// Get connection string from user secrets
+// Determines the database connection string based on the environment.
+
 var connection = String.Empty;
+
 if (builder.Environment.IsDevelopment())
 {
     connection = builder.Configuration["AZURE_SQL_CONNECTIONSTRING"];
@@ -19,8 +20,10 @@ else
     connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
 }
 
-// Add services to the container.
+// Configures the ChirpDBContext with selected database connection.
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlServer(connection));
+
+// Adds repositories and memory cache
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddMemoryCache();
@@ -31,48 +34,46 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
 
-Trace.WriteLine("Programmet kører");
-
+// Builds the application
 var app = builder.Build();
 
-// Seed database
+// Database migration and initialization
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ChirpDBContext>();
 
+    // Applies database migrations
     context.Database.Migrate();
 
-    //Then you can use the context to seed the database for example
+    // Seed the database with initial data
     DbInitializer.SeedDatabase(context);
 }
 
-// Configure the HTTP request pipeline.
+// Configures the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+// Configure cookie policy with secure settings.
 app.UseCookiePolicy(new CookiePolicyOptions()
 {
     Secure = CookieSecurePolicy.Always
 });
 
+//Configure routing for controllers and Razor Pages
 app.UseRouting();
 
 app.MapControllers();
 app.MapRazorPages();
 
-
-Trace.WriteLine("Programmet skal til at runne");
-
+// Runs the application
 app.Run();
 
-Trace.WriteLine("programmet er kørt");
 
 public partial class Program { }

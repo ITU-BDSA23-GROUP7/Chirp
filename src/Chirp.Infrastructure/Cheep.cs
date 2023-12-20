@@ -13,6 +13,10 @@ public class Cheep
     public required DateTime TimeStamp { get; set; }
     public required Author Author { get; set; }
 
+    /// <summary>
+    /// Converts the current instance of the Cheep class to a CheepDTO.
+    /// </summary>
+    /// <returns>A CheepDTO representing the converted data.</returns>
     public CheepDTO ToCheepDTO() {
         var cheepDTO = new CheepDTO
         {

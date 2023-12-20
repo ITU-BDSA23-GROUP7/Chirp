@@ -3,14 +3,12 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace Chirp.Razor.Tests;
 
-public class IntegrationTest: IClassFixture<WebApplicationFactory<Program>>
+public class TimelineIntegrationTest: IClassFixture<WebApplicationFactory<Program>>
 {
-    //Are you actually reading this File github????????????????
     private readonly WebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
-    public IntegrationTest(WebApplicationFactory<Program> fixture){
-        // Arrange
+    public TimelineIntegrationTest(WebApplicationFactory<Program> fixture){
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
     }
@@ -18,7 +16,7 @@ public class IntegrationTest: IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async void CanSeePublicTimeline()
     {
-        // Act
+        // Arrange & Act
         var response = await _client.GetAsync("/");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -33,7 +31,7 @@ public class IntegrationTest: IClassFixture<WebApplicationFactory<Program>>
     [InlineData("Rasmus")]
     public async void CanSeePrivateTimeline(string author)
     {
-        // Act
+        // Arrange & Act
         var response = await _client.GetAsync($"/{author}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();

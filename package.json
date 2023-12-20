@@ -1,0 +1,17 @@
+{
+  "name": "chirp",
+  "version": "1.0.0",
+  "description": "Chirp is a web-based application developed in the BDSA course at ITU by Group 7 using .NET.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.10.5"
+  }
+}

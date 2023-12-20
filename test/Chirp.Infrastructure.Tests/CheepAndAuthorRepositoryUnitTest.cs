@@ -1,4 +1,4 @@
-namespace Chirp.Razor.Tests;
+namespace Chirp.Infrastructure.Tests;
 
 public class CheepAndAuthorRepositoryUnitTest
 {
@@ -14,7 +14,7 @@ public class CheepAndAuthorRepositoryUnitTest
         var builder = new DbContextOptionsBuilder<ChirpDBContext>()
             .UseSqlite(_connection);
 
-        //injecting the context into the database
+        //Injecting the context into the database
         var context = new ChirpDBContext(builder.Options);
         context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
@@ -28,7 +28,7 @@ public class CheepAndAuthorRepositoryUnitTest
     }
 
     [Fact]
-    public async void HiddenCheepsAreNotShown(){
+    public async void GetCheeps_HiddenUserCheeps_HiddenCheepsAreNotShown(){
         //Arange
         var username="Casper";
         await _authorService.CreateNewAuthor(username);
@@ -48,9 +48,9 @@ public class CheepAndAuthorRepositoryUnitTest
         Assert.Empty(hiddenUsersCheeps);
     }
 
-    //Hidden user cannot cheep
+
     [Fact]
-    public async void HiddenUserCannotCheep(){
+    public async void AddCheepAsync_HiddenUser_HiddenUserCannotCheep(){
         //Arrange
         var hiddenName="Per";
         await _authorService.CreateNewAuthor(hiddenName);
@@ -58,7 +58,7 @@ public class CheepAndAuthorRepositoryUnitTest
         //Act
         await _authorService.SetHidden(hiddenName, true);
 
-        //Assert        
+        //Assert
         await Assert.ThrowsAsync<Exception>(async () => await _cheepService.AddCheepAsync(hiddenName, "Can i as a hidden user cheep?"));
     }
 }
