@@ -25,7 +25,7 @@ public class CheepServiceUnitTest
     }
 
     [Fact]
-    public async void GetCheepsListLength32()
+    public async void GetCheeps_Page_GetCheepsListLength32()
     {
         // Arrange
         int pagesize = 32;
@@ -39,7 +39,7 @@ public class CheepServiceUnitTest
     }
 
     [Fact]
-    public async void GetCheepsFromAuthorHelgeHasMoreThanZeroCheeps()
+    public async void CheeplistCount_Helge_GetCheepsFromAuthorHelgeHasMoreThanZeroCheeps()
     {
         // Arrange
         IEnumerable<CheepDTO> helgeCheepList = await _cheepService.GetCheeps(author: "Helge");
@@ -52,7 +52,7 @@ public class CheepServiceUnitTest
     }
 
     [Fact]
-    public async void GetCheepsFromAuthor6A6F6E726164HasNoCheeps()
+    public async void GetCheeps_AuthorThatDoesNotExist_GetCheepsFromAuthor6A6F6E726164HasNoCheeps()
     {
         //OBS. This test doesn't function if a Author has the name "6A6F6E726164"
 
@@ -68,7 +68,7 @@ public class CheepServiceUnitTest
 
     // Test will currently only work under the assumption that "Helge" has less than 31 cheeps
     [Fact]
-    public async void AddCheepWillAddCheepToUser()
+    public async void AddCheepAsync_Helge_AddCheepWillAddCheepToUser()
     {
         // Arrange
         string author = "Helge";
@@ -88,7 +88,7 @@ public class CheepServiceUnitTest
     }
 
     [Fact]
-    public async void UserDoesNotExistWhenAddingCheep()
+    public async void AddCheepAsync_UserThatDoesNotExist_UserDoesNotExistWhenAddingCheep()
     {
         //Arrange
         var notExistingName = "Bobby";

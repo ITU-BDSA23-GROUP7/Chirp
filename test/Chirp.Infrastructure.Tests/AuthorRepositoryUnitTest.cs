@@ -24,7 +24,7 @@ public class AuthorRepositoryUnitTest
     }
 
     [Fact]
-    public async void CreateNewAuthorTest()
+    public async void CreateNewAuthor_NewAuthor_SuccefullyCreateNewAuthor()
     {
         //Arrange
 
@@ -37,7 +37,7 @@ public class AuthorRepositoryUnitTest
     }
 
     [Fact]
-    public async void UserDoesNotExistTest()
+    public async void GetAuthorDTOByUsername_UserThatDoesNotExist_UserDoesNotExistTest()
     {
         //Arrange
         var notExistingName = "Bobby";
@@ -47,7 +47,7 @@ public class AuthorRepositoryUnitTest
     }
 
     [Fact]
-    public async void UserDoesExist()
+    public async void GetAuthorDTOByUsername_UserThatDoesExist_UserDoesExist()
     {
         //Arrange
         var existingName = "Rasmus";
@@ -57,7 +57,7 @@ public class AuthorRepositoryUnitTest
     }
 
     [Fact]
-    public async void UserCanBeHidden()
+    public async void SetHidden_SingleUser_UserCanBeHidden()
     {
         //Arrange
         var user = "John Doe";
@@ -73,7 +73,7 @@ public class AuthorRepositoryUnitTest
 
 
     [Fact]
-    public async void UserCanBecomeVisibleAgain()
+    public async void SetHidden_WhenUserIsHidden_UserCanBecomeVisibleAgain()
     {
         //Arrange
         var user = "John Doe";
