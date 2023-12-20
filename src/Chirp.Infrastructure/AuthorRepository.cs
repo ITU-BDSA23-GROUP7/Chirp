@@ -158,8 +158,6 @@ public class AuthorRepository : IAuthorRepository
             throw new CannotFollowSelfException("You cannot unfollow yourself.");
         }
 
-        // Check if newUnFollowerAuthor follows newUnFollowingAuthor
-
         newUnFollowerAuthor.Following.Remove(newUnFollowingAuthor);
         newUnFollowingAuthor.Followers.Remove(newUnFollowerAuthor);
         await context.SaveChangesAsync();
