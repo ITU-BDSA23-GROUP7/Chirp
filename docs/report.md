@@ -288,6 +288,44 @@ stateDiagram
   Delete_output_directory --> Publish_on_Github
   Publish_on_Github --> [*]
 ```
+## End-2-End testing
+In the current implementation of our End-2-End test, it is  running via localhost. This means that the database being used is the online Azure Database(It would in the future be favorable to have a local database running in memory instead, to ensure the data has not been manipulated with, and it would ensure more durability for the tests). 
+Because of this it currently would not be preferable to have tests like for example ones that check for if there exists an unfollow button, due to it not being assured the tests before have not manipulated with the followers.
+
+### Issues with the End-2-End testing
+Due to the fact that Chirp! was implemented with B2C authentication via github, Authentication in end-2-end testing was not easy to implement. This was primarily due to the chance of githubs "device verification" feature would occansially pop up during testing, which the playwright testing had no way of solving. Because of this the tests have been made with one part without log in, that should work without any problems, and one with logging in, that occasionly fails due to what was mentioned before. We did however prepare some test cases for end to end testing, for when we got the log in working, here is an diagram showing one of the test cases we prepared.
+
+The following testcase checks if a new cheep shows up on the right pages, and nowhere else. Every time 'the cheep' is mentioned, we check for the specific text defined in the text and the author of the test user:
+```mermaid
+stateDiagram-v2
+    state "Public timeline" as public
+    state "Public timeline" as public2
+    state "Public timeline" as public3
+    state "Public timeline" as public4
+    state "Public timeline page 2" as public5
+    state "Public timeline page 2" as public6
+    state "Own timeline" as own
+    state "Own timeline" as own2
+    state "Others timeline" as other
+    state "Others timeline" as other2
+    state "User info" as userinfo
+    state "User info" as userinfo2
+
+    [*] --> public : Log in 
+    public --> public2 : Check if the cheep exists (False)
+    public2 --> public3 : Write the cheep
+    public3 --> public4 : Check if the cheep exists (True)
+    public4 --> public5 : Go to public timeline page 2
+    public5 --> public6 : Check if the cheep exists (False)
+    public6 --> own : Go to own timeline
+    own --> own2 : Check if the cheep exists (True)
+    own2 --> other : Go to another authors timeline
+    other --> other2 : Check if the cheep exists (False)
+    other2 --> userinfo : Go to User info
+    userinfo --> userinfo2 : Check if the cheep exists (True)
+    userinfo2 --> [*]
+```
+
 
 ## Team work
 
