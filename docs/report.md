@@ -290,14 +290,18 @@ stateDiagram
   Delete_output_directory --> Publish_on_Github
   Publish_on_Github --> [*]
 ```
+
 ## End-2-End testing
-In the current implementation of our End-2-End test, it is  running via localhost. This means that the database being used is the online Azure Database(It would in the future be favorable to have a local database running in memory instead, to ensure the data has not been manipulated with, and it would ensure more durability for the tests). 
+
+In the current implementation of our End-2-End test, it is running via localhost. This means that the database being used is the online Azure Database(It would in the future be favorable to have a local database running in memory instead, to ensure the data has not been manipulated with, and it would ensure more durability for the tests).
 Because of this it currently would not be preferable to have tests like for example ones that check for if there exists an unfollow button, due to it not being assured the tests before have not manipulated with the followers.
 
 ### Issues with the End-2-End testing
+
 Due to the fact that Chirp! was implemented with B2C authentication via github, Authentication in end-2-end testing was not easy to implement. This was primarily due to the chance of githubs "device verification" feature would occansially pop up during testing, which the playwright testing had no way of solving. Because of this the tests have been made with one part without log in, that should work without any problems, and one with logging in, that occasionly fails due to what was mentioned before. We did however prepare some test cases for end to end testing, for when we got the log in working, here is an diagram showing one of the test cases we prepared.
 
 The following testcase checks if a new cheep shows up on the right pages, and nowhere else. Every time 'the cheep' is mentioned, we check for the specific text defined in the text and the author of the test user:
+
 ```mermaid
 stateDiagram-v2
     state "Public timeline" as public
@@ -313,7 +317,7 @@ stateDiagram-v2
     state "User info" as userinfo
     state "User info" as userinfo2
 
-    [*] --> public : Log in 
+    [*] --> public : Log in
     public --> public2 : Check if the cheep exists (False)
     public2 --> public3 : Write the cheep
     public3 --> public4 : Check if the cheep exists (True)
@@ -327,7 +331,6 @@ stateDiagram-v2
     userinfo --> userinfo2 : Check if the cheep exists (True)
     userinfo2 --> [*]
 ```
-
 
 ## Team work
 
@@ -430,16 +433,19 @@ When the program is running you can find it in your browser by following the url
 
 ## How to run test suite locally
 
-To run our e2e test first download the VSCode extension 'Playwright Test for VSCode', and then enter ">Test: Install Playwright Browsers" into the search bar. When prompted to overwrite the 'playwright.config.ts' file in the terminal select no, by entering 'n'.
-Then open a terminal and run the program.
+To run our e2e test in the root directory `/Chirp` from the command:
 
-Open another terminal run the command:
+```
+npx playwright install
+```
+
+Then run the program as described above.
+
+Open another terminal in the root of our repository, `/Chirp`, run the command:
 
 ```
 dotnet test
 ```
-
-from the root of our repository, `/Chirp`
 
 # Ethics
 
