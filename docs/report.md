@@ -406,6 +406,8 @@ Currently when running our program in a development environment the program will
 
 ### Project board workflow
 
+![Screenshot of our Project Board before submission](images/ProjectBoard.jpg)
+
 In our project board we have 5 columns, 'No status' is the first column, where all new issues end up, and this is where issues stay until we start working on them.
 When a project is being worked on it should be moved to 'In progress', and once ready for review and the pull request is up it is intended to move to 'In review'. Once the pull request is accepted and issue is done, it should be moved to 'Done' and the issue closed.
 We also have the column 'Backlog' which is used for issues that we decided are not a priority, and can be looked at if we have time after doing more pressing issues.
