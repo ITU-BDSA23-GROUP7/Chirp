@@ -54,13 +54,13 @@ From the outer layer, the 'program.cs' class can create the razor pages, send it
 
 The system has a Client Server architecture, where the web server and web database is hosted via Azure.
 ![Illustration of the _Chirp!_ architecture between the client and the server.](images/Client-server_Architecture.jpg)
-it was chosen to show that multible clients can access the web application server at the same time.
+it was chosen to show that multiple clients can access the web application server at the same time.
 
 ## User activities
 
 ### Log in
 
-The following diagram shows the process of signing into Chirp! We decided to use ASP.NET identity for our authentication. We decided to do so, to avoid having to gather the information needed directly from the users. Instead ASP.NET indentity allows us to gather the information from the github account of the user that logged in.
+The following diagram shows the process of signing into Chirp! We decided to use ASP.NET identity for our authentication. We decided to do so, to avoid having to gather the information needed directly from the users. Instead ASP.NET identity allows us to gather the information from the github account of the user that logged in.
 
 ```mermaid
 stateDiagram-v2
@@ -298,9 +298,9 @@ Because of this it currently would not be preferable to have tests like for exam
 
 ### Issues with the End-2-End testing
 
-Due to the fact that Chirp! was implemented with B2C authentication via github, Authentication in end-2-end testing was not easy to implement. This was primarily due to the chance of githubs "device verification" feature would occansially pop up during testing, which the playwright testing had no way of solving. Because of this the tests have been made with one part without log in, that should work without any problems, and one with logging in, that occasionly fails due to what was mentioned before. We did however prepare some test cases for end to end testing, for when we got the log in working, here is an diagram showing one of the test cases we prepared.
+Due to the fact that Chirp! was implemented with B2C authentication via Github, Authentication in end-2-end testing was not easy to implement. This was primarily due to the chance of Github's "device verification" feature would occasionally pop up during testing, which the playwright testing had no way of solving. Because of this the tests have been made with one part without log in, that should work without any problems, and one with logging in, that occasionally fails due to what was mentioned before. We did however prepare some test cases for end to end testing, for when we got the log in working, here is an diagram showing one of the test cases we prepared.
 
-The following testcase checks if a new cheep shows up on the right pages, and nowhere else. Every time 'the cheep' is mentioned, we check for the specific text defined in the text and the author of the test user:
+The following test case checks if a new cheep shows up on the right pages, and nowhere else. Every time 'the cheep' is mentioned, we check for the specific text defined in the text and the author of the test user:
 
 ```mermaid
 stateDiagram-v2
@@ -336,13 +336,13 @@ stateDiagram-v2
 
 ### Process of implementing new feature
 
-Here is a diagram of a normal process from having a new feature in mind, to having it made and integrated in our program. It shows, the coding and testing process as well as the issue's state on the projectboard
+Here is a diagram of a normal process from having a new feature in mind, to having it made and integrated in our program. It shows, the coding and testing process as well as the issue's state on the project board
 
 ```mermaid
 stateDiagram-v2
     state "Make issue" as issue
     state "Create branch" as createbranch
-    state "Move to 'in progrss'" as inProgress
+    state "Move to 'in progress'" as inProgress
     state "Code part" as code
     state "Test locally" as test
     state plswork <<choice>>
@@ -384,7 +384,7 @@ stateDiagram-v2
 The 'Forget me' feature is used by users to delete their accounts. In it's current form in the program the feature flips the boolean 'Hidden' on an Author to be set to true. This means the feature is not deleting anything from our database, but just hiding it on the web application.
 With more time we would have liked to change the feature so it deletes users and their cheeps from the database. This way the feature would be more GDPR compliant, so we won't have to manually delete data from the database if a user requests for their data to be deleted.
 
-Currently when running our program in a development environment the program will still use the same database as on our production environment. With more time we would have liked to make the development environment run on a seperate database, to avoid tampering with the live database when testing and making new features.
+Currently when running our program in a development environment the program will still use the same database as on our production environment. With more time we would have liked to make the development environment run on a separate database, to avoid tampering with the live database when testing and making new features.
 
 ### Project board workflow
 
@@ -417,7 +417,7 @@ In this directory you need to set up a user secret containing a connection strin
 dotnet user-secrets set "AZURE_SQL_CONNECTIONSTRING" "[insert connection string]"
 ```
 
-Where `[insert connection string]` is replaced with a connection string refering to an sql server.
+Where `[insert connection string]` is replaced with a connection string referring to an sql server.
 
 When the user secret is made, the program can be run from the same directory using one of the two following commands:
 
@@ -451,10 +451,10 @@ dotnet test
 
 ## License
 
-We have chosen the MIT Licence for our application.
+We have chosen the MIT License for our application.
 
 ## LLMs, ChatGPT, CoPilot, and others
 
-Through the project, we have used LLM's occasionally. Most of all we used ChatGPT to help us understand different new libraries or architechtures that we needed to use. ChatGPT was occasionally used to help us debug our code. It rarely had a direct influence on what we wrote, and has been co authored whenever this occured.
+Through the project, we have used LLM's occasionally. Most of all we used ChatGPT to help us understand different new libraries or architectures that we needed to use. ChatGPT was occasionally used to help us debug our code. It rarely had a direct influence on what we wrote, and has been co authored whenever this occurred.
 
 We used CoPilot once to speed up a task, but has never really used it for anything helpful. CoPilot was co authored as well.
