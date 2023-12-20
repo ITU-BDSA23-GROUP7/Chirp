@@ -9,7 +9,6 @@ public class TimelineIntegrationTest: IClassFixture<WebApplicationFactory<Progra
     private readonly HttpClient _client;
 
     public TimelineIntegrationTest(WebApplicationFactory<Program> fixture){
-        // Arrange
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
     }
@@ -17,7 +16,7 @@ public class TimelineIntegrationTest: IClassFixture<WebApplicationFactory<Progra
     [Fact]
     public async void CanSeePublicTimeline()
     {
-        // Act
+        // Arrange & Act
         var response = await _client.GetAsync("/");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -32,7 +31,7 @@ public class TimelineIntegrationTest: IClassFixture<WebApplicationFactory<Progra
     [InlineData("Rasmus")]
     public async void CanSeePrivateTimeline(string author)
     {
-        // Act
+        // Arrange & Act
         var response = await _client.GetAsync($"/{author}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
