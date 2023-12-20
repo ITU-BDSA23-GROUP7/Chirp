@@ -186,7 +186,7 @@ public class AuthorRepository : IAuthorRepository
     /// <summary>
     /// Asynchronously retrieves the usernames who follows the specific author.
     /// </summary>
-    /// <param name="username">Username of author whose follower-list is retrieved</param>
+    /// <param name="username"> Username of author whose follower-list is retrieved</param>
     public async Task<IEnumerable<string>> GetFollowersUsernames(string username)
     {
         var author = await GetAuthorWithFollowersAsync(username);
@@ -205,8 +205,8 @@ public class AuthorRepository : IAuthorRepository
     /// Asynchronously retrieves number of cheeps by specific author.
     /// If the username does not exist a <c>UsernameNotFoundException</c> is thrown.
     /// </summary>
-    /// <param name="username">Username of the author whose cheep-count is retrieved</param>
-    /// <returns>Returns author's cheep-count</returns>
+    /// <param name="username"> Username of the author whose cheep-count is retrieved</param>
+    /// <returns> Returns author's cheep-count</returns>
     public async Task<int> GetAmmountOfCheeps(string username)
     {
         var author = await context.Authors.Include(a => a.Cheeps).FirstOrDefaultAsync(c => c.Name == username);

@@ -9,7 +9,7 @@ public class CheepRepository : ICheepRepository
     }
 
     /// <summary>
-    /// gets a list of CheepDTOs based on the given parameters
+    /// Gets a list of CheepDTOs based on the given parameters
     /// </summary>
     /// <param name="pageNum">The page number of cheeps to retrieve (default is 1).</param>
     /// <param name="author">The optional author's name to filter cheeps (default is null for all cheeps)
@@ -22,7 +22,7 @@ public class CheepRepository : ICheepRepository
     {
         int pageIndex = pageNum - 1;
 
-        // Checks wether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
+        // Checks whether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
         List<Cheep> cheeps = await
             (
                 author == null ?
@@ -48,7 +48,7 @@ public class CheepRepository : ICheepRepository
     }
 
     /// <summary>
-    /// gets a list of CheepDTOs from the given authors followers cheeps.
+    /// Gets a list of CheepDTOs from the given authors followers cheeps.
     /// </summary>
     /// <param name="pageNum">The page number of cheeps to retrieve (default is 1).</param>
     /// <param name="author">The author's name to find the followers from.</param>
@@ -69,7 +69,7 @@ public class CheepRepository : ICheepRepository
             following.Add(a.Name);
         }
 
-        // Checks wether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
+        // Checks whether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
         List<Cheep> cheeps = await context.Cheeps
             .Where(c => c.Author.Name == author || following.Contains(c.Author.Name))
             .OrderByDescending(c => c.TimeStamp)
@@ -91,7 +91,7 @@ public class CheepRepository : ICheepRepository
     }
 
     /// <summary>
-    /// gets an integer that represents the number of pages needed to display all cheeps of a user.
+    /// Gets an integer that represents the number of pages needed to display all cheeps of a user.
     /// </summary>
     /// <param name="author">The author's name to find the followers from.(default is null)
     /// (if author is null, then the pagecount to display all cheeps is used instead)</param>
@@ -101,7 +101,7 @@ public class CheepRepository : ICheepRepository
     /// </returns>
     public int GetPageCount(string? author = null)
     {
-        // Checks wether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
+        // Checks whether there is an author, and takes cheeps corresponding to an author or all the cheeps if no author has been specified
         int cheepCount = (
                 author == null ?
                 context.Cheeps :
@@ -157,7 +157,7 @@ public class CheepRepository : ICheepRepository
                 }
             }
         }
-        
+
 
         Cheep input = new Cheep
         {
@@ -167,7 +167,6 @@ public class CheepRepository : ICheepRepository
             Author = author,
         };
         context.Cheeps.Add(input);
-        Console.WriteLine("Did we reach this-?");
 
         await context.SaveChangesAsync();
 
@@ -190,12 +189,12 @@ public class CheepRepository : ICheepRepository
         }
 
         context.Cheeps.Remove(cheepToRemove);
-    
+
         await context.SaveChangesAsync();
     }
 
     /// <summary>
-    /// gets an integer that represents the number of pages needed to display all cheeps from all followers.
+    /// Gets an integer that represents the number of pages needed to display all cheeps from all followers.
     /// </summary>
     /// <param name="author">The author's name to find the followers from.</param>
     /// <returns>

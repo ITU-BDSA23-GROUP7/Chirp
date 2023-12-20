@@ -1,7 +1,7 @@
 namespace Chirp.Infrastructure;
 
 /// <summary>
-/// Implements the &lt;c&gt;DbContext&lt;/c&gt; interface.
+/// Implements the <c>DbContext</c> interface.
 /// Represents the database context for the Chirp-application, giving access to
 /// <c>Cheeps</c> and <c>Authors</c> objects.
 /// </summary>
