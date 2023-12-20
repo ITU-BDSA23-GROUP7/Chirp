@@ -10,7 +10,27 @@ authors:
   - Daniel Fich <dafi@itu.dk>
   - Sebastian Cloos Hylander <sehy@itu.dk>
 numbersections: true
+
 ---
+
+# _Chirp!_ Project Report
+## ITU BDSA 2023 Group 7
+### Course title: Analysis, Design and Software Architecture
+### Course code: BSANDSA1KU
+### Authors
+Casper Storm Frøding - <csfr@itu.dk><br/>
+
+Daniel Fich - <dafi@itu.dk><br/>
+
+Line Juul Kabbeltved Præstegaard - <ljni@itu.dk><br/>
+
+Max Brix Koch - <mbko@itu.dk><br/>
+
+Sebastian Cloos Hylander - <sehy@itu.dk><br/>
+
+
+<br/>
+
 
 # Design and Architecture of Chirp!
 
@@ -19,10 +39,12 @@ numbersections: true
 Our domain model consists of the `Author`- and `Cheep` class. Each author can have multiple cheeps and each cheep has a reference to one author. Each author can follow and be followed by multiple other authors.
 
 ![Domain model of  _Chirp!_](images/Domain_model.jpg)
+<br/>
 
 ## Architecture — In the small
 
 ![Illustration of the _Chirp!_ data model as UML class diagram.](images/BDSA_UML.jpg)
+<br/>
 
 Here we have chosen some relevant classes, to show our onion architecture.
 The most important part to notice here are that dependencies flow inward, ensuring that the inner layers remain independent of the outer layers.
@@ -32,7 +54,9 @@ From the outer layer, the 'program.cs' class can create the razor pages, send it
 ## Architecture of deployed application
 
 The system has a Client Server architecture, where the web server and web database are hosted via Azure.
+
 ![Illustration of the _Chirp!_ architecture between the client and the server.](images/Client-server_Architecture.jpg)
+<br/>
 
 It was chosen to show that multiple clients can access the web application server at the same time.
 
@@ -43,6 +67,7 @@ It was chosen to show that multiple clients can access the web application serve
 The following activity diagram shows a typical user journey for an unauthenticated user.
 
 ![Lalala](images/Unauthenticated_user.jpg)
+<br/>
 
 
 
@@ -51,30 +76,35 @@ The following activity diagram shows a typical user journey for an unauthenticat
 The following diagram shows the process of signing into Chirp! We decided to use ASP.NET identity for our authentication. We decided to do so, to avoid having to gather the information needed directly from the users. Instead ASP.NET identity allows us to gather the information from the github account of the user that logged in.
 
 ![log in](images/Log_in.jpg)
+<br/>
 
 ### Follow and unfollow
 
 The following diagram shows the process of following an author, viewing their timeline, viewing their cheeps on your own timeline and unfollowing the author.
 
 ![jhsdgfyjf](images/Follow_unfollow.jpg)
+<br/>
 
 ### Adding a cheepstreak
 
 The following diagram shows the process of checking the scoreboard, writing a cheep on the public timeline, and checking the scoreboard again to check whether your streak has increased or not.
 
 ![cheepstreak](images/Cheepstreak.jpg)
+<br/>
 
 ### Deleting account
 
 The following diagram shows the process of requesting a deletion of your account, and accepting or rejecting a deletion of the account.
 
 ![delete user](images/Delete.png)
+<br/>
 
 ## Sequence of functionality/calls trough Chirp!
 
 #### Sequence diagram
 
 ![sequence diagram](images/Sequence_diagram.png)
+<br/>
 
 This sequence diagram shows what happens when a user accesses the web application.
 
@@ -89,6 +119,7 @@ It also shows what happens if the user is authenticated, including what happens 
 Whenever a push is made to main, or a pull request is made, Github will build and test our program, to make sure that we do not implement a feature that does not pass all our earlier defined tests.
 
 ![sequence diagram](images/Auto_build_test.png)
+<br/>
 
 Another important note is that all tests are not run by Github, due to the `--filter` added. This ensures that tests that contain the words `Playwright` or `IntegrationTest` in their [fully qualified name](https://learn.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=mstest) are not run. This is due to these tests not always compiling correctly on github.
 
@@ -97,6 +128,7 @@ Another important note is that all tests are not run by Github, due to the `--fi
 When a push is made to main, it is automatically deployed to our Azure website. We discussed having the program tested before deploying it to make sure that it would work, but decided not to do that since some of our tests was testing our website directly, which could cause problems.
 
 ![Build and deploy](images/Build_Deploy.png)
+<br/>
 
 ### Automatic build and release to github
 
@@ -104,6 +136,7 @@ Whenever a tag is pushed with the format `v*.*.*` it is automatically build, pub
 
 
 ![Build and deploy github](images/Build_ReleaseGithub.png)
+<br/>
 
 ## End-2-End testing
 
@@ -117,6 +150,7 @@ Due to the fact that Chirp! was implemented with B2C authentication via Github, 
 The following test case checks if a new cheep shows up on the right pages, and nowhere else. Every time 'the cheep' is mentioned, we check for the specific text defined in the test and the author of the test user:
 
 ![End2EndTest](images/End2EndTest.png)
+<br/>
 
 ## Team work
 
@@ -125,6 +159,7 @@ The following test case checks if a new cheep shows up on the right pages, and n
 Here is a diagram of a normal process from having a new feature in mind, to having it made and integrated in our program. It shows, the coding and testing process as well as the issue's state on the project board
 
 ![ImplementingNewFeature](images/ImplementingNewFeature.png)
+<br/>
 
 ### Missing features/functionality
 
@@ -136,6 +171,7 @@ Currently when running our program in a development environment the program will
 ### Project board workflow
 
 ![Screenshot of our Project Board before submission](images/ProjectBoard.jpg)
+<br/>
 
 In our project board we have 5 columns, 'No status' is the first column, where all new issues end up, and this is where issues stay until we start working on them.
 When a project is being worked on it should be moved to 'In progress', and once ready for review and the pull request is up it is intended to move to 'In review'. Once the pull request is accepted and issue is done, it should be moved to 'Done' and the issue closed.
