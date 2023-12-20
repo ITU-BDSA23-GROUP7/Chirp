@@ -12,34 +12,13 @@ authors:
 numbersections: true
 ---
 
-# Design and Architecture of _Chirp!_
+# Design and Architecture of Chirp!
 
 ## Domain model
 
 Our domain model consists of the `Author`- and `Cheep` class. Each author can have multiple cheeps and each cheep has a reference to one author. Each author can follow and be followed by multiple other authors.
 
-```mermaid
-  classDiagram
-  direction LR
-      class Cheep{
-        +CheepId: Guid
-        +Text: string
-        +TimeStamp: DateTime
-        +ToCheepDTO() CheepDTO
-      }
-
-      class Author{
-        +AuthorID: Guid
-        +Name: string
-        +Email:  string
-        +CheepStreak: int
-        +Hidden: bool
-        +ToAuthorDTO() AuthorDTO
-      }
-
-      Author "1" <--> "0..N" Cheep : Cheeps
-      Author "0..N" <--> "0..N" Author : Follows
-```
+![Domain model of  _Chirp!_](images/Domain_model.jpg)
 
 ## Architecture — In the small
 
@@ -63,151 +42,39 @@ It was chosen to show that multiple clients can access the web application serve
 
 The following activity diagram shows a typical user journey for an unauthenticated user.
 
-```mermaid
-stateDiagram-v2
-    state "Public timeline" as public
-    state "Public timeline (page 2)" as p2
-    state "[User]'s private timeline" as private
-    state "Scoreboard" as scoreboard
+![Lalala](images/Unauthenticated_user.jpg)
 
-    [*] --> public: unauthenticated user
-    public --> p2: Clicks on '2' on the page navigation
-    p2 --> private: Clicks on username of a cheep
-    private --> scoreboard: Clicks on the scoreboard button
-    scoreboard --> [*]
-```
+
 
 ### Log in
 
 The following diagram shows the process of signing into Chirp! We decided to use ASP.NET identity for our authentication. We decided to do so, to avoid having to gather the information needed directly from the users. Instead ASP.NET identity allows us to gather the information from the github account of the user that logged in.
 
-```mermaid
-stateDiagram-v2
-    state "Public timeline" as public
-    state "Public timeline" as public2
-    state "Log in" as login
-    state if_state <<choice>>
-
-    [*] --> public: unauthenticated user
-    public --> login
-    login --> if_state
-    if_state --> public : No
-    if_state --> public2 : Yes
-    public2 --> [*]
-```
+![log in](images/Log_in.jpg)
 
 ### Follow and unfollow
 
 The following diagram shows the process of following an author, viewing their timeline, viewing their cheeps on your own timeline and unfollowing the author.
 
-```mermaid
-stateDiagram-v2
-    state "Public timeline" as public
-    state "Public timeline" as public2
-    state "Authors timeline" as author
-    state "Private timeline" as private
-    state "Private timeline" as private2
-
-    [*] --> public : authenticated user
-    public --> public2 : follow author
-    public2 --> author : click on authors name
-    author --> private : go to own timeline
-    private --> private2 : unfollow author
-
-    note left of private2
-      The same as before,
-      but no longer showing
-      the cheeps of the author
-    end note
-
-    private2 --> [*]
-```
+![jhsdgfyjf](images/Follow_unfollow.jpg)
 
 ### Adding a cheepstreak
 
 The following diagram shows the process of checking the scoreboard, writing a cheep on the public timeline, and checking the scoreboard again to check whether your streak has increased or not.
 
-```mermaid
-stateDiagram-v2
-    state "Public timeline" as public
-    state "Scoreboard" as scoreboard
-    state "Public timeline" as public2
-    state "Public timeline" as public3
-    state "Scoreboard" as scoreboard2
-
-
-    [*] --> public : authenticated user
-    public --> scoreboard : Check scoreboard
-    scoreboard --> public2
-    public2 --> public3 : Make a cheep
-    public3 --> scoreboard2 : Check scoreboard again
-
-    note left of scoreboard2
-      If your newest cheep
-      was written
-       the day before,
-        your streak has
-         been increased by '1'
-    end note
-```
+![cheepstreak](images/Cheepstreak.jpg)
 
 ### Deleting account
 
 The following diagram shows the process of requesting a deletion of your account, and accepting or rejecting a deletion of the account.
 
-```mermaid
-stateDiagram-v2
-  state "Public timeline" as public
-  state "About me" as aboutMe
-  state "Forget me" as forgetMe
-  state "Public timeline" as public2
-  state "Sign out" as signOut
+![delete user](images/Delete.png)
 
-
-  [*] --> public : authenticated user
-  public --> aboutMe : Go to about me page
-  aboutMe --> forgetMe: Request deletion
-  forgetMe --> signOut : Yes
-  signOut --> public2
-  forgetMe --> public2 : No
-
-```
-
-## Sequence of functionality/calls trough _Chirp!_
+## Sequence of functionality/calls trough Chirp!
 
 #### Sequence diagram
 
-```mermaid
-sequenceDiagram
-    actor user as User
-    participant webBrowser as WebBrowser
-    participant app as Chirp.Razor
-    participant auth as Azure authorization server
-    participant db as Database
-
-    user ->>+ webBrowser: Access Chirp
-        webBrowser ->>+ app: GET
-
-        app ->>+ auth: User.Identity.IsAuthenticated
-        auth -->>- app: Response
-
-        opt User is authenticated
-            app -)+ db: UserNameExists()
-            db --)- app: Response
-            opt Username doesn't exist in db
-                app -)+ db: CreateNewAuthor()
-                db --)- app: New author
-            end
-            app -)+ db: GetFollowing()
-            db --)- app: IEnumerable<string>
-        end
-
-        app ->>+ db: GetCheeps()
-        db -->>- app: List<CheepDTO>
-
-        app -->>- webBrowser: Response
-    webBrowser -->>- user: Response
-```
+![sequence diagram](images/Sequence_diagram.png)
 
 This sequence diagram shows what happens when a user accesses the web application.
 
@@ -221,22 +88,7 @@ It also shows what happens if the user is authenticated, including what happens 
 
 Whenever a push is made to main, or a pull request is made, Github will build and test our program, to make sure that we do not implement a feature that does not pass all our earlier defined tests.
 
-```mermaid
-stateDiagram
-  state "Build Ubuntu" as build_ubuntu
-  state "Dotnet build" as dotnet_build
-  state if_state <<choice>>
-  state "Run test" as Test
-
-  [*] --> build_ubuntu : Push or pull-request on main
-  build_ubuntu -->  dotnet_build
-  dotnet_build -->  if_state : Build Complete?
-
-  if_state --> Test : True
-  if_state --> [*] : False
-
-  Test --> [*]
-```
+![sequence diagram](images/Auto_build_test.png)
 
 Another important note is that all tests are not run by Github, due to the `--filter` added. This ensures that tests that contain the words `Playwright` or `IntegrationTest` in their [fully qualified name](https://learn.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=mstest) are not run. This is due to these tests not always compiling correctly on github.
 
@@ -244,69 +96,14 @@ Another important note is that all tests are not run by Github, due to the `--fi
 
 When a push is made to main, it is automatically deployed to our Azure website. We discussed having the program tested before deploying it to make sure that it would work, but decided not to do that since some of our tests was testing our website directly, which could cause problems.
 
-```mermaid
-stateDiagram
-  state "Build Ubuntu" as build_ubuntu
-  state "Dotnet build" as dotnet_build
-  state if_state <<choice>>
-  state "Publish project" as publish
-  state "Upload Artifacts" as upload
-
-  state "Build Ubuntu" as build_ubuntu2
-  state "Download Artifacts from Build" as download
-  state "Deploy to Azure" as deploy
-
-
-  [*] --> build_ubuntu : Push on main
-  build_ubuntu -->  dotnet_build : Build Ubuntu for publishing project
-  dotnet_build -->  if_state : Build Complete?
-
-  if_state --> publish : True
-  if_state --> [*] : False
-
-  publish --> upload
-
-  upload --> build_ubuntu2
-  build_ubuntu2 --> download : Build Ubuntu for deployment
-  download --> deploy
-  deploy --> [*]
-```
+![Build and deploy](images/Build_Deploy.png)
 
 ### Automatic build and release to github
 
 Whenever a tag is pushed with the format `v*.*.*` it is automatically build, published and released to github, with a zip folder for both windows, macos and linux.
 
-```mermaid
 
-stateDiagram
-  state "Build Ubuntu" as build_ubuntu
-  state "Dotnet build" as dotnet_build
-  state if_state <<choice>>
-  state "Publish project" as publish
-  state zip
-  state "Delete output directory" as Delete_output_directory
-  state "Publish on github" as Publish_on_Github
-
-
-  [*] --> build_ubuntu : Push on tag format[v*.*.*]
-  build_ubuntu -->  dotnet_build : Build Ubuntu for publishing project
-  dotnet_build -->  if_state : Build Complete?
-
-  if_state --> publish : True
-
-  if_state --> [*] : False
-  publish --> zip
-  note left of publish
-  Both Zip and publishing and
-  deletion of output directory is
-  for Windows,  macOS and linux
-  end note
-
-  zip --> Delete_output_directory
-
-  Delete_output_directory --> Publish_on_Github
-  Publish_on_Github --> [*]
-```
+![Build and deploy github](images/Build_ReleaseGithub.png)
 
 ## End-2-End testing
 
@@ -319,35 +116,7 @@ Due to the fact that Chirp! was implemented with B2C authentication via Github, 
 
 The following test case checks if a new cheep shows up on the right pages, and nowhere else. Every time 'the cheep' is mentioned, we check for the specific text defined in the test and the author of the test user:
 
-```mermaid
-stateDiagram-v2
-    state "Public timeline" as public
-    state "Public timeline" as public2
-    state "Public timeline" as public3
-    state "Public timeline" as public4
-    state "Public timeline page 2" as public5
-    state "Public timeline page 2" as public6
-    state "Own timeline" as own
-    state "Own timeline" as own2
-    state "Others timeline" as other
-    state "Others timeline" as other2
-    state "User info" as userinfo
-    state "User info" as userinfo2
-
-    [*] --> public : Log in
-    public --> public2 : Check if the cheep exists (False)
-    public2 --> public3 : Write the cheep
-    public3 --> public4 : Check if the cheep exists (True)
-    public4 --> public5 : Go to public timeline page 2
-    public5 --> public6 : Check if the cheep exists (False)
-    public6 --> own : Go to own timeline
-    own --> own2 : Check if the cheep exists (True)
-    own2 --> other : Go to another authors timeline
-    other --> other2 : Check if the cheep exists (False)
-    other2 --> userinfo : Go to User info
-    userinfo --> userinfo2 : Check if the cheep exists (True)
-    userinfo2 --> [*]
-```
+![End2EndTest](images/End2EndTest.png)
 
 ## Team work
 
@@ -355,46 +124,7 @@ stateDiagram-v2
 
 Here is a diagram of a normal process from having a new feature in mind, to having it made and integrated in our program. It shows, the coding and testing process as well as the issue's state on the project board
 
-```mermaid
-stateDiagram-v2
-    state "Make issue" as issue
-    state "Create branch" as createbranch
-    state "Move to 'in progress'" as inProgress
-    state "Code part" as code
-    state "Test locally" as test
-    state plswork <<choice>>
-    state "Debug" as debug
-    state isdone <<choice>>
-    state "Push to branch" as push
-    state "Create pull request" as request
-    state "Move to 'in review'" as review
-    state "Peer review feature" as peer
-    state isgood <<choice>>
-    state "Merge with main" as merge
-    state "Delete branch" as delete
-    state "Move to 'done'" as wedonehere
-
-    [*] --> issue : New Task
-    issue --> createbranch
-    createbranch --> inProgress
-    inProgress --> code
-    code --> test
-    test --> plswork : Did it work?
-    plswork --> push : Yes
-    plswork --> debug : No
-    debug --> test
-    push --> isdone : Is the feature done?
-    isdone --> code : No
-    isdone --> request : Yes
-    request --> review
-    review --> peer
-    peer --> isgood : Is the feature accepted?
-    isgood --> code : No
-    isgood --> merge : Yes
-    merge --> delete
-    delete --> wedonehere
-    wedonehere --> [*]
-```
+![ImplementingNewFeature](images/ImplementingNewFeature.png)
 
 ### Missing features/functionality
 
