@@ -16,7 +16,7 @@ numbersections: true
 
 ## Domain model
 
-Here comes a description of our domain model.
+Our domain model consists of the `Author`- and `Cheep` class. Each author can have multiple cheeps and each cheep has a reference to one author. Each author can follow and be followed by multiple other authors.
 
 ```mermaid
   classDiagram
@@ -257,7 +257,7 @@ stateDiagram
 
 ### Automatic build and release to github
 
-Whenever a tag is pushed with the format v\*.\*.\* it is automatically build, published and released to github, with a zip folder for both windows, macos and linux.
+Whenever a tag is pushed with the format `v*.*.*` it is automatically build, published and released to github, with a zip folder for both windows, macos and linux.
 
 ```mermaid
 
