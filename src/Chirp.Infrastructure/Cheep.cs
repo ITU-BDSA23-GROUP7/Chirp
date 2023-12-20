@@ -14,9 +14,9 @@ public class Cheep
     public required Author Author { get; set; }
 
     /// <summary>
-    /// Converts the current instance of the Cheep class to a CheepDTO.
+    /// Returns a new <c>CheepDTO</c> object with all its properties set to the ones in <c>Cheep</c>.
     /// </summary>
-    /// <returns>A CheepDTO representing the converted data.</returns>
+    /// <returns></returns>
     public CheepDTO ToCheepDTO() {
         var cheepDTO = new CheepDTO
         {
