@@ -58,6 +58,24 @@ it was chosen to show that multiple clients can access the web application serve
 
 ## User activities
 
+### Unauthenticated user
+
+The following activity diagram shows a typical user journey for an unauthenticated user.
+
+```mermaid
+stateDiagram-v2
+    state "Public timeline" as public
+    state "Public timeline (page 2)" as p2
+    state "[User]'s private timeline" as private
+    state "Scoreboard" as scoreboard
+
+    [*] --> public: unauthenticated user
+    public --> p2: Clicks on '2' on the page navigation
+    p2 --> private: Clicks on username of a cheep
+    private --> scoreboard: Clicks on the scoreboard button
+    scoreboard --> [*]
+```
+
 ### Log in
 
 The following diagram shows the process of signing into Chirp! We decided to use ASP.NET identity for our authentication. We decided to do so, to avoid having to gather the information needed directly from the users. Instead ASP.NET identity allows us to gather the information from the github account of the user that logged in.
@@ -69,7 +87,7 @@ stateDiagram-v2
     state "Log in" as login
     state if_state <<choice>>
 
-    [*] --> public
+    [*] --> public: unauthenticated user
     public --> login
     login --> if_state
     if_state --> public : No
@@ -91,7 +109,7 @@ stateDiagram-v2
     state "Private timeline" as private
     state "Private timeline" as private2
 
-    [*] --> public : logged in
+    [*] --> public : authenticated user
     public --> public2 : follow author
     public2 --> author : click on authors name
     author --> private : go to own timeline
@@ -119,7 +137,7 @@ stateDiagram-v2
     state "Scoreboard" as scoreboard2
 
 
-    [*] --> public : logged in
+    [*] --> public : authenticated user
     public --> scoreboard : Check scoreboard
     scoreboard --> public2
     public2 --> public3 : Make a cheep
@@ -147,7 +165,7 @@ stateDiagram-v2
   state "Sign out" as signOut
 
 
-  [*] --> public : logged in
+  [*] --> public : authenticated user
   public --> aboutMe : Go to about me page
   aboutMe --> forgetMe: Request deletion
   forgetMe --> signOut : Yes
