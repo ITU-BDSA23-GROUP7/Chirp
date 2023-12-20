@@ -52,9 +52,10 @@ From the outer layer, the 'program.cs' class can create the razor pages, send it
 
 ## Architecture of deployed application
 
-The system has a Client Server architecture, where the web server and web database is hosted via Azure.
+The system has a Client Server architecture, where the web server and web database are hosted via Azure.
 ![Illustration of the _Chirp!_ architecture between the client and the server.](images/Client-server_Architecture.jpg)
-it was chosen to show that multiple clients can access the web application server at the same time.
+
+It was chosen to show that multiple clients can access the web application server at the same time.
 
 ## User activities
 
@@ -94,8 +95,6 @@ stateDiagram-v2
     if_state --> public2 : Yes
     public2 --> [*]
 ```
-
-UML activity diagram
 
 ### Follow and unfollow
 
@@ -220,7 +219,7 @@ It also shows what happens if the user is authenticated, including what happens 
 
 ### Automatic build and test
 
-Whenever a push is made to main, or a pull request is made, github will build and test our program, to make sure that we do not implement a feature that does not pass all our earlier defined tests.
+Whenever a push is made to main, or a pull request is made, Github will build and test our program, to make sure that we do not implement a feature that does not pass all our earlier defined tests.
 
 ```mermaid
 stateDiagram
@@ -239,7 +238,7 @@ stateDiagram
   Test --> [*]
 ```
 
-Another important note is that all tests are not run by github, due to the `--filter` added. This ensures that tests that contain the words `Playwright` or `IntegrationTest` in their [fully qualified name](https://learn.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=mstest) are not run. This is due to these tests not always compiling correctly on github.
+Another important note is that all tests are not run by Github, due to the `--filter` added. This ensures that tests that contain the words `Playwright` or `IntegrationTest` in their [fully qualified name](https://learn.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=mstest) are not run. This is due to these tests not always compiling correctly on github.
 
 ### Build and deploy to Azure
 
@@ -316,9 +315,9 @@ Because of this it currently would not be preferable to have tests like for exam
 
 ### Issues with the End-2-End testing
 
-Due to the fact that Chirp! was implemented with B2C authentication via Github, Authentication in end-2-end testing was not easy to implement. This was primarily due to the chance of Github's "device verification" feature would occasionally pop up during testing, which the playwright testing had no way of solving. Because of this the tests have been made with one part without log in, that should work without any problems, and one with logging in, that occasionally fails due to what was mentioned before. We did however prepare some test cases for end to end testing, for when we got the log in working, here is an diagram showing one of the test cases we prepared.
+Due to the fact that Chirp! was implemented with B2C authentication via Github, Authentication in End-2-End testing was not easy to implement. This was primarily due to the chance of Github's "device verification" feature would occasionally pop up during testing, which the playwright testing had no way of solving. Because of this the tests have been made with one part without log in, that should work without any problems, and one with logging in, that occasionally fails due to what was mentioned before. We did however prepare some test cases for End-2-End testing, for when we got the log in working, here is a diagram showing one of the test cases we prepared.
 
-The following test case checks if a new cheep shows up on the right pages, and nowhere else. Every time 'the cheep' is mentioned, we check for the specific text defined in the text and the author of the test user:
+The following test case checks if a new cheep shows up on the right pages, and nowhere else. Every time 'the cheep' is mentioned, we check for the specific text defined in the test and the author of the test user:
 
 ```mermaid
 stateDiagram-v2
@@ -453,13 +452,13 @@ When the program is running you can find it in your browser by following the url
 
 ## How to run test suite locally
 
-To run our e2e test in the root directory `/Chirp` from the command:
+To run our End-2-End test in the root directory `/Chirp` from the command:
 
 ```
 npx playwright install
 ```
 
-Then run the program as described above.
+Then run the program as described above, because the playwright tests use the program running on localhost.
 
 Open another terminal in the root of our repository, `/Chirp`, run the command:
 
